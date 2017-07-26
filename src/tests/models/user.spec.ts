@@ -3,7 +3,7 @@ import { Database } from '../../config/database/database';
 import { App, server } from '../../server';
 import { User, IUser, Permission, Role, Organization } from '../../models';
 import { Config } from '../../config/config';
-import { Constants } from "../../constants";
+import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
 
@@ -23,12 +23,8 @@ let guestOrgId: string;
 describe('Users', () => {
 
     before(async () => {
-        // Keep in mind this happens in the users test.
-        // I'm not sure if this is really how I want to do this. 
-        await Permission.remove({});
-        await Role.remove({});
-        await User.remove({});
-        await Organization.remove({});
+
+        await Cleanup.clearDatabase();
         await DatabaseBootstrap.seed();
 
         userAuthToken = await AuthenticationUtil.generateUserAuthToken();
@@ -36,10 +32,28 @@ describe('Users', () => {
         guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
     });
 
+    it('allow a user to register', async () => {
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "registeredUser@leblum.com",
+            "password":"test354435",
+            "isTokenExpired": false
+        }
+
+        let response = await api
+            .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(response.status).to.equal(201);
+        expect(response.body).to.be.an('object');
+        expect(response.body.email).to.be.equal(user.email);
+        expect(response.body.password.length).to.be.equal(0);
+    })
+
     // Testing the list method.
     it('should list all the users', async () => {
         let response = await api
-            .get(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
@@ -49,7 +63,7 @@ describe('Users', () => {
 
     it('should NOT list all the users for a regular user', async () => {
         let response = await api
-            .get(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", userAuthToken);
 
         expect(response.status).to.equal(403);
@@ -68,12 +82,12 @@ describe('Users', () => {
         });
 
         let createResponse = await api
-            .post(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
         
         let response = await api
-            .delete(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/${user.id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
             .set("x-access-token", userAuthToken);
 
         expect(response.status).to.equal(403);
@@ -91,7 +105,7 @@ describe('Users', () => {
         });
 
         let response = await api
-            .post(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
 
@@ -118,7 +132,7 @@ describe('Users', () => {
         user = await user.save();
 
         let response = await api
-            .get(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/${user.id}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
             .set("x-access-token", systemAuthToken)
 
         expect(response.status).to.equal(200);
@@ -147,7 +161,7 @@ describe('Users', () => {
         };
 
         let response = await api
-            .put(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/${user.id}`)
+            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
             .set("x-access-token", systemAuthToken)
             .send(iuser);
 
@@ -169,12 +183,12 @@ describe('Users', () => {
         });
 
         let createResponse = await api
-            .post(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
         
         let response = await api
-            .delete(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/${user.id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
@@ -187,7 +201,7 @@ describe('Users', () => {
     it('should return a 404 on delete when the ID isnt there', async () => {
 
         let response = await api
-            .delete(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/58f8c8caedf7292be80a90e4`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
@@ -196,14 +210,14 @@ describe('Users', () => {
     it('should return a 404 on update when the ID isnt there', async () => {
 
         let response = await api
-            .put(`${Constants.API_ENDPOINT}${Constants.API_VERSION_1}/${Constants.USERs_ENDPOINT}/58f8c8caedf7292be80a90e4`)
+            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
     });
 
     after(async () => {
-        await Cleanup.cleanup();
+        await Cleanup.closeConnections();
     });
 
 });

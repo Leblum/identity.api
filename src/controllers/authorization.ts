@@ -2,7 +2,7 @@
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler, Application } from 'express';
 import { Config } from "../config/config";
 import { ITokenPayload } from "../models/index";
-import { Constants } from "../constants";
+import { CONST } from "../constants";
 import { AuthenticationController } from "./authentication.controller";
 
 export class authz {
@@ -13,7 +13,7 @@ export class authz {
 
     public static permit(...allowed): (request: any, res: any, next: any) => void {
         return (request, res, next) => {
-            var token = request[Constants.REQUEST_TOKEN_LOCATION] as ITokenPayload;
+            var token = request[CONST.REQUEST_TOKEN_LOCATION] as ITokenPayload;
             if (token && token.userId && token.roles && this.checkIfRoleExists(token.roles, allowed))
                 next(); // role is allowed, so continue on the next middleware
             else {

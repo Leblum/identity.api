@@ -1,6 +1,6 @@
 import { IPermission, Permission, Role, IRole, User, IUser, IOrganization, Organization } from "../../models";
 import { Config } from "../config";
-import { Constants } from "../../constants";
+import { CONST } from "../../constants";
 import { OrganizationType } from "../../enumerations";
 var bcrypt = require('bcrypt');
 import log = require('winston');
@@ -38,7 +38,7 @@ export  class DatabaseBootstrap {
                 firstName: 'system',
                 lastName: 'system',
                 email: 'system@leblum.com',
-                password: await bcrypt.hash(Config.active.get('systemUserPassword'), Constants.SALT_ROUNDS),
+                password: await bcrypt.hash(Config.active.get('systemUserPassword'), CONST.SALT_ROUNDS),
                 roles: [await this.createSingleRole('admin', 'amdministrator', permissions)],
                 isTokenExpired: false,
                 organizationId: systemOrg.id,

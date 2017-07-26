@@ -12,7 +12,7 @@ import { join } from 'path';
 import { json, urlencoded } from 'body-parser';
 import { mongoose, Database } from './config/database/database';
 import { DatabaseBootstrap } from './config/database/database-bootstrap';
-import { Constants } from './constants';
+import { CONST } from './constants';
 import { Config } from './config/config';
 import { Router } from 'express';
 import { ApiErrorHandler } from './api-error-handler';
@@ -86,7 +86,7 @@ class Application {
     this.express.get('/healthcheck', (request: express.Request, response: express.Response) => {
       response.statusCode = this.setupComplete ? 200 : 500;
       response.json({
-        ApplicationName: Constants.APPLICATION_NAME,
+        ApplicationName: CONST.APPLICATION_NAME,
         StatusCode: this.setupComplete ? 200 : 500,
         SetupComplete: this.setupComplete,
       });
@@ -140,15 +140,15 @@ class Application {
   private routes(): void {
     log.info('Initializing Routers');
     // The authentication endpoint is 'Open', and should be added to the router pipeline before the other routers
-    this.express.use('/authenticate', new routers.AuthenticationRouter().getRouter());
-    this.express.use('/register', new routers.RegistrationRouter().getRouter());
+    this.express.use(CONST.ep.AUTHENTICATION, new routers.AuthenticationRouter().getRouter());
+    this.express.use(`${CONST.ep.V1}${CONST.ep.REGISTER}`, new routers.RegistrationRouter().getRouter());
     this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
 
     //Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.OrganizationRouter().getRouter());
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.UserRouter().getRouter());
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.RoleRouter().getRouter());
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.OrganizationRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.UserRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.RoleRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
 
     log.info('Instantiating Default Error Handler Route');
     this.express.use((error: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
@@ -161,7 +161,7 @@ class Application {
   private handlers(): void {
     this.express.get('/', (request: express.Request, response: express.Response) => {
       response.json({
-        name: Constants.APPLICATION_NAME,
+        name: CONST.APPLICATION_NAME,
         DocumentationLocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api-docs`,
         APILocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api`,
         AuthenticationEndpoint: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api/authenticate`,
@@ -176,8 +176,8 @@ class Application {
   // This will allow us to serve the static homepage for our swagger definition
   // along with the swagger ui explorer.
   private swagger(): void {
-    this.express.use(Constants.API_DOCS_ENDPOINT, express.static(__dirname + '/swagger/swagger-ui'));
-    this.express.use(Constants.API_SWAGGER_DEF_ENDPOINT, express.static(__dirname + '/swagger/'));
+    this.express.use(CONST.ep.API_DOCS, express.static(__dirname + '/swagger/swagger-ui'));
+    this.express.use(CONST.ep.API_SWAGGER_DEF, express.static(__dirname + '/swagger/'));
   }
 }
 export default new Application();

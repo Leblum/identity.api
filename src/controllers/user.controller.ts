@@ -3,7 +3,7 @@ import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHa
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
 import { BaseController } from './base/base.controller';
-import { Constants } from '../constants';
+import { CONST } from '../constants';
 import { IUserRepository, UserRepository } from "../repositories";
 var bcrypt = require('bcrypt');
 
@@ -22,8 +22,8 @@ export class UserController extends BaseController {
   }
 
   public async preCreateHook(user: IUser): Promise<IUser> {
-    user.href = `${Constants.API_ENDPOINT}${Constants.USERs_ENDPOINT}/${user._id}`;
-    user.password = await bcrypt.hash(user.password, Constants.SALT_ROUNDS);
+    user.href = `${CONST.ep.API}${CONST.ep.USERS}/${user._id}`;
+    user.password = await bcrypt.hash(user.password, CONST.SALT_ROUNDS);
     return user;
   }
 
@@ -33,7 +33,7 @@ export class UserController extends BaseController {
   }
   
   public preUpdateHook(model: IUser): Promise<IUser>{
-    model.href = `${Constants.API_ENDPOINT}${Constants.USERs_ENDPOINT}/${model._id}`;
+    model.href = `${CONST.ep.API}${CONST.ep.USERS}/${model._id}`;
     return Promise.resolve(model);
   }
 }

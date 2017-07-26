@@ -6,7 +6,7 @@ import { Config } from '../config/config';
 
 let mongoose = require("mongoose");
 import * as chai from 'chai';
-import { Constants } from "../constants";
+import { CONST } from "../constants";
 import { OrganizationRepository } from "../repositories/index";
 let expect = chai.expect;
 let should = chai.should();
@@ -31,7 +31,7 @@ export class AuthenticationUtil {
                 organizationId: guestOrg.id,
                 isEmailVerified: true,
             });
-            newUser.password = await bcrypt.hash(newUser.password, Constants.SALT_ROUNDS);
+            newUser.password = await bcrypt.hash(newUser.password, CONST.SALT_ROUNDS);
             newUser = await newUser.save();
         }
 

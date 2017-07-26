@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
 import { BaseRouter } from './base/base.router';
-import { Constants } from '../constants';
+import { CONST } from '../constants';
 
 export class UserRouter extends BaseRouter {
     public router: Router = Router();
@@ -10,6 +10,6 @@ export class UserRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.USERs_ENDPOINT;
+        this.resource = CONST.ep.USERS;
     }
 }

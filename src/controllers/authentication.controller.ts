@@ -7,7 +7,7 @@ import { Config } from '../config/config';
 import { ITokenPayload } from '../models/';
 import { UserRepository, IOrganizationRepository, OrganizationRepository, RoleRepository, IRoleRepository } from "../repositories";
 import { IUserRepository } from "../repositories/interfaces/user.repository.interface";
-import { Constants } from "../constants";
+import { CONST } from "../constants";
 import { IEmailVerification, EmailVerification } from "../models/email-verification";
 
 const bcrypt = require('bcrypt');
@@ -119,7 +119,7 @@ export class AuthenticationController extends BaseController {
                     if (err) { this.sendAuthFailure(response, 401, `Failed to authenticate token. The timer *may* have expired on this token. err: ${err}`); }
                     else {
                         var token: ITokenPayload = decoded;
-                        request[Constants.REQUEST_TOKEN_LOCATION] = token;
+                        request[CONST.REQUEST_TOKEN_LOCATION] = token;
                         next();
                     }
                 });

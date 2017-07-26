@@ -1,18 +1,21 @@
-export const Constants = {
-    API_ENDPOINT: '/api',
-    API_VERSION_1: '/v1',
-    AUTHENTICATION_ENDPOINT: '/authenticate',
-    API_DOCS_ENDPOINT: '/api-docs',
-    API_SWAGGER_DEF_ENDPOINT: '/swagger-definition',
-    PERMISSION_ENDPOINT: '/permissions',
-    ROLES_ENDPOINT: '/roles',
-    USERs_ENDPOINT: '/users',
-    ORGANIZATION_ENDPOINT: '/organizations',
+export const CONST = {
+    ep: {
+        API: '/api',
+        V1: '/v1',
+        AUTHENTICATION: '/authenticate',
+        API_DOCS: '/api-docs',
+        API_SWAGGER_DEF: '/swagger-definition',
+        PERMISSIONS: '/permissions',
+        ROLES: '/roles',
+        USERS: '/users',
+        ORGANIZATIONS: '/organizations',
+        REGISTER: '/register',
+    },
     LEBLUM_API_Q_BACKPLANE: 'leblum-api-q-backplane',
     APPLICATION_NAME: "leblum.identity.api",
     REQUEST_TOKEN_LOCATION: 'api-decoded-token',
     SALT_ROUNDS: 10,
-    ErrorCodes:{
+    ErrorCodes: {
         EMAIL_TAKEN: 'EmailAlreadyTaken',
         PASSWORD_FAILED_CHECKS: 'PasswordFailedChecks',
     }

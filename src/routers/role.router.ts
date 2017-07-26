@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { RoleController } from '../controllers/role.controller';
 import { BaseRouter } from './base/base.router';
-import { Constants } from '../constants';
+import { CONST } from '../constants';
 
 export class RoleRouter extends BaseRouter {
     public router: Router = Router();
@@ -10,6 +10,6 @@ export class RoleRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.ROLES_ENDPOINT;
+        this.resource = CONST.ep.ROLES;
     }
 }

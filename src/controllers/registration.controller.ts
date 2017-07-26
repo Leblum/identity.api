@@ -7,7 +7,7 @@ import { Config } from '../config/config';
 import { ITokenPayload } from '../models/';
 import { UserRepository, IOrganizationRepository, OrganizationRepository, RoleRepository, IRoleRepository } from "../repositories";
 import { IUserRepository } from "../repositories/interfaces/user.repository.interface";
-import { Constants } from "../constants";
+import { CONST } from "../constants";
 import { IEmailVerification, EmailVerification } from "../models/email-verification";
 import { ApiErrorHandler } from "../api-error-handler";
 
@@ -32,10 +32,10 @@ export class RegistrationController extends BaseController {
         try {
             // First we have to check if the email address is unique
             if (await this.userRepository.findUserByEmail(request.body.email)) {
-                ApiErrorHandler.sendError('That user email already exists',400, Constants.ErrorCodes.EMAIL_TAKEN, response);
+                ApiErrorHandler.sendError('That user email already exists',400, CONST.ErrorCodes.EMAIL_TAKEN, response);
             }
             if(!request.body.password || request.body.password.length < 6){
-                ApiErrorHandler.sendError('Password must be supplied, and be at least 6 chars',400, Constants.ErrorCodes.PASSWORD_FAILED_CHECKS, response);
+                ApiErrorHandler.sendError('Password must be supplied, and be at least 6 chars',400, CONST.ErrorCodes.PASSWORD_FAILED_CHECKS, response);
             }
             else {
                 const guestOrg = await this.organizationRepository.getGuestOrganization();
@@ -45,7 +45,7 @@ export class RegistrationController extends BaseController {
 
                 // now we need to do a few things to this user.
                 // first up hash the password
-                user.password = await bcrypt.hash(user.password, Constants.SALT_ROUNDS);
+                user.password = await bcrypt.hash(user.password, CONST.SALT_ROUNDS);
 
                 // Add the organizationId to the user.  We will change this when we 'upgrade' the user.
                 user.organizationId = guestOrg.id;
