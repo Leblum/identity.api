@@ -2,7 +2,7 @@
     "publicURL": "http://localhost",
     "name": "leblum.vendor.api",
     "database": {
-      "mongoConnectionString": "mongodb://root:leblum1234@ds111123.mlab.com:11123/leblum-vendor-api-development"
+      "mongoConnectionString": "mongodb://root:hastjGvfpD6CjkFn@ds111103.mlab.com:11103/leblum-identity-development"
     },
     "ampq":{
         "ampqConnectionString": "amqp://wkaxkarj:NAsD1ISNCESHMmVlK9Mch6IcBjapIBYn@puma.rmq.cloudamqp.com/wkaxkarj"

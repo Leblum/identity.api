@@ -67,6 +67,12 @@ If you want to actually start using TLS/HTTPS you need to turn on Helmet to prev
 Uncomment this line in server.ts
 //app.use(helmet()); //Protecting the app from a lot of vulnerabilities turn on when you want to use TLS.
 
+If you're getting errors on gulp build missing @gulp-sourcemaps/sourcemaps
+rm ./package-lock.json
+rm -r ./node_modules
+npm cache clear --force
+npm install
+
 ## URL
 
 *  "DocumentationLocation": [Docs](http://localhost:8080/api-docs)
