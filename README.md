@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/davidbfrogman/leblum.api.vendor.alpha.svg?branch=master)](https://travis-ci.org/davidbfrogman/leblum.api.vendor.alpha)
+[![Build Status](https://travis-ci.com/Leblum/identity.api.svg?token=piJBjH1x3vNsd4rYXCfv&branch=master)](https://travis-ci.com/Leblum/identity.api)
 
 # Mongoose & Typescript & Express 
  
