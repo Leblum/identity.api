@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { OrganizationController } from '../controllers/Organization.controller';
+import { OrganizationController } from '../controllers/organization.controller';
 import { BaseRouter } from './base/base.router';
 import { Constants } from '../constants';
 
