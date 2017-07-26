@@ -1,5 +1,5 @@
 //During the test the env variable is set to test
-import { Database } from '../config/database';
+import { Database } from '../config/database/database';
 import { App, server } from '../server';
 import { User, IUser } from '../models';
 import { Config } from '../config/config';

@@ -8,22 +8,22 @@ import { OrganizationRepository, IOrganizationRepository } from '../repositories
 export class OrganizationController extends BaseController{
   public defaultPopulationArgument =
   {
-    path: 'owner primaryContact businessAddress pickupAddress',
+    path: '',
   }
 
-  protected repository: IOrganizationRepository = new OrganizationRepository();
+  protected userRepository: IOrganizationRepository = new OrganizationRepository();
 
   constructor() {
     super();
   }
 
   public preCreateHook(model: IOrganization): Promise<IOrganization>{
-    model.href = `${Constants.APIEndpoint}${Constants.OrganizationsEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.ORGANIZATION_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 
   public preUpdateHook(model: IOrganization): Promise<IOrganization>{
-    model.href = `${Constants.APIEndpoint}${Constants.OrganizationsEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.ORGANIZATION_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 }

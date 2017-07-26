@@ -1,7 +1,6 @@
 export * from './user';
 export * from './role';
 export * from './permission';
-export * from './address';
 export * from './organization';
 export * from './permission';
 export * from './search-criteria';

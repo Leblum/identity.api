@@ -51,6 +51,13 @@ public static convictSchema: convict.Config = convict({
       env: 'JWT_SECRET_TOKEN',
       sensitive: true
     },
+    systemUserPassword:{
+      doc:'This is the password for the system user',
+      format: String,
+      default: 'ads9f8a8s7df6adfiug87daf6gsudifyiasd7',
+      env: 'SYSTEM_USER_PASS',
+      sensitive: true
+    },
     returnCallStackOnError: {
       doc: 'When the api encounters an error do we return a call stack',
       format: Boolean,

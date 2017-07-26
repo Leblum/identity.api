@@ -1,31 +1,22 @@
-import { mongoose } from '../config/database';
+import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
 import { IUser } from './user';
 import { IBaseModel } from "./index";
-import { SupplierType, EnumHelper } from "../enumerations";
-import { IAddress } from "./address";
+import { EnumHelper, OrganizationType } from "../enumerations";
 
 export interface IOrganization extends IBaseModel {
     name: string,
-    phone: string,
-    type: SupplierType,
-    owner: IUser,
-    primaryContact: IUser,
-    businessAddress: IAddress,
-    pickupAddress: IAddress,
-    contacts: Array<IUser>,
+    type: OrganizationType,
+    isSystem: boolean;
+    users?: Array<IUser>;
     href: string,
 }
 
 const OrganizationSchema = new Schema({
     name: {type: String, required: true},
-    phone: {type: String, required: true},
-    type: { type: Number, enum: [EnumHelper.getValuesFromEnum(SupplierType)] },
-    owner: { type : Schema.Types.ObjectId, ref: 'user' },
-    primaryContact: { type : Schema.Types.ObjectId, ref: 'user' },
-    businessAddress: { type : Schema.Types.ObjectId, ref: 'address' },
-    pickupAddress: { type : Schema.Types.ObjectId, ref: 'address' },
-    contacts: [{ type : Schema.Types.ObjectId, ref: 'user' }],
+    type: { type: Number, enum: [EnumHelper.getValuesFromEnum(OrganizationType)] },
+    isSystem: {type: Boolean, required: true},
+    users: [{ type : Schema.Types.ObjectId, ref: 'user' }],
     href: {type:String},
 },{timestamps:true});
 

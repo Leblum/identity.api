@@ -1,11 +1,7 @@
-export enum SupplierType{
-    Vendor = 1,
-    Wholesaler = 2,
-}
-
-export enum AddressType{
-    Business = 1,
-    Pickup = 2,
+export enum OrganizationType{
+    system = 1,
+    guest = 2,
+    supplier = 3
 }
 
 export class EnumHelper {

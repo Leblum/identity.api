@@ -1,6 +1,6 @@
 import mongoose = require('mongoose');
 import { ConnectionOptions } from 'mongoose';
-import { Config } from './config';
+import { Config } from '../config';
 import log = require('winston');
 
 /*  Add this retry logic to the database connection

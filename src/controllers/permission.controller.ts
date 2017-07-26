@@ -8,19 +8,19 @@ import { PermissionRepository, IPermissionRepository } from '../repositories'
 export class PermissionController extends BaseController {
   public defaultPopulationArgument = null;
 
-  protected repository: IPermissionRepository = new PermissionRepository();
+  protected userRepository: IPermissionRepository = new PermissionRepository();
 
   constructor() {
     super();
   }
 
   public preCreateHook(model: IPermission): Promise<IPermission>{
-    model.href = `${Constants.APIEndpoint}${Constants.PermissionsEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.PERMISSION_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 
   public preUpdateHook(model: IPermission): Promise<IPermission>{
-    model.href = `${Constants.APIEndpoint}${Constants.PermissionsEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.PERMISSION_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 }

@@ -4,6 +4,7 @@ import { Model } from "mongoose";
 import { IBaseRepository } from "../index";
 
 export interface IUserRepository extends IBaseRepository<IUser>{
-    getUserForPasswordCheck(username: string): Promise<IUser>;
+    getUserForPasswordCheck(email: string): Promise<IUser>;
     updatePassword(id: string, hashedPassword: string): Promise<IUser>;
+    findUserByEmail(email: string): Promise<IUser>;
 }

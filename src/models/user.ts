@@ -1,4 +1,4 @@
-import { mongoose } from '../config/database';
+import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
 import { IRole } from './role';
 import { IBaseModel } from "./index";
@@ -6,33 +6,28 @@ import { IBaseModel } from "./index";
 export interface IUser extends IBaseModel {
     firstName: string,
     lastName: string,
-    phone: string,
-    username: string;
-    passwordHash: string;
+    password: string;
     email: string;
     roles?: Array<IRole>;
+    organizationId: string;
     href?: string;
     // This will be set to true whenever a user changes their password / or we require them to login again
     // This is used by the authentication controller to revoke the renewal of a token.  
     isTokenExpired: boolean; 
+    isEmailVerified: boolean;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
 }
 
 const UserSchema = new Schema({
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
-    phone: {type: String, required: false},
-    username: {
-        type: String, 
-        unique:true,
-        trim:true,
-        required:true
-    },
+    firstName: {type: String, required: false},
+    lastName: {type: String, required: false},
     email: {type:String, unique:true},
-    passwordHash: {type: String, required: true, select: false},
+    password: {type: String, required: true, select: false},
     isTokenExpired: {type : Boolean, required: true, default: true},
+    isEmailVerified: {type : Boolean, required: true, default: false},
     href: {type:String},
+    organizationId: { type : Schema.Types.ObjectId, ref: 'organization' },
     roles: [{ type : Schema.Types.ObjectId, ref: 'role' }]
 },{timestamps:true});
 

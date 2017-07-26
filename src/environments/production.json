@@ -1,5 +1,5 @@
 {
-    "name": "leblum.vendor.api",
+    "name": "leblum.identity.api",
     "database": {
       "mongoConnectionString": "mongodb://dbrown:password1@ds161162.mlab.com:61162/leblum-vendor-api"
     },

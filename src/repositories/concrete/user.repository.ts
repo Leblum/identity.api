@@ -10,19 +10,23 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         super();
     }
 
-    public async getUserForPasswordCheck(username: string): Promise<IUser> {
-        return await this.mongooseModelInstance.findOne({ username: username })
+    public async findUserByEmail(email: string): Promise<IUser>{
+        return await this.mongooseModelInstance.findOne({email: email});
+    }
+
+    public async getUserForPasswordCheck(email: string): Promise<IUser> {
+        return await this.mongooseModelInstance.findOne({ email: email })
             .populate({
                 path: 'roles',
                 // Permissions for the roles
                 populate: { path: 'permissions' }
             })
-            .select('+passwordHash');
+            .select('+password');
     }
 
     public async updatePassword(id: string, hashedPassword: string): Promise<IUser> {
-        let user: IUser = await this.mongooseModelInstance.findById(id).select('+passwordHash');
-        user.passwordHash = hashedPassword;
+        let user: IUser = await this.mongooseModelInstance.findById(id).select('+password');
+        user.password = hashedPassword;
         return await user.save();
     }
 }

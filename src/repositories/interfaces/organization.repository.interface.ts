@@ -4,4 +4,6 @@ import { Model } from "mongoose";
 import { IBaseRepository } from "../index";
 
 export interface IOrganizationRepository extends IBaseRepository<IOrganization>{
+    getGuestOrganization(): Promise<IOrganization>;
+    getSystemOrganizatoin(): Promise<IOrganization>;
 }

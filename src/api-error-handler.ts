@@ -3,6 +3,15 @@ import log = require('winston');
 import { Config } from './config/config';
 
 export class ApiErrorHandler {
+
+    public static sendError(message: string, status: number, errorCode: string, response: Response){
+        response.status(status).json({
+            message: message,
+            status: status,
+            errorCode: errorCode
+        });
+    }
+
     public static HandleApiError(error: Error & { status: number }, request: Request, response: Response, next: NextFunction) {
         log.error(error.stack);
 

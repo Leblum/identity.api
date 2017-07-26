@@ -10,6 +10,6 @@ export class RoleRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.RolesEndpoint;
+        this.resource = Constants.ROLES_ENDPOINT;
     }
 }

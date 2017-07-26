@@ -1,4 +1,4 @@
-import { mongoose } from '../config/database';
+import { mongoose } from '../config/database/database';
 import { Schema, Model, Document } from 'mongoose';
 import { IBaseModel } from "./index";
 

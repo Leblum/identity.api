@@ -10,14 +10,13 @@ import * as routers from './routers';
 import { ObjectId } from 'bson';
 import { join } from 'path';
 import { json, urlencoded } from 'body-parser';
-import { mongoose, Database } from './config/database';
+import { mongoose, Database } from './config/database/database';
+import { DatabaseBootstrap } from './config/database/database-bootstrap';
 import { Constants } from './constants';
 import { Config } from './config/config';
 import { Router } from 'express';
 import { ApiErrorHandler } from './api-error-handler';
 
-var jwt = require('express-jwt');
-var jwks = require('jwks-rsa');
 import methodOverride = require('method-override');
 import log = require('winston');
 
@@ -86,7 +85,7 @@ class Application {
     this.express.get('/healthcheck', (request: express.Request, response: express.Response) => {
       response.statusCode = this.setupComplete ? 200 : 500;
       response.json({
-        ApplicationName: Constants.ApplicationName,
+        ApplicationName: Constants.APPLICATION_NAME,
         StatusCode: this.setupComplete ? 200 : 500,
         SetupComplete: this.setupComplete,
       });
@@ -99,12 +98,15 @@ class Application {
     });
   }
 
-  private connectDatabase() {
+  private async connectDatabase() {
     this.currentDatabase = new Database();
-    this.currentDatabase.connect().then(connected => {
-      this.setupComplete = connected as boolean;
-      log.info('Completed Setup, database now online');
-    });
+    let connected = await this.currentDatabase.connect();
+    // Be very careful with this line.
+    ///asd9f9as78df98sadjawait DatabaseBootstrap.teardown();
+    await DatabaseBootstrap.bootstrap();
+
+    this.setupComplete = connected as boolean;
+    log.info('Completed Setup, boostrapped database, database now online');
   }
 
   private secure() {
@@ -113,7 +115,7 @@ class Application {
 
   // Sets up authentication, and sets it with our jwt secret token.
   private configureJWT() {
-    //this.express.set('jwtSecretToken', Config.active.get('jwtSecretToken'));
+    this.express.set('jwtSecretToken', Config.active.get('jwtSecretToken'));
   }
 
   // Configure Express middleware.
@@ -134,30 +136,15 @@ class Application {
     this.express.use(compression());
   }
 
-  private getJWTMiddleware() {
-    return jwt({
-      secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: "https://leblum.auth0.com/.well-known/jwks.json"
-      }),
-      audience: 'https://vendor.leblum.com/api',
-      issuer: "https://leblum.auth0.com/",
-      algorithms: ['RS256']
-    });
-  }
-
   private routes(): void {
     log.info('Initializing Routers');
     // The authentication endpoint is 'Open', and should be added to the router pipeline before the other routers
     this.express.use('/authenticate', new routers.AuthenticationRouter().getRouter());
-    this.express.use('/api*', this.getJWTMiddleware());
-    this.express.use(Constants.APIEndpoint + Constants.APIVersion1, new routers.AddressRouter().getRouter());
-    this.express.use(Constants.APIEndpoint + Constants.APIVersion1, new routers.OrganizationRouter().getRouter());
-    this.express.use(Constants.APIEndpoint + Constants.APIVersion1, new routers.UserRouter().getRouter());
-    this.express.use(Constants.APIEndpoint + Constants.APIVersion1, new routers.RoleRouter().getRouter());
-    this.express.use(Constants.APIEndpoint + Constants.APIVersion1, new routers.PermissionRouter().getRouter());
+    this.express.use('/register', new routers.RegistrationRouter().getRouter());
+    this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.OrganizationRouter().getRouter());
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.UserRouter().getRouter());
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.RoleRouter().getRouter());
 
     log.info('Instantiating Default Error Handler Route');
     this.express.use((error: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
@@ -170,7 +157,7 @@ class Application {
   private handlers(): void {
     this.express.get('/', (request: express.Request, response: express.Response) => {
       response.json({
-        name: Constants.ApplicationName,
+        name: Constants.APPLICATION_NAME,
         DocumentationLocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api-docs`,
         APILocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api`,
         AuthenticationEndpoint: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api/authenticate`,
@@ -185,8 +172,8 @@ class Application {
   // This will allow us to serve the static homepage for our swagger definition
   // along with the swagger ui explorer.
   private swagger(): void {
-    this.express.use(Constants.APIDocsEndpoint, express.static(__dirname + '/swagger/swagger-ui'));
-    this.express.use(Constants.APISwaggerDefinitionEndpoint, express.static(__dirname + '/swagger/'));
+    this.express.use(Constants.API_DOCS_ENDPOINT, express.static(__dirname + '/swagger/swagger-ui'));
+    this.express.use(Constants.API_SWAGGER_DEF_ENDPOINT, express.static(__dirname + '/swagger/'));
   }
 }
 export default new Application();

@@ -15,25 +15,25 @@ export class UserController extends BaseController {
     populate: { path: 'permissions' }
   };
 
-  protected repository: IUserRepository = new UserRepository();
+  protected userRepository: IUserRepository = new UserRepository();
 
   constructor() {
     super();
   }
 
   public async preCreateHook(user: IUser): Promise<IUser> {
-    user.href = `${Constants.APIEndpoint}${Constants.UsersEndpoint}/${user._id}`;
-    user.passwordHash = await bcrypt.hash(user.passwordHash, Constants.SaltRounds);
+    user.href = `${Constants.API_ENDPOINT}${Constants.USERs_ENDPOINT}/${user._id}`;
+    user.password = await bcrypt.hash(user.password, Constants.SALT_ROUNDS);
     return user;
   }
 
   public async preSendResponseHook(user: IUser): Promise<IUser> {
-    user.passwordHash = '';
+    user.password = '';
     return user;
   }
   
   public preUpdateHook(model: IUser): Promise<IUser>{
-    model.href = `${Constants.APIEndpoint}${Constants.UsersEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.USERs_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 }

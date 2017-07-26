@@ -11,19 +11,19 @@ export class RoleController extends BaseController{
     path: 'permissions'
   }
 
-  protected repository: IRoleRepository = new RoleRepository();
+  protected userRepository: IRoleRepository = new RoleRepository();
 
   constructor() {
     super();
   }
 
   public preCreateHook(model: IRole): Promise<IRole>{
-    model.href = `${Constants.APIEndpoint}${Constants.RolesEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.ROLES_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 
   public preUpdateHook(model: IRole): Promise<IRole>{
-    model.href = `${Constants.APIEndpoint}${Constants.RolesEndpoint}/${model._id}`;
+    model.href = `${Constants.API_ENDPOINT}${Constants.ROLES_ENDPOINT}/${model._id}`;
     return Promise.resolve(model);
   }
 }

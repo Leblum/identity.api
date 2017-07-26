@@ -7,7 +7,7 @@ import { BaseRepository, IBaseRepository } from "../../repositories/";
 
 export abstract class BaseController {
 
-    protected abstract repository: IBaseRepository<IBaseModel>;
+    protected abstract userRepository: IBaseRepository<IBaseModel>;
     public abstract defaultPopulationArgument: object;
 
     public async isValid(model: IBaseModel): Promise<IValidationError[]> {
@@ -27,7 +27,7 @@ export abstract class BaseController {
     }
 
     public blank(request: Request, response: Response, next: NextFunction): void {
-        response.json(this.repository.blank());
+        response.json(this.userRepository.blank());
     }
 
     public utility(request: Request, response: Response, next: NextFunction): void {
@@ -43,33 +43,33 @@ export abstract class BaseController {
 
     public async query(request: Request, response: Response, next: NextFunction): Promise<IBaseModel[]> {
         try {
-            let models: IBaseModel[] = await this.repository.query(request.body, this.defaultPopulationArgument);
+            let models: IBaseModel[] = await this.userRepository.query(request.body, this.defaultPopulationArgument);
 
             response.json(models);
 
-            log.info(`Queried for: ${this.repository.getCollectionName()}, Found: ${models.length}`);
+            log.info(`Queried for: ${this.userRepository.getCollectionName()}, Found: ${models.length}`);
             return models;
         } catch (err) { next(err); }
     }
 
     public async clear(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
-            let count: number = await this.repository.count(new SearchCriteria(request, next));
-            await this.repository.clear(request.body);
+            let count: number = await this.userRepository.count(new SearchCriteria(request, next));
+            await this.userRepository.clear(request.body);
 
             response.json({
-                Collection: this.repository.getCollectionName(),
+                Collection: this.userRepository.getCollectionName(),
                 Message: 'All items cleared from collection',
                 CountOfItemsRemoved: count
             });
 
-            log.info(`Cleared the entire collection: ${this.repository.getCollectionName()}`);
+            log.info(`Cleared the entire collection: ${this.userRepository.getCollectionName()}`);
         } catch (err) { next(err); }
     }
 
     public async destroy(request: Request, response: Response, next: NextFunction): Promise<IBaseModel> {
         try {
-            let deletedModel = await this.repository.destroy(this.getId(request));
+            let deletedModel = await this.userRepository.destroy(this.getId(request));
 
             if (!deletedModel) { throw { message: "Item Not Found", status: 404 }; }
 
@@ -77,7 +77,7 @@ export abstract class BaseController {
                 ItemRemovedId: deletedModel.id,
                 ItemRemoved: deletedModel,
             });
-            log.info(`Removed a: ${this.repository.getCollectionName()}, ID: ${this.getId(request)}`);
+            log.info(`Removed a: ${this.userRepository.getCollectionName()}, ID: ${this.getId(request)}`);
 
             return deletedModel;
         } catch (err) { next(err); }
@@ -94,7 +94,7 @@ export abstract class BaseController {
 
     private async update(request: Request, response: Response, next: NextFunction, isFull: boolean): Promise<IBaseModel> {
         try {
-            let model = await this.preUpdateHook(this.repository.createFromBody(request.body));
+            let model = await this.preUpdateHook(this.userRepository.createFromBody(request.body));
 
             //I think validation will break on partial updates.  Something to look for.
             let validationErrors = await this.isValid(model);
@@ -115,18 +115,18 @@ export abstract class BaseController {
                 updateBody = { $set: request.body }
             }
 
-            model = await this.repository.update(this.getId(request), updateBody);
+            model = await this.userRepository.update(this.getId(request), updateBody);
             if (!model) { throw { message: 'Item Not found', status: 404 }; }
 
             response.status(202).json({ model });
-            log.info(`Updated a: ${this.repository.getCollectionName()}, ID: ${model._id}`);
+            log.info(`Updated a: ${this.userRepository.getCollectionName()}, ID: ${model._id}`);
             return model;
         } catch (err) { next(err) }
     }
 
     public async create(request: Request, response: Response, next: NextFunction): Promise<IBaseModel> {
         try {
-            let model = await this.preCreateHook(this.repository.createFromBody(request.body));
+            let model = await this.preCreateHook(this.userRepository.createFromBody(request.body));
 
             let validationErrors = await this.isValid(model);
 
@@ -135,11 +135,11 @@ export abstract class BaseController {
                 return null;
             }
 
-            model = await this.repository.create(model);
+            model = await this.userRepository.create(model);
 
             response.status(201).json({ model });
 
-            log.info(`Created New: ${this.repository.getCollectionName()}, ID: ${model._id}`);
+            log.info(`Created New: ${this.userRepository.getCollectionName()}, ID: ${model._id}`);
 
             return model;
         } catch (err) { next(err) }
@@ -148,14 +148,14 @@ export abstract class BaseController {
     public async count(request: Request, response: Response, next: NextFunction): Promise<number> {
         try {
             const searchCriteria = new SearchCriteria(request, next);
-            const count: number = await this.repository.count(searchCriteria);
+            const count: number = await this.userRepository.count(searchCriteria);
 
             response.json({
-                CollectionName: this.repository.getCollectionName(),
+                CollectionName: this.userRepository.getCollectionName(),
                 CollectionCount: count,
                 SearchCriteria: searchCriteria.criteria,
             });
-            log.info(`Executed Count Operation: ${this.repository.getCollectionName()}, Count: ${count}`);
+            log.info(`Executed Count Operation: ${this.userRepository.getCollectionName()}, Count: ${count}`);
             return count;
         } catch (err) { next(err) }
 
@@ -163,11 +163,11 @@ export abstract class BaseController {
 
     public async list(request: Request, response: Response, next: NextFunction): Promise<IBaseModel[]> {
         try {
-            let models: IBaseModel[] = await this.repository.list(new SearchCriteria(request, next), this.defaultPopulationArgument);
+            let models: IBaseModel[] = await this.userRepository.list(new SearchCriteria(request, next), this.defaultPopulationArgument);
 
             response.json(models);
 
-            log.info(`Executed List Operation: ${this.repository.getCollectionName()}, Count: ${models.length}`);
+            log.info(`Executed List Operation: ${this.userRepository.getCollectionName()}, Count: ${models.length}`);
 
             return models;
         } catch (err) { next(err) }
@@ -175,13 +175,13 @@ export abstract class BaseController {
 
     public async single(request: Request, response: Response, next: NextFunction): Promise<IBaseModel> {
         try {
-            let model: IBaseModel = await this.repository.single(this.getId(request), this.defaultPopulationArgument);
+            let model: IBaseModel = await this.userRepository.single(this.getId(request), this.defaultPopulationArgument);
             if (!model)
                 throw ({ message: 'Item Not Found', status: 404 });
 
             response.json(model);
 
-            log.info(`Executed Single Operation: ${this.repository.getCollectionName()}, item._id: ${model._id}`);
+            log.info(`Executed Single Operation: ${this.userRepository.getCollectionName()}, item._id: ${model._id}`);
 
             return model;
         } catch (err) { next(err) }

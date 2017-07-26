@@ -11,4 +11,8 @@ export class RoleRepository extends BaseRepository<IRole> implements IRoleReposi
     public constructor(){
         super();
     }
+
+    public async getRoleByName(name: string): Promise<IRole>{
+        return await Role.findOne({name: name});
+    }
 }

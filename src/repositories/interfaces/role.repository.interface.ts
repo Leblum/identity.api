@@ -4,4 +4,5 @@ import { Model } from "mongoose";
 import { IBaseRepository } from "../index";
 
 export interface IRoleRepository extends IBaseRepository<IRole>{
+    getRoleByName(name: string): Promise<IRole>;
 }

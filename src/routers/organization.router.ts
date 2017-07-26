@@ -10,6 +10,6 @@ export class OrganizationRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.OrganizationsEndpoint;
+        this.resource = Constants.ORGANIZATION_ENDPOINT;
     }
 }

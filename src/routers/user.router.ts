@@ -10,6 +10,6 @@ export class UserRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.UsersEndpoint;
+        this.resource = Constants.USERs_ENDPOINT;
     }
 }

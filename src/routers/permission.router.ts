@@ -10,6 +10,6 @@ export class PermissionRouter extends BaseRouter {
 
     public constructor(){
         super();
-        this.resource = Constants.PermissionsEndpoint;
+        this.resource = Constants.PERMISSION_ENDPOINT;
     }
 }
