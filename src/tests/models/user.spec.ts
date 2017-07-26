@@ -23,6 +23,8 @@ let guestOrgId: string;
 describe('Users', () => {
 
     before(async () => {
+        // Keep in mind this happens in the users test.
+        // I'm not sure if this is really how I want to do this. 
         await Permission.remove({});
         await Role.remove({});
         await User.remove({});
