@@ -1,0 +1,2637 @@
+# leblum API Swagger
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  description: "This is the leblum RestAPI with a mongo db backing it.  You can see more about \
+  \ [mongo](https://www.mongodb.com/), [express](https://expressjs.com/), [mongoose](http://mongoosejs.com/)"
+  version: "1.0.0"
+  title: "leblum Rest API"
+  contact:
+    email: "davebrown.dev@gmail.com"
+  license:
+    name: "MIT Open Source"
+    url: "https://opensource.org/licenses/MIT"
+# the domain of the service
+host: localhost:8080
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+tags:
+- name: "Documents"
+  description: "Documents, Templates, and more"
+  externalDocs:
+    description: "Find out more"
+    url: "http://infor.com"
+- name: "Admin"
+  description: "Administrative tools"
+- name: "Authentication"
+  description: "Authentication enpoint. Grant JWT token, and Refresh Token"  
+- name: "Utils"
+  description: "Utility operations"
+basePath: 
+produces:
+  - application/json
+paths:
+  /api/document-entities:
+    get:
+      description: 'TODO: Add Description'
+      summary: criteria /document-entities
+      tags:
+      - Document Entities
+      operationId: criteria /document-entities
+      produces:
+      - application/json
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: '/api/document-entities?criteria={"name": "New Document"}&sort={"createdOn": -1}&limit=5'
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: criteria /document-entities
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    post:
+      description: 'TODO: Add Description'
+      summary: create /document-entities
+      tags:
+      - Document Entities
+      operationId: create /document-entities
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/Create ~1documentEntitiesrequest'
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/59044b9da7e3193c2025cd14:
+    get:
+      description: 'TODO: Add Description'
+      summary: single /api/document-entities/59044b9da7e3193c2025cd14
+      tags:
+      - Document Entities
+      operationId: single /api/document-entities/59044b9da7e3193c2025cd14
+      produces:
+      - application/json
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-entities/59044b9da7e3193c2025cd14
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: single /api/document-entities/59044b9da7e3193c2025cd14
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/utility:
+    get:
+      description: 'TODO: Add Description'
+      summary: utility /document-entities/utility
+      tags:
+      - Document Entities
+      operationId: utility /document-entities/utility
+      produces:
+      - application/json
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-entities/utility
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: utility /document-entities/utility
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/590449580193913434621477:
+    delete:
+      description: 'TODO: Add Description'
+      summary: destroy /api/document-entities/58fb4fbb085e7e3b30e33b98
+      tags:
+      - Document Entities
+      operationId: destroy /api/document-entities/58fb4fbb085e7e3b30e33b98
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/document-entities/590449580193913434621477
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: destroy /api/document-entities/58fb4fbb085e7e3b30e33b98
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/count:
+    get:
+      description: 'TODO: Add Description'
+      summary: count /document-entities/count
+      tags:
+      - Document Entities
+      operationId: count /document-entities/count
+      produces:
+      - application/json
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-entities/count
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: count /document-entities/count
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/blank:
+    get:
+      description: 'TODO: Add Description'
+      summary: blank /api/document-entities/blank
+      tags:
+      - Document Entities
+      operationId: blank /api/document-entities/blank
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-entities/blank
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: blank /api/document-entities/blank
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/query:
+    post:
+      description: 'TODO: Add Description'
+      summary: 'query: Text Index /document-entities'
+      tags:
+      - Document Entities
+      operationId: 'query: Text Index /document-entities'
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/Query: text index ~1documentEntitiesrequest'
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/document-entities/query
+          headers:
+            Content-Type: application/json
+            Accept: application/json
+          body: "{  \r\n    \"$text\": { \"$search\": \"Ax1287\", \"$caseSensitive\": false } \r\n}\r\n"
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: 'query: Text Index /document-entities'
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/clear:
+    delete:
+      description: 'TODO: Add Description'
+      summary: clear /api/document-entities/
+      tags:
+      - Document Entities
+      operationId: clear /api/document-entities/
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          type: object
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/document-entities/clear
+          headers:
+            Content-Type: application/json
+          body: '{}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: clear /api/document-entities/
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-entities/590459481d5fc03e305796ee:
+    put:
+      description: 'TODO: Add Description'
+      summary: update full /api/document-entities/58fd07bbe7062f2edc055097
+      tags:
+      - Document Entities
+      operationId: update full /api/document-entities/58fd07bbe7062f2edc055097
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/Update full ~1api~1documentEntities~158fd07bbe7062f2edc055097request'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    patch:
+      description: 'TODO: Add Description'
+      summary: update partial /api/document-entities/58fd07bbe7062f2edc055097
+      tags:
+      - Document Entities
+      operationId: update partial /api/document-entities/58fd07bbe7062f2edc055097
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/Update partial ~1api~1documentEntities~158fd07bbe7062f2edc055097request'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: PATCH
+          uri: /api/document-entities/590459481d5fc03e305796ee
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+              "_id": "590459481d5fc03e305796ee",
+              "selectedEnumerations.0.selectedValue": "1"
+            }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: update partial /api/document-entities/58fd07bbe7062f2edc055097
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates:
+    get:
+      description: 'TODO: Add Description'
+      summary: criteria /document-templates
+      tags:
+      - Document Templates
+      operationId: criteria /document-templates
+      produces:
+      - application/json
+      parameters:
+      - name: criteria
+        in: query
+        required: true
+        type: string
+        description: ''
+      - name: sort
+        in: query
+        required: true
+        type: string
+        description: ''
+      - name: limit
+        in: query
+        required: true
+        type: integer
+        format: int32
+        description: ''
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: '/api/document-templates?criteria={"name": "New Test Doc Template"}&sort={"createdOn": -1}&limit=5'
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: criteria /document-templates
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/blank:
+    get:
+      description: 'TODO: Add Description'
+      summary: /api/document-templates/blank
+      tags:
+      - Document Templates
+      operationId: /api/document-templates/blank
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-templates/blank
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/document-templates/blank
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/count:
+    get:
+      description: 'TODO: Add Description'
+      summary: /document-templates/count copy copy
+      tags:
+      - Document Templates
+      operationId: /document-templates/count copy copy
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-templates/count
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/count copy copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/58f14e187cb681211461c5a2:
+    get:
+      description: 'TODO: Add Description'
+      summary: /document-templates/58f14e187cb681211461c5a2
+      tags:
+      - Document Templates
+      operationId: /document-templates/58f14e187cb681211461c5a2
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/document-templates/58f14e187cb681211461c5a2
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/58f14e187cb681211461c5a2
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/58f321afb7bf853a28eac174:
+    put:
+      description: 'TODO: Add Description'
+      summary: /document-templates/58f321afb7bf853a28eac174
+      tags:
+      - Document Templates
+      operationId: /document-templates/58f321afb7bf853a28eac174
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/~1documentTemplates~158f321afb7bf853a28eac174request'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: PUT
+          uri: /api/document-templates/58f321afb7bf853a28eac174
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+              "_id": "58f321afb7bf853a28eac174",
+              "__v": 0,
+              "createdAt": "2017-04-16T07:56:15.186Z",
+              "description": "I have now updated the description3",
+              "name": "And a new name"
+            }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/58f321afb7bf853a28eac174
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    delete:
+      description: 'TODO: Add Description'
+      summary: /document-templates/58f321afb7bf853a28eac174
+      tags:
+      - Document Templates
+      operationId: /document-templates/58f321afb7bf853a28eac1741
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/document-templates/58f321afb7bf853a28eac174
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/58f321afb7bf853a28eac1741
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    patch:
+      description: 'TODO: Add Description'
+      summary: /document-templates/
+      tags:
+      - Document Templates
+      operationId: /document-templates/1
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/~1documentTemplates~1request31'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: PATCH
+          uri: /api/document-templates/58f321afb7bf853a28eac174
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+              "_id": "58f321afb7bf853a28eac174",
+              "__v": 0,
+              "createdAt": "2017-04-16T07:56:15.186Z",
+              "description": "I have now updated the description3",
+              "name": "THis is a patched name"
+            }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/1
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/:
+    post:
+      description: 'TODO: Add Description'
+      summary: /document-templates/
+      tags:
+      - Document Templates
+      operationId: /document-templates/
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/~1documentTemplates~1request'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/document-templates/
+          headers:
+            Content-Type: application/json
+          body: >2-
+              {
+              	"_id": "58f321afb7bf853a28eac174",
+                "description": "Document Template Made Through Put Request",
+                "name": "PostMan Document Template For creation",
+                "fields":[{
+                  "name": "filename",
+                  "description": "This is the filename of the uploaded file",
+                  "tooltip": "filename ie. 'upload.jpg'",
+                  "fieldStyle": 1,
+                  "primitiveType": 1,
+                  "requiresValidation": false,
+                  "validators": [{
+                  	"validationType": 1,
+                  	"min":0,
+                  	"max":100
+                  }],
+                  "value": "friendlyBoston.jpg"
+                },
+                {
+                  "name": "File Type",
+                  "description": "This is a user entered file type",
+                  "tooltip": "if you would like to specify a type, you can, and we'll try and save and render it as that type",
+                  "fieldStyle": 1,
+                  "primitiveType": 1,
+                  "requiresValidation": false,
+                  "validators": [{
+                  	"validationType": 1,
+                  	"min":0,
+                  	"max":20
+                  }],
+                  "value": "jpg"
+                }]
+              }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /document-templates/
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/document-templates/query:
+    post:
+      description: 'TODO: Add Description'
+      summary: query /api/document-templates
+      tags:
+      - Document Templates
+      operationId: query /api/document-templates
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/Query ~1api~1documentTemplatesrequest'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/enterprise-enumerations:
+    get:
+      description: 'TODO: Add Description'
+      summary: /enterprise-enumerations
+      tags:
+      - Enterprise Enumerations
+      operationId: /enterprise-enumerations
+      produces:
+      - application/json
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/enterprise-enumerations
+          headers:
+            Accept: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /enterprise-enumerations
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    post:
+      description: 'TODO: Add Description'
+      summary: /enterprise-enumerations
+      tags:
+      - Enterprise Enumerations
+      operationId: /enterprise-enumerations1
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/~1enterpriseEnumerationsrequest'
+      - name: Accept
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/enterprise-enumerations
+          headers:
+            Content-Type: application/json
+            Accept: application/json
+          body: "  {\n  	\"name\": \"Status\",\n  	\"description\": \"The current status of a document\",\n  	\"enumerationValues\": [\n  		{\n  		\"name\": \"Created\", \"value\": \"1\" \n  	},\n  	{\n  		\"name\": \"Opened\", \"value\": \"2\" \n  	},\n  	{\n  		\"name\": \"Closed\", \"value\": \"3\" \n  	}\n  	]\n  }"
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /enterprise-enumerations1
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/enterprise-enumerations/58fc98954f87e25f4c76174d:
+    delete:
+      description: 'TODO: Add Description'
+      summary: /api/enterprise-enumerations/58fb3e868280782334460839
+      tags:
+      - Enterprise Enumerations
+      operationId: /api/enterprise-enumerations/58fb3e868280782334460839
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/enterprise-enumerations/58fc98954f87e25f4c76174d
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/enterprise-enumerations/58fb3e868280782334460839
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/enterprise-enumerations/58fc6c57baed2e4e085730d0:
+    get:
+      description: 'TODO: Add Description'
+      summary: single /api/enterprise-enumerations/58fc6c57baed2e4e085730d0
+      tags:
+      - Enterprise Enumerations
+      operationId: single /api/enterprise-enumerations/58fc6c57baed2e4e085730d0
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/enterprise-enumerations/58fc6c57baed2e4e085730d0
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: single /api/enterprise-enumerations/58fc6c57baed2e4e085730d0
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/permissions/:
+    get:
+      description: 'TODO: Add Description'
+      summary: /api/admin/permissions/
+      tags:
+      - Permissions
+      operationId: /api/admin/permissions/
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/admin/permissions/
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/permissions/
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    post:
+      description: 'TODO: Add Description'
+      summary: Super user permission /api/admin/permissions/ copy
+      tags:
+      - Setup Users Roles Permissions
+      operationId: Super user permission /api/admin/permissions/ copy
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/SuperUserPermission~1api~1admin~1permissions~1Copyrequest'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/admin/permissions/
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+            	"_id": "58f8c48fedf7292be80a90dd",
+                      "name": "Full Access",
+                      "description": "Couldn't have more access if you tried",
+                      "value": "SUPER_USER"
+                    }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Super user permission /api/admin/permissions/ copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/roles/:
+    get:
+      description: 'TODO: Add Description'
+      summary: /api/admin/roles/
+      tags:
+      - Roles
+      operationId: /api/admin/roles/
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/admin/roles/
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/roles/
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    post:
+      description: 'TODO: Add Description'
+      summary: Read Only role /api/admin/permissions/ copy
+      tags:
+      - Setup Users Roles Permissions
+      operationId: Read Only role /api/admin/permissions/ copy
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/ReadOnlyRole~1api~1admin~1permissions~1Copyrequest'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/admin/roles/
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+            	"_id": "58f8c730edf7292be80a90e0",
+              "name": "ReadOnly",
+                "description": "Read Only role for just searching",
+                "permissions":[{"_id": "58f8c4ceedf7292be80a90de"}]
+            }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Read Only role /api/admin/permissions/ copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/users/:
+    post:
+      description: 'TODO: Add Description'
+      summary: ReadOnly User /api/users/
+      tags:
+      - Users
+      operationId: ReadOnly User /api/users/1
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/ReadonlyUser~1api~1users~1request56'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /api/admin/users/
+          headers:
+            Content-Type: application/json
+          body: >-
+            {
+                "username": "readOnlyUserName",
+                "passwordHash": "nothashedyet",
+                "email": "readAccess@read.com",
+                "roles":[{"_id": "58f8c730edf7292be80a90e0"}],
+                "isTokenExpired": false
+            }
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: ReadOnly User /api/users/
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/permissions/58f8c4ceedf7292be80a90de:
+    delete:
+      description: 'TODO: Add Description'
+      summary: /api/admin/permissions/58f8c4ceedf7292be80a90de
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: /api/admin/permissions/58f8c4ceedf7292be80a90de
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/permissions/58f8c4ceedf7292be80a90de
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/permissions/58f8c4ceedf7292be80a90de
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/permissions/58f8c48fedf7292be80a90dd:
+    delete:
+      description: 'TODO: Add Description'
+      summary: /api/admin/permissions/58f8c4ceedf7292be80a90de copy
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: /api/admin/permissions/58f8c4ceedf7292be80a90de copy
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/permissions/58f8c48fedf7292be80a90dd
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/permissions/58f8c4ceedf7292be80a90de copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/roles/58f8c7adedf7292be80a90e1:
+    delete:
+      description: 'TODO: Add Description'
+      summary: /api/admin/roles/58f8c4ceedf7292be80a90de copy
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: /api/admin/roles/58f8c4ceedf7292be80a90de copy
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/roles/58f8c7adedf7292be80a90e1
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/roles/58f8c4ceedf7292be80a90de copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/roles/58f8c730edf7292be80a90e0:
+    delete:
+      description: 'TODO: Add Description'
+      summary: /api/admin/roles/58f8c4ceedf7292be80a90de copy copy
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: /api/admin/roles/58f8c4ceedf7292be80a90de copy copy
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/roles/58f8c730edf7292be80a90e0
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/admin/roles/58f8c4ceedf7292be80a90de copy copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/users/58f8c8caedf7292be80a90e4:
+    delete:
+      description: 'TODO: Add Description'
+      summary: Delete Admin /api/users/58f757e1ae87ab520cb443ad copy
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: Delete Admin /api/users/58f757e1ae87ab520cb443ad copy
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/users/58f8c8caedf7292be80a90e4
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Delete Admin /api/users/58f757e1ae87ab520cb443ad copy
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/users/58f8c88bedf7292be80a90e2:
+    delete:
+      description: 'TODO: Add Description'
+      summary: Delete Read Only /api/users/58f757e1ae87ab520cb443ad
+      tags:
+      - Tear Down Users Roles Permissions
+      operationId: Delete Read Only /api/users/58f757e1ae87ab520cb443ad
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/users/58f8c88bedf7292be80a90e2
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Delete Read Only /api/users/58f757e1ae87ab520cb443ad
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/users:
+    get:
+      description: 'TODO: Add Description'
+      summary: /api/users
+      tags:
+      - Users
+      operationId: /api/users
+      produces:
+      - application/json
+      parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /api/admin/users
+          headers:
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfYnNvbnR5cGUiOiJPYmplY3RJRCIsImlkIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjpbODgsMjQ4LDIyOSwxNTQsMTIxLDE0OSw0Miw3MywxNjgsNTAsODQsNzFdfSwiaWF0IjoxNDkyNzA3MTMxLCJleHAiOjE0OTI3OTM1MzF9.QnCa6M8TwnYgM0ZsHa_VCgFwxtGeX3MwLflAwsVS27Q
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: /api/users
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /api/admin/users/58fc9fbe285d705f6428ba60:
+    delete:
+      description: 'TODO: Add Description'
+      summary: Delete Admin /api/users/58f757e1ae87ab520cb443ad
+      tags:
+      - Users
+      operationId: Delete Admin /api/users/58f757e1ae87ab520cb443ad
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /api/admin/users/58fc9fbe285d705f6428ba60
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Delete Admin /api/users/58f757e1ae87ab520cb443ad
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /authenticate:
+    post:
+      description: 'TODO: Add Description'
+      summary: Authenticate ADMIN /api/authenticate
+      tags:
+      - Users
+      operationId: Authenticate ADMIN /api/authenticate
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/AuthenticateAdmin~1api~1authenticaterequest'
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /authenticate
+          headers:
+            Content-Type: application/json
+          body: "{  \r\n  \"username\": \"adminUserName\",\r\n  \"passwordHash\": \"nothashedyet\"\r\n}\r\n"
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Authenticate ADMIN /api/authenticate
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /authenticate/refresh:
+    post:
+      description: 'TODO: Add Description'
+      summary: Refresh /api/authenticate/refresh
+      tags:
+      - Users
+      operationId: Refresh /api/authenticate/refresh
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: x-access-token
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /authenticate/refresh
+          headers:
+            Content-Type: application/json
+            x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OGY4Yzg4YmVkZjcyOTJiZTgwYTkwZTIiLCJleHBpcmF0aW9uIjoiMWgiLCJpYXQiOjE0OTM1MDU2ODUsImV4cCI6MTQ5MzUwOTI4NX0.hJ8gur-H6fW7Qw3P6mo22lQBctIKjvtMN_h-Xiyy3N8
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Refresh /api/authenticate/refresh
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+definitions:
+  Create /documentEntitiesrequest:
+    title: create /document-entitiesRequest
+    type: object
+    properties:
+      description:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      selectedEnumerations:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/SelectedEnumeration'
+      dataTables:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/DataTable'
+      fields:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      isTemplate:
+        description: ''
+        type: boolean
+      isCheckedOut:
+        description: ''
+        type: boolean
+      version:
+        description: ''
+        type: integer
+        format: int32
+    required:
+    - description
+    - name
+    - selectedEnumerations
+    - dataTables
+    - fields
+    - isTemplate
+    - isCheckedOut
+    - version
+  SelectedEnumeration:
+    title: SelectedEnumeration
+    type: object
+    properties:
+      selectedValue:
+        description: ''
+        type: string
+      fromEnumeration:
+        description: ''
+        $ref: '#/definitions/FromEnumeration'
+    required:
+    - selectedValue
+    - fromEnumeration
+  FromEnumeration:
+    title: FromEnumeration
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      updatedAt:
+        description: ''
+        type: string
+      createdAt:
+        description: ''
+        type: string
+      href:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      __v:
+        description: ''
+        type: integer
+        format: int32
+      enumerationValues:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/EnumerationValue'
+    required:
+    - _id
+    - updatedAt
+    - createdAt
+    - href
+    - name
+    - description
+    - __v
+    - enumerationValues
+  EnumerationValue:
+    title: EnumerationValue
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    required:
+    - name
+    - value
+  DataTable:
+    title: DataTable
+    type: object
+    properties:
+      columns:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Column'
+    required:
+    - columns
+  Column:
+    title: Column
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      tooltip:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      fieldStyle:
+        description: ''
+        type: integer
+        format: int32
+      booleanValues:
+        description: ''
+        type: array
+        items:
+          type: string
+      dateValues:
+        description: ''
+        type: array
+        items:
+          type: string
+      numberValues:
+        description: ''
+        type: array
+        items:
+          type: string
+      stringValues:
+        description: ''
+        type: array
+        items:
+          type: string
+      validators:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Validator'
+    required:
+    - name
+    - tooltip
+    - description
+    - fieldStyle
+    - booleanValues
+    - dateValues
+    - numberValues
+    - stringValues
+    - validators
+  Validator:
+    title: Validator
+    type: object
+    properties:
+      validationType:
+        description: ''
+        type: integer
+        format: int32
+      min:
+        description: ''
+        type: integer
+        format: int32
+      max:
+        description: ''
+        type: integer
+        format: int32
+    required:
+    - validationType
+    - min
+    - max
+  Field:
+    title: Field
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      fieldStyle:
+        description: ''
+        type: integer
+        format: int32
+      validators:
+        description: ''
+        type: array
+        items:
+          type: string
+      tooltip:
+        description: ''
+        type: string
+      stringValue:
+        description: ''
+        type: string
+      numberValue:
+        description: ''
+        type: number
+        format: double
+      booleanValue:
+        description: ''
+        type: boolean
+      dateValue:
+        description: ''
+        type: string
+    required:
+    - name
+    - description
+    - fieldStyle
+    - validators
+  Query /documentEntitiesrequest:
+    title: query /document-entitiesRequest
+    type: object
+    properties:
+      $and:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/And'
+    required:
+    - $and
+  And:
+    title: And
+    type: object
+    properties:
+      $or:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Or'
+      $text:
+        description: ''
+        $ref: '#/definitions/Text'
+  Or:
+    title: Or
+    type: object
+    properties:
+      fields.fieldStyle:
+        description: ''
+        $ref: '#/definitions/FieldsFieldStyle'
+      dataTables.columns:
+        description: ''
+        $ref: '#/definitions/DataTablesColumns'
+      $and:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/And14'
+  FieldsFieldStyle:
+    title: FieldsFieldStyle
+    type: object
+    properties:
+      $lt:
+        description: ''
+        type: integer
+        format: int32
+    required:
+    - $lt
+  DataTablesColumns:
+    title: DataTablesColumns
+    type: object
+    properties:
+      $elemMatch:
+        description: ''
+        $ref: '#/definitions/ElemMatch'
+    required:
+    - $elemMatch
+  ElemMatch:
+    title: ElemMatch
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      stringValues:
+        description: ''
+        type: string
+    required:
+    - name
+    - stringValues
+  And14:
+    title: And14
+    type: object
+    properties:
+      fields:
+        description: ''
+        $ref: '#/definitions/Fields'
+    required:
+    - fields
+  Fields:
+    title: Fields
+    type: object
+    properties:
+      $elemMatch:
+        description: ''
+        $ref: '#/definitions/ElemMatch16'
+    required:
+    - $elemMatch
+  ElemMatch16:
+    title: ElemMatch16
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      numberValue:
+        description: ''
+        $ref: '#/definitions/NumberValue'
+    required:
+    - name
+    - numberValue
+  NumberValue:
+    title: NumberValue
+    type: object
+    properties:
+      $gte:
+        description: ''
+        type: number
+        format: double
+    required:
+    - $gte
+  Text:
+    title: Text
+    type: object
+    properties:
+      $search:
+        description: ''
+        type: string
+      $caseSensitive:
+        description: ''
+        type: boolean
+    required:
+    - $search
+    - $caseSensitive
+  'Query: text index /documentEntitiesrequest':
+    title: 'query: Text Index /document-entitiesRequest'
+    type: object
+    properties:
+      $text:
+        description: ''
+        $ref: '#/definitions/Text'
+    required:
+    - $text
+  Update full /api/documentEntities/58fd07bbe7062f2edc055097request:
+    title: update full /api/document-entities/58fd07bbe7062f2edc055097Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      updatedAt:
+        description: ''
+        type: string
+      createdAt:
+        description: ''
+        type: string
+      href:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      __v:
+        description: ''
+        type: integer
+        format: int32
+      selectedEnumerations:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/SelectedEnumeration22'
+      dataTables:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/DataTable'
+      fields:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Fields26'
+      isTemplate:
+        description: ''
+        type: boolean
+      isCheckedOut:
+        description: ''
+        type: boolean
+      version:
+        description: ''
+        type: integer
+        format: int32
+    required:
+    - _id
+    - updatedAt
+    - createdAt
+    - href
+    - description
+    - name
+    - __v
+    - selectedEnumerations
+    - dataTables
+    - fields
+    - isTemplate
+    - isCheckedOut
+    - version
+  SelectedEnumeration22:
+    title: SelectedEnumeration22
+    type: object
+    properties:
+      selectedValue:
+        description: ''
+        type: string
+      fromEnumeration:
+        description: ''
+        type: string
+    required:
+    - selectedValue
+    - fromEnumeration
+  Fields26:
+    title: Fields26
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      fieldStyle:
+        description: ''
+        type: integer
+        format: int32
+      validators:
+        description: ''
+        type: array
+        items:
+          type: string
+      tooltip:
+        description: ''
+        type: string
+      stringValue:
+        description: ''
+        type: string
+      numberValue:
+        description: ''
+        type: number
+        format: double
+      booleanValue:
+        description: ''
+        type: boolean
+      dateValue:
+        description: ''
+        type: string
+    required:
+    - name
+    - description
+    - fieldStyle
+    - validators
+  Update partial /api/documentEntities/58fd07bbe7062f2edc055097request:
+    title: update partial /api/document-entities/58fd07bbe7062f2edc055097Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      selectedEnumerations.0.selectedValue:
+        description: ''
+        type: string
+    required:
+    - _id
+    - selectedEnumerations.0.selectedValue
+  /documentTemplates/request:
+    title: /document-templates/Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      fields:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Fields29'
+    required:
+    - _id
+    - description
+    - name
+    - fields
+  Fields29:
+    title: Fields29
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      tooltip:
+        description: ''
+        type: string
+      fieldStyle:
+        description: ''
+        type: integer
+        format: int32
+      primitiveType:
+        description: ''
+        type: integer
+        format: int32
+      requiresValidation:
+        description: ''
+        type: boolean
+      validators:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Validator'
+      value:
+        description: ''
+        type: string
+    required:
+    - name
+    - description
+    - tooltip
+    - fieldStyle
+    - primitiveType
+    - requiresValidation
+    - validators
+    - value
+  /documentTemplates/request31:
+    title: /document-templates/Request31
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      __v:
+        description: ''
+        type: integer
+        format: int32
+      createdAt:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+    required:
+    - _id
+    - __v
+    - createdAt
+    - description
+    - name
+  /documentTemplates/58f321afb7bf853a28eac174request:
+    title: /document-templates/58f321afb7bf853a28eac174Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      __v:
+        description: ''
+        type: integer
+        format: int32
+      createdAt:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+    required:
+    - _id
+    - __v
+    - createdAt
+    - description
+    - name
+  Query /api/documentTemplatesrequest:
+    title: query /api/document-templatesRequest
+    type: object
+    properties:
+      $or:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Or34'
+    required:
+    - $or
+  Or34:
+    title: Or34
+    type: object
+    properties:
+      fields.fieldStyle:
+        description: ''
+        $ref: '#/definitions/FieldsFieldStyle'
+      fields.value:
+        description: ''
+        type: string
+      fields.updatedAt:
+        description: ''
+        type: string
+    required:
+    - fields.fieldStyle
+  /enterpriseEnumerationsrequest:
+    title: /enterprise-enumerationsRequest
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      enumerationValues:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/EnumerationValue'
+    required:
+    - name
+    - description
+    - enumerationValues
+  SuperUserPermission/api/admin/permissions/request:
+    title: Super user permission /api/admin/permissions/Request
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    required:
+    - name
+    - description
+    - value
+  ReadOnlyPermission/api/admin/permissions/request:
+    title: Read Only permission /api/admin/permissions/Request
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    required:
+    - name
+    - description
+    - value
+  AdminRole/api/admin/rolesrequest:
+    title: Admin role /api/admin/rolesRequest
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      permissions:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+    required:
+    - name
+    - description
+    - permissions
+  Permission:
+    title: Permission
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+    required:
+    - _id
+  ReadOnlyRole/api/admin/permissions/request:
+    title: Read Only role /api/admin/permissions/Request
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      permissions:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+    required:
+    - name
+    - description
+    - permissions
+  ReadOnlyPermission/api/admin/permissions/Copyrequest:
+    title: Read Only permission /api/admin/permissions/ copyRequest
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    required:
+    - _id
+    - name
+    - description
+    - value
+  SuperUserPermission/api/admin/permissions/Copyrequest:
+    title: Super user permission /api/admin/permissions/ copyRequest
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    required:
+    - _id
+    - name
+    - description
+    - value
+  AdminRole/api/admin/rolesCopyrequest:
+    title: Admin role /api/admin/roles copyRequest
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      permissions:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+    required:
+    - _id
+    - name
+    - description
+    - permissions
+  ReadOnlyRole/api/admin/permissions/Copyrequest:
+    title: Read Only role /api/admin/permissions/ copyRequest
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      permissions:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+    required:
+    - _id
+    - name
+    - description
+    - permissions
+  Admin/api/users/request:
+    title: ADMIN /api/users/Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+      email:
+        description: ''
+        type: string
+      roles:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      isTokenExpired:
+        description: ''
+        type: boolean
+    required:
+    - _id
+    - username
+    - passwordHash
+    - email
+    - roles
+    - isTokenExpired
+  Role:
+    title: Role
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+    required:
+    - _id
+  ReadonlyUser/api/users/request:
+    title: ReadOnly User /api/users/Request
+    type: object
+    properties:
+      _id:
+        description: ''
+        type: string
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+      email:
+        description: ''
+        type: string
+      roles:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      isTokenExpired:
+        description: ''
+        type: boolean
+    required:
+    - _id
+    - username
+    - passwordHash
+    - email
+    - roles
+    - isTokenExpired
+  Admin/api/users/request54:
+    title: ADMIN /api/users/Request54
+    type: object
+    properties:
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+      email:
+        description: ''
+        type: string
+      roles:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      isTokenExpired:
+        description: ''
+        type: boolean
+    required:
+    - username
+    - passwordHash
+    - email
+    - roles
+    - isTokenExpired
+  ReadonlyUser/api/users/request56:
+    title: ReadOnly User /api/users/Request56
+    type: object
+    properties:
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+      email:
+        description: ''
+        type: string
+      roles:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      isTokenExpired:
+        description: ''
+        type: boolean
+    required:
+    - username
+    - passwordHash
+    - email
+    - roles
+    - isTokenExpired
+  AuthenticateReadOnly/api/authenticaterequest:
+    title: Authenticate READ ONLY /api/authenticateRequest
+    type: object
+    properties:
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+    required:
+    - username
+    - passwordHash
+  AuthenticateAdmin/api/authenticaterequest:
+    title: Authenticate ADMIN /api/authenticateRequest
+    type: object
+    properties:
+      username:
+        description: ''
+        type: string
+      passwordHash:
+        description: ''
+        type: string
+    required:
+    - username
+    - passwordHash

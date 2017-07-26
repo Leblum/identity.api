@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+- node
+before_script:
+- npm install -g gulp-cli
+- gulp build
+cache:
+  directories:
+  - node_modules
+notifications:
+  email: false
+deploy:
+  provider: heroku
+  api_key:
+    secure: CopT1Ck7+lAFbQTHh9FXh40APSyoJZQvh6I54gz5GOLM8rPXNcjb8XZm+4wjLYVGfM6mBRxsrzcq+3uXPvjm2G1ylUrFXUyl75+j1Y2kelfLkZ2/KGJjUEMcFQKzLXydeEJdnQnptjUFfC0cvqfUPJrEZArqkbgaa2OnWmccf4KOAV+HuidUj+exSFSnbfQ31LMAlpksKsJSEGkeL1gEdStWMZsulzMxE7G9I8zNY+hQIb/TPo7iekkp42OC1mnN6bipOn68gNvGjya/GDg2+LOEV4sxiB/MCTmnNRLt5NN1T0/WgNrQDxeJ6o9FhNA2niAwyqHQgJ9AITe2Hea/xEFDgqseYxtTDgMtnGOlsjkc1daTsmK25DcZ5//19rxZq71ZrrCL4U13uiqYln0D0dAjag6898FRnQQAiy01uAO7kT/sHj+ac3+aw1fNUvNqdeh3IqfrucaktENinkFjYFWEWchqQcfz/P7khxIjbC4CAA8ZiD2zLhCQ3n2TZp6cNut/lh/g5iqJxVnuLK4B08XnzfTodrxy7rqzkj3+fb++auZPRUMGM0o2FpQOO8R2ppOOcB6PszDqWTvFhdztAJy0tT8If9Ua3Ci203Y60DWqUt7nRipe1g1hvgiKO+Q/qfMWOQi2HiWrzMHJkFFX5ozEzLN1pV5+ZqYafRYuHRE=
+  app: leblum-vendor-api-alpha
+  on:
+    repo: davidbfrogman/leblum.api.vendor.alpha
