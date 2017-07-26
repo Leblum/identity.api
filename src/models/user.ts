@@ -4,8 +4,8 @@ import { IRole } from './role';
 import { IBaseModel } from "./index";
 
 export interface IUser extends IBaseModel {
-    firstName: string,
-    lastName: string,
+    firstName?: string,
+    lastName?: string,
     password: string;
     email: string;
     roles?: Array<IRole>;

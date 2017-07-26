@@ -19,6 +19,7 @@ import { ApiErrorHandler } from './api-error-handler';
 
 import methodOverride = require('method-override');
 import log = require('winston');
+import { authz } from "./controllers/authorization";
 
 
 // Creates and configures an ExpressJS web server.
@@ -103,7 +104,7 @@ class Application {
     let connected = await this.currentDatabase.connect();
     // Be very careful with this line.
     ///asd9f9as78df98sadjawait DatabaseBootstrap.teardown();
-    await DatabaseBootstrap.bootstrap();
+    await DatabaseBootstrap.seed();
 
     this.setupComplete = connected as boolean;
     log.info('Completed Setup, boostrapped database, database now online');
@@ -142,9 +143,12 @@ class Application {
     this.express.use('/authenticate', new routers.AuthenticationRouter().getRouter());
     this.express.use('/register', new routers.RegistrationRouter().getRouter());
     this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.OrganizationRouter().getRouter());
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.UserRouter().getRouter());
-    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, new routers.RoleRouter().getRouter());
+
+    //Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.OrganizationRouter().getRouter());
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.UserRouter().getRouter());
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.RoleRouter().getRouter());
+    this.express.use(Constants.API_ENDPOINT + Constants.API_VERSION_1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
 
     log.info('Instantiating Default Error Handler Route');
     this.express.use((error: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {

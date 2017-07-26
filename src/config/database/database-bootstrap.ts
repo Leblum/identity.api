@@ -8,15 +8,15 @@ import log = require('winston');
 export  class DatabaseBootstrap {
 
     // This teardown would be for testing only.  Careful with this guy.
-    public static async teardown(){
-        let count = await Organization.count({});
-        await Permission.remove({});
-        await Role.remove({});
-        await User.remove({});
-        await Organization.remove({});
-    }
+    // public static async teardown(){
+    //     let count = await Organization.count({});
+    //     await Permission.remove({});
+    //     await Role.remove({});
+    //     await User.remove({});
+    //     await Organization.remove({});
+    // }
     
-    public static async bootstrap() {
+    public static async seed() {
         let count = await Organization.count({});
         if (count === 0) {
             log.info('About to bootstrap the database.  This will insert a system org, and system user, along with default roles, and permissions');
@@ -68,16 +68,6 @@ export  class DatabaseBootstrap {
 
         }
     }
-
-    // private async createAllRoles(): Promise<Array<IRole>>{
-    //     let permissions = await this.createAllPermissions()
-    //     let roles: Array<IRole> = new Array<IRole>();
-    //     roles.push(await this.createSingleRole('admin','amdministrator', permissions));
-    //     roles.push(await this.createSingleRole('guest','guest', permissions));
-    //     roles.push(await this.createSingleRole('supplier:owner','supplier owner access to sensitive info', permissions));
-    //     roles.push(await this.createSingleRole('supplier:user','supplier employee no access to sensitive info', permissions));
-    //     return roles;
-    // }
 
     private static async createSingleRole(name: string, description: string, permissions: Array<IPermission>): Promise<IRole> {
         let role = new Role({

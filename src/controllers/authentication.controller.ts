@@ -114,18 +114,19 @@ export class AuthenticationController extends BaseController {
             const token = request.body.token || request.query.token || request.headers['x-access-token'];
             if (token) {
                 // verifies secret and checks exp
+                //Rewrite to use async or something 
                 jwt.verify(token, Config.active.get('jwtSecretToken'), (err, decoded) => {
                     if (err) { this.sendAuthFailure(response, 401, `Failed to authenticate token. The timer *may* have expired on this token. err: ${err}`); }
                     else {
                         var token: ITokenPayload = decoded;
                         request[Constants.REQUEST_TOKEN_LOCATION] = token;
+                        next();
                     }
                 });
             } else {
                 //No token, send auth failure
                 return this.sendAuthFailure(response, 403, 'No Authentication Token Provided');
             }
-            next();
         } catch (err) {
             this.sendAuthFailure(response, 401, "Authentication Failed");
         }
