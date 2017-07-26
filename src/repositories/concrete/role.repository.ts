@@ -4,9 +4,10 @@ import {IBaseRepository} from '../base/base.repository.interface';
 
 import { Model } from "mongoose";
 import { IRoleRepository } from "../index";
+import { IRoleDoc } from "../../models/role";
 
-export class RoleRepository extends BaseRepository<IRole> implements IRoleRepository, IBaseRepository<IRole>{
-    protected mongooseModelInstance: Model<IRole> = Role;
+export class RoleRepository extends BaseRepository<IRoleDoc> implements IRoleRepository, IBaseRepository<IRoleDoc>{
+    protected mongooseModelInstance: Model<IRoleDoc> = Role;
 
     public constructor(){
         super();

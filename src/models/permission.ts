@@ -1,6 +1,6 @@
 import { mongoose } from '../config/database/database';
 import { Schema, Model, Document } from 'mongoose';
-import { IBaseModel } from "./index";
+import { IBaseModel, IBaseModelDoc } from "./index";
 
 export interface IPermission extends IBaseModel {
     name: String;
@@ -8,6 +8,11 @@ export interface IPermission extends IBaseModel {
     value: string;
     href: string;
 }
+
+export interface IPermissionDoc extends IPermission, IBaseModelDoc {
+
+}
+
 
 export const PermissionSchema = new Schema({
     name: {type: String},
@@ -22,4 +27,4 @@ PermissionSchema.pre('save',function(next){
     next();
 });
 
-export const Permission = mongoose.model<IPermission>('permission', PermissionSchema);
+export const Permission = mongoose.model<IPermissionDoc>('permission', PermissionSchema);

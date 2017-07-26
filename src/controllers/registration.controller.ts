@@ -1,4 +1,4 @@
-import { User, IUser } from '../models';
+import { User, IUserDoc } from '../models';
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler, Application } from 'express';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
@@ -20,7 +20,7 @@ export class RegistrationController extends BaseController {
     private tokenExpiration: string = '24h';
     public defaultPopulationArgument = null;
 
-    protected userRepository: IUserRepository = new UserRepository();
+    protected repository: IUserRepository = new UserRepository();
     protected organizationRepository: IOrganizationRepository = new OrganizationRepository();
     protected roleRepository: IRoleRepository = new RoleRepository();
 
@@ -31,7 +31,7 @@ export class RegistrationController extends BaseController {
     public async register(request: Request, response: Response, next: NextFunction): Promise<any> {
         try {
             // First we have to check if the email address is unique
-            if (await this.userRepository.findUserByEmail(request.body.email)) {
+            if (await this.repository.findUserByEmail(request.body.email)) {
                 ApiErrorHandler.sendError('That user email already exists',400, CONST.ErrorCodes.EMAIL_TAKEN, response);
             }
             if(!request.body.password || request.body.password.length < 6){
@@ -57,12 +57,12 @@ export class RegistrationController extends BaseController {
                 user = await user.save();
 
                 //Now we create an email verification record
-                let emailVerification: IEmailVerification = new EmailVerification();
-                emailVerification.isVerified = false;
-                emailVerification.userId = user.id;
-                emailVerification.validityLength = '1week';
-
-                emailVerification.save();
+                let emailVerification: IEmailVerification = {
+                    isVerified: false,
+                    userId: user.id,
+                    validityLength: '1week'
+                }
+                await new EmailVerification(emailVerification).save();
 
                 // TODO: Send the email verification
 

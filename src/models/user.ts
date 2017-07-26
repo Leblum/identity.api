@@ -1,7 +1,8 @@
 import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
 import { IRole } from './role';
-import { IBaseModel } from "./index";
+import { IBaseModel, IBaseModelDoc } from "./index";
+
 
 export interface IUser extends IBaseModel {
     firstName?: string,
@@ -17,6 +18,10 @@ export interface IUser extends IBaseModel {
     isEmailVerified: boolean;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
+}
+
+export interface IUserDoc extends IUser, IBaseModelDoc {
+
 }
 
 const UserSchema = new Schema({
@@ -38,4 +43,4 @@ UserSchema.pre('save',function(next){
 });
 
 // This will compile the schema for the object, and place it in this Instance.
-export const User = mongoose.model<IUser>('user', UserSchema);
+export const User = mongoose.model<IUserDoc>('user', UserSchema);

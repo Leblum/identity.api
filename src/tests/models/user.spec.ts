@@ -1,7 +1,7 @@
 //During the test the env variable is set to test
 import { Database } from '../../config/database/database';
 import { App, server } from '../../server';
-import { User, IUser, Permission, Role, Organization } from '../../models';
+import { User, IUserDoc, Permission, Role, Organization, IUser } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
@@ -71,7 +71,8 @@ describe('Users', () => {
     });
 
     it('should NOT Allow delete with a regular user', async () => {
-        let user = new User({
+
+        let user: IUser = {
             email: "6788765768@test.com",
             password: "test",
             isTokenExpired: false,
@@ -79,7 +80,9 @@ describe('Users', () => {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
-        });
+        };
+        //By calling this I'll generate an id
+         let userDoc = new User(user)
 
         let createResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
@@ -87,7 +90,7 @@ describe('Users', () => {
             .send(user);
         
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", userAuthToken);
 
         expect(response.status).to.equal(403);
@@ -95,14 +98,15 @@ describe('Users', () => {
     });
 
     it('should create a user', async () => {
-        let user:IUser = new User({
+        let user: IUser = {
             firstName: "Dave",
             lastName: "Brown",
             email: "test2@test.com",
             password: "test1234",
             isTokenExpired: false,
             organizationId: guestOrgId,
-        });
+            isEmailVerified: false,
+        };
 
         let response = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
@@ -119,7 +123,7 @@ describe('Users', () => {
 
     it('should create the user in the db and make sure get by id works', async () => {
 
-        let user = new User({
+        let user: IUser = {
             email: "test2345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -127,12 +131,12 @@ describe('Users', () => {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
-        });
+        };
 
-        user = await user.save();
+        let userDoc = await new User(user).save();
 
         let response = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", systemAuthToken)
 
         expect(response.status).to.equal(200);
@@ -142,7 +146,7 @@ describe('Users', () => {
     });
 
     it('it should update a user', async () => {
-        let user = new User({
+        let user: IUser = {
             email: "qwerqwer@test.com",
             password: "test",
             isTokenExpired: false,
@@ -150,29 +154,29 @@ describe('Users', () => {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
-        });
+        };
 
-        user = await user.save();
+        let userDoc = await new User(user).save();
 
-        let iuser = {
-            _id: `${user.id}`,
+        let userUpdate = {
+            _id: `${userDoc.id}`,
             firstName: "Don",
             lastName: "Jaun",
         };
 
         let response = await api
-            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
+            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", systemAuthToken)
-            .send(iuser);
+            .send(userUpdate);
 
         expect(response.status).to.equal(202);
         expect(response.body).to.have.property('model');
         expect(response.body.model).to.have.property('firstName');
-        expect(response.body.model.firstName).to.equal(iuser.firstName);
+        expect(response.body.model.firstName).to.equal(userUpdate.firstName);
     });
 
     it('it should delete a user', async () => {
-        let user = new User({
+        let user: IUser = {
             email: "24352345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -180,7 +184,7 @@ describe('Users', () => {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
-        });
+        };
 
         let createResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
@@ -188,13 +192,13 @@ describe('Users', () => {
             .send(user);
         
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${user.id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${createResponse.body.model._id}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property('ItemRemoved');
         expect(response.body).to.have.property('ItemRemovedId');
-        expect(response.body.ItemRemovedId).to.be.equal(user.id);
+        expect(response.body.ItemRemovedId).to.be.equal(createResponse.body.model._id);
         expect(response.body.ItemRemoved.email).to.be.equal(user.email);
     });
 

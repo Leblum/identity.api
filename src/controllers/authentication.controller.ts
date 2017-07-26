@@ -1,4 +1,4 @@
-import { User, IUser } from '../models';
+import { User, IUserDoc } from '../models';
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler, Application } from 'express';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
@@ -19,7 +19,7 @@ export class AuthenticationController extends BaseController {
     private tokenExpiration: string = '24h';
     public defaultPopulationArgument = null;
 
-    protected userRepository: IUserRepository = new UserRepository();
+    protected repository: IUserRepository = new UserRepository();
     protected organizationRepository: IOrganizationRepository = new OrganizationRepository();
     protected roleRepository: IRoleRepository = new RoleRepository();
 
@@ -29,7 +29,7 @@ export class AuthenticationController extends BaseController {
 
     public async authenticate(request: Request, response: Response, next: NextFunction): Promise<any> {
         try {
-            const user = await this.userRepository.getUserForPasswordCheck(request.body.email);
+            const user = await this.repository.getUserForPasswordCheck(request.body.email);
             const passwordResult = await bcrypt.compare(request.body.password, user.password);
             if (passwordResult === false) {
                 this.sendAuthFailure(response, 401, 'Password does not match');
@@ -75,7 +75,7 @@ export class AuthenticationController extends BaseController {
                     this.sendAuthFailure(response, 401, 'Failed to authenticate token. The timer *may* have expired on this token.');
                 } else {
                     //get the user from the database, and verify that they don't need to re login
-                    this.userRepository.single(decodedToken.userId).then((user) => {
+                    this.repository.single(decodedToken.userId).then((user) => {
                         if (user.isTokenExpired) {
                             this.sendAuthFailure(response, 401, 'The user must login again to refresh their credentials');
                         }

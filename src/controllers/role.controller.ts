@@ -1,4 +1,4 @@
-import { Role, IRole } from '../models';
+import { Role, IRole, IRoleDoc } from '../models';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
 import { BaseController } from './base/base.controller';
@@ -11,18 +11,18 @@ export class RoleController extends BaseController{
     path: 'permissions'
   }
 
-  protected userRepository: IRoleRepository = new RoleRepository();
+  protected repository: IRoleRepository = new RoleRepository();
 
   constructor() {
     super();
   }
 
-  public preCreateHook(model: IRole): Promise<IRole>{
+  public preCreateHook(model: IRoleDoc): Promise<IRoleDoc>{
     model.href = `${CONST.ep.API}${CONST.ep.ROLES}/${model._id}`;
     return Promise.resolve(model);
   }
 
-  public preUpdateHook(model: IRole): Promise<IRole>{
+  public preUpdateHook(model: IRoleDoc): Promise<IRoleDoc>{
     model.href = `${CONST.ep.API}${CONST.ep.ROLES}/${model._id}`;
     return Promise.resolve(model);
   }

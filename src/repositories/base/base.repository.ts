@@ -3,11 +3,11 @@ import { Model, Document } from "mongoose";
 import { SearchCriteria, IBaseModel } from "../../models/index";
 import { IBaseRepository } from "./base.repository.interface";
 
-export abstract class BaseRepository<IModel extends Document> implements IBaseRepository<IModel>{
+export abstract class BaseRepository<IModelDoc extends Document> implements IBaseRepository<IModelDoc>{
 
-    protected abstract mongooseModelInstance: Model<IModel>;
+    protected abstract mongooseModelInstance: Model<IModelDoc>;
 
-    public createFromBody(body: object): IModel{
+    public createFromBody(body: object): IModelDoc{
         return new this.mongooseModelInstance(body);
     }
 
@@ -15,13 +15,13 @@ export abstract class BaseRepository<IModel extends Document> implements IBaseRe
         return this.mongooseModelInstance.collection.name
     }
 
-    public async single(id: string, populationArgument?: any): Promise<IModel> {
+    public async single(id: string, populationArgument?: any): Promise<IModelDoc> {
         let query = this.mongooseModelInstance.findById(id);
         query = populationArgument ? query.populate(populationArgument) : query;
         return await query;
     }
 
-    public async list(searchCriteria: SearchCriteria, populationArgument?: any): Promise<IModel[]> {
+    public async list(searchCriteria: SearchCriteria, populationArgument?: any): Promise<IModelDoc[]> {
         let query = this.mongooseModelInstance.find()
             .skip(searchCriteria.skip)
             .limit(searchCriteria.limit)
@@ -42,15 +42,15 @@ export abstract class BaseRepository<IModel extends Document> implements IBaseRe
             .count();
     }
 
-    public async create(model: IModel): Promise<IModel> {
+    public async create(model: IModelDoc): Promise<IModelDoc> {
         return await model.save();
     }
 
-    public async update(id:string, body: any): Promise<IModel>{
+    public async update(id:string, body: any): Promise<IModelDoc>{
         return await this.mongooseModelInstance.findByIdAndUpdate(id, body, { new: true });
     }
 
-    public async destroy(id:string): Promise<IModel>{
+    public async destroy(id:string): Promise<IModelDoc>{
         return await this.mongooseModelInstance.findByIdAndRemove(id);
     }
 
@@ -58,7 +58,7 @@ export abstract class BaseRepository<IModel extends Document> implements IBaseRe
         return await this.mongooseModelInstance.remove(searchBody);
     }
 
-    public async query(searchBody: any, populationArgument: any): Promise<IModel[]>{
+    public async query(searchBody: any, populationArgument: any): Promise<IModelDoc[]>{
         this.recursivlyConvertRegexes(searchBody);
 
         let query = this.mongooseModelInstance.find(searchBody);

@@ -1,12 +1,17 @@
 import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
-import { IUser } from './user';
-import { IBaseModel } from "./index";
+import { IUserDoc } from './user';
+import { IBaseModel, IBaseModelDoc } from "./index";
 
 export interface IEmailVerification extends IBaseModel {
     userId: string;
     validityLength: string;
     isVerified: boolean;
+}
+
+// This will give us an interface that's a composite of both base model, and document.
+export interface IEmailVerificationDoc extends IEmailVerification, IBaseModelDoc {
+    
 }
 
 const EmailVerificationSchema = new Schema({
@@ -22,4 +27,4 @@ EmailVerificationSchema.pre('save',function(next){
 });
 
 // This will compile the schema for the object, and place it in this Instance.
-export const EmailVerification = mongoose.model<IEmailVerification>('email-verification', EmailVerificationSchema);
+export const EmailVerification = mongoose.model<IEmailVerificationDoc>('email-verification', EmailVerificationSchema);

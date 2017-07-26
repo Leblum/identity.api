@@ -1,4 +1,4 @@
-import { IPermission, Permission, Role, IRole, User, IUser, IOrganization, Organization } from "../../models";
+import { IPermission, Permission, Role, IRole, User, IUser, IOrganization, Organization, IUserDoc, IOrganizationDoc } from "../../models";
 import { Config } from "../config";
 import { CONST } from "../../constants";
 import { OrganizationType } from "../../enumerations";
@@ -25,40 +25,41 @@ export  class DatabaseBootstrap {
             let permissions = await this.createAllPermissions();
 
             // We create the system organization first.
-            let systemOrg: IOrganization = new Organization({
+            let systemOrg: IOrganization = {
                 name: 'system',
                 isSystem: true,
                 type: OrganizationType.system,
-            });
+            };
 
-            systemOrg = await systemOrg.save();
+            let savedSystemOrg: IOrganizationDoc = await new Organization(systemOrg).save();
 
             // Then we create a system user.
-            let systemUser: IUser = new User({
+            let systemUser: IUser = {
                 firstName: 'system',
                 lastName: 'system',
                 email: 'system@leblum.com',
                 password: await bcrypt.hash(Config.active.get('systemUserPassword'), CONST.SALT_ROUNDS),
                 roles: [await this.createSingleRole('admin', 'amdministrator', permissions)],
                 isTokenExpired: false,
-                organizationId: systemOrg.id,
-            });
+                organizationId: savedSystemOrg.id,
+                isEmailVerified: true,
+            };
 
-            systemUser = await systemUser.save();
+            let savedSystemUser: IUserDoc = await new User(systemUser).save();
 
             //Now we need to link the system user back up to the database.
-            systemOrg.users = [systemUser];
-            systemOrg.save();
+            savedSystemOrg.users = [savedSystemUser];
+            savedSystemOrg.save();
 
             // Next we need to create a guest organization.  This will act as a holding place
             // for accounts that haven't been email verified, or in the middle of the signup process before an org has been created.
-            let guestOrg: IOrganization = new Organization({
+            let guestOrg: IOrganization = {
                 name: 'guest',
                 isSystem: false,
                 type: OrganizationType.guest,
-            });
+            };
 
-            guestOrg = await guestOrg.save();
+            let guestOrgDoc = await new Organization(guestOrg).save();
 
             //now we create all the remaining roles
             await this.createSingleRole('guest', 'guest', permissions);

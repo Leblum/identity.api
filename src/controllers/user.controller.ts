@@ -1,4 +1,4 @@
-import { IUser, User } from '../models';
+import { IUserDoc, User } from '../models';
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler } from 'express';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
@@ -15,24 +15,24 @@ export class UserController extends BaseController {
     populate: { path: 'permissions' }
   };
 
-  protected userRepository: IUserRepository = new UserRepository();
+  protected repository: IUserRepository = new UserRepository();
 
   constructor() {
     super();
   }
 
-  public async preCreateHook(user: IUser): Promise<IUser> {
+  public async preCreateHook(user: IUserDoc): Promise<IUserDoc> {
     user.href = `${CONST.ep.API}${CONST.ep.USERS}/${user._id}`;
     user.password = await bcrypt.hash(user.password, CONST.SALT_ROUNDS);
     return user;
   }
 
-  public async preSendResponseHook(user: IUser): Promise<IUser> {
+  public async preSendResponseHook(user: IUserDoc): Promise<IUserDoc> {
     user.password = '';
     return user;
   }
   
-  public preUpdateHook(model: IUser): Promise<IUser>{
+  public preUpdateHook(model: IUserDoc): Promise<IUserDoc>{
     model.href = `${CONST.ep.API}${CONST.ep.USERS}/${model._id}`;
     return Promise.resolve(model);
   }

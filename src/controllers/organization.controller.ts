@@ -1,4 +1,4 @@
-import { Organization, IOrganization } from '../models';
+import { Organization, IOrganization, IOrganizationDoc } from '../models';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
 import { BaseController } from './base/base.controller';
@@ -11,18 +11,18 @@ export class OrganizationController extends BaseController{
     path: '',
   }
 
-  protected userRepository: IOrganizationRepository = new OrganizationRepository();
+  protected repository: IOrganizationRepository = new OrganizationRepository();
 
   constructor() {
     super();
   }
 
-  public preCreateHook(model: IOrganization): Promise<IOrganization>{
+  public preCreateHook(model: IOrganizationDoc): Promise<IOrganizationDoc>{
     model.href = `${CONST.ep.API}${CONST.ep.ORGANIZATIONS}/${model._id}`;
     return Promise.resolve(model);
   }
 
-  public preUpdateHook(model: IOrganization): Promise<IOrganization>{
+  public preUpdateHook(model: IOrganizationDoc): Promise<IOrganizationDoc>{
     model.href = `${CONST.ep.API}${CONST.ep.ORGANIZATIONS}/${model._id}`;
     return Promise.resolve(model);
   }

@@ -1,7 +1,7 @@
 import { mongoose } from '../config/database/database';
 import { Schema, Model, Document } from 'mongoose';
 import { IPermission, PermissionSchema } from './permission';
-import { IBaseModel } from "./index";
+import { IBaseModel, IBaseModelDoc } from "./index";
 
 export interface IRole extends IBaseModel  {
     name: string;
@@ -10,6 +10,10 @@ export interface IRole extends IBaseModel  {
     href: string;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
+}
+
+export interface IRoleDoc extends IRole, IBaseModelDoc {
+
 }
 
 const RoleSchema = new Schema({
@@ -25,4 +29,4 @@ RoleSchema.pre('save',function(next){
     next();
 });
 
-export const Role = mongoose.model<IRole>('role', RoleSchema);
+export const Role = mongoose.model<IRoleDoc>('role', RoleSchema);

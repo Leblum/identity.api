@@ -1,7 +1,7 @@
 //During the test the env variable is set to test
 import { Database } from '../config/database/database';
 import { App, server } from '../server';
-import { User, IUser, Organization, IOrganization } from '../models';
+import { User, IUserDoc, Organization, IOrganization, IOrganizationDoc } from '../models';
 import { Config } from '../config/config';
 
 let mongoose = require("mongoose");
@@ -67,7 +67,7 @@ export class AuthenticationUtil {
         return res.body.token;
     }
 
-    public static async findGuestOrganization(): Promise<IOrganization> {
+    public static async findGuestOrganization(): Promise<IOrganizationDoc> {
         return await new OrganizationRepository().getGuestOrganization();
     }
 }

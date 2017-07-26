@@ -1,15 +1,20 @@
 import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
-import { IUser } from './user';
-import { IBaseModel } from "./index";
+import { IUserDoc } from './user';
+import { IBaseModel, IBaseModelDoc } from "./index";
 import { EnumHelper, OrganizationType } from "../enumerations";
 
 export interface IOrganization extends IBaseModel {
     name: string,
     type: OrganizationType,
     isSystem: boolean;
-    users?: Array<IUser>;
-    href: string,
+    users?: Array<IUserDoc>;
+    href?: string,
+}
+
+// This will give us an interface that's a composite of both base model, and document.
+export interface IOrganizationDoc extends IOrganization, IBaseModelDoc {
+    
 }
 
 const OrganizationSchema = new Schema({
@@ -27,4 +32,4 @@ OrganizationSchema.pre('save',function(next){
 });
 
 // This will compile the schema for the object, and place it in this Instance.
-export const Organization = mongoose.model<IOrganization>('organization', OrganizationSchema);
+export const Organization = mongoose.model<IOrganizationDoc>('organization', OrganizationSchema);

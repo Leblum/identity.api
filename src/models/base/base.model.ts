@@ -1,6 +1,6 @@
 import { Schema, Model, Document } from 'mongoose';
 
-export interface IBaseModel extends Document {
+export interface IBaseModel {
     createdBy?: string;
     modifiedBy?: string;
     createdAt?: Date,
