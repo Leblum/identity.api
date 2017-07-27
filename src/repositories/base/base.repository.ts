@@ -1,11 +1,15 @@
 
 import { Model, Document } from "mongoose";
-import { SearchCriteria, IBaseModel } from "../../models/index";
+import { SearchCriteria, IBaseModel, IBaseModelDoc } from "../../models/index";
 import { IBaseRepository } from "./base.repository.interface";
 
-export abstract class BaseRepository<IModelDoc extends Document> implements IBaseRepository<IModelDoc>{
+export abstract class BaseRepository<IModelDoc extends IBaseModelDoc> implements IBaseRepository<IModelDoc>{
 
     protected abstract mongooseModelInstance: Model<IModelDoc>;
+
+    public createFromInterface(model: IBaseModel): IModelDoc{
+        return new this.mongooseModelInstance(model);
+    }
 
     public createFromBody(body: object): IModelDoc{
         return new this.mongooseModelInstance(body);

@@ -18,9 +18,4 @@ export class PermissionController extends BaseController {
     model.href = `${CONST.ep.API}${CONST.ep.PERMISSIONS}/${model._id}`;
     return Promise.resolve(model);
   }
-
-  public preUpdateHook(model: IPermissionDoc): Promise<IPermissionDoc>{
-    model.href = `${CONST.ep.API}${CONST.ep.PERMISSIONS}/${model._id}`;
-    return Promise.resolve(model);
-  }
 }

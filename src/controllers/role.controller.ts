@@ -21,9 +21,4 @@ export class RoleController extends BaseController{
     model.href = `${CONST.ep.API}${CONST.ep.ROLES}/${model._id}`;
     return Promise.resolve(model);
   }
-
-  public preUpdateHook(model: IRoleDoc): Promise<IRoleDoc>{
-    model.href = `${CONST.ep.API}${CONST.ep.ROLES}/${model._id}`;
-    return Promise.resolve(model);
-  }
 }

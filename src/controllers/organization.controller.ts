@@ -21,9 +21,4 @@ export class OrganizationController extends BaseController{
     model.href = `${CONST.ep.API}${CONST.ep.ORGANIZATIONS}/${model._id}`;
     return Promise.resolve(model);
   }
-
-  public preUpdateHook(model: IOrganizationDoc): Promise<IOrganizationDoc>{
-    model.href = `${CONST.ep.API}${CONST.ep.ORGANIZATIONS}/${model._id}`;
-    return Promise.resolve(model);
-  }
 }

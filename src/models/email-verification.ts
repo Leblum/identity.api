@@ -11,7 +11,7 @@ export interface IEmailVerification extends IBaseModel {
 
 // This will give us an interface that's a composite of both base model, and document.
 export interface IEmailVerificationDoc extends IEmailVerification, IBaseModelDoc {
-    
+
 }
 
 const EmailVerificationSchema = new Schema({

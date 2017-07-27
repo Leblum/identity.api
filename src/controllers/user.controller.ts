@@ -31,9 +31,4 @@ export class UserController extends BaseController {
     user.password = '';
     return user;
   }
-  
-  public preUpdateHook(model: IUserDoc): Promise<IUserDoc>{
-    model.href = `${CONST.ep.API}${CONST.ep.USERS}/${model._id}`;
-    return Promise.resolve(model);
-  }
 }

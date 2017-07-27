@@ -41,7 +41,7 @@ export class RegistrationController extends BaseController {
                 const guestOrg = await this.organizationRepository.getGuestOrganization();
                 const guestRole = await this.roleRepository.getRoleByName('guest');
 
-                let user = new User(request.body);
+                let user: IUserDoc = this.repository.createFromBody(request.body);
 
                 // now we need to do a few things to this user.
                 // first up hash the password
@@ -62,6 +62,7 @@ export class RegistrationController extends BaseController {
                     userId: user.id,
                     validityLength: '1week'
                 }
+
                 await new EmailVerification(emailVerification).save();
 
                 // TODO: Send the email verification

@@ -1,9 +1,10 @@
 import { Model, Document } from "mongoose";
-import { SearchCriteria } from "../../models/";
+import { SearchCriteria, IBaseModelDoc, IBaseModel } from "../../models/";
 
-export interface IBaseRepository<IModelDoc extends Document> {
+export interface IBaseRepository<IModelDoc extends IBaseModelDoc> {
     
     createFromBody(body: object): IModelDoc;
+    createFromInterface(model: IBaseModel): IModelDoc;
     getCollectionName(): string;
 
     single(id: string, populationArgument?: any): Promise<IModelDoc>;

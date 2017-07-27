@@ -6,6 +6,7 @@ import { Config } from '../../config/config';
 import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
+import { suite, test } from "mocha-typescript";
 
 import * as supertest from 'supertest';
 import * as chai from 'chai';
@@ -14,30 +15,36 @@ const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
 
+
 const api = supertest(`http://localhost:${Config.active.get('port')}`);
 
 let userAuthToken: string;
 let systemAuthToken: string;
 let guestOrgId: string;
-//Our parent block
-describe('Users', () => {
 
-    before(async () => {
+@suite('User Test')
+class UserTest {
 
+    public static async before() {
         await Cleanup.clearDatabase();
         await DatabaseBootstrap.seed();
 
         userAuthToken = await AuthenticationUtil.generateUserAuthToken();
         systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
         guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
-    });
+    }
 
-    it('allow a user to register', async () => {
+    public static async after(){
+        await Cleanup.closeConnections();
+    }
+
+    @test('allow a user to register')
+    public async register() {
         let user = {
             "firstName": "Dave",
             "lastName": "Brown",
             "email": "registeredUser@leblum.com",
-            "password":"test354435",
+            "password": "test354435",
             "isTokenExpired": false
         }
 
@@ -48,10 +55,10 @@ describe('Users', () => {
         expect(response.body).to.be.an('object');
         expect(response.body.email).to.be.equal(user.email);
         expect(response.body.password.length).to.be.equal(0);
-    })
+    }
 
-    // Testing the list method.
-    it('should list all the users', async () => {
+    @test('should list all the users')
+    public async userList() {
         let response = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken);
@@ -59,20 +66,22 @@ describe('Users', () => {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0); // we have a seed user, and a new temp user.
-    });
+    }
 
-    it('should NOT list all the users for a regular user', async () => {
+    @test('should NOT list all the users for a regular user')
+    public async failUserListForAuthentication() {
         let response = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
-            .set("x-access-token", userAuthToken);
+            .set("x-access-token", systemAuthToken);
 
-        expect(response.status).to.equal(403);
-        expect(response.body).to.be.an('object');
-    });
+        expect(response.status).to.equal(200);
+        expect(response.body).to.be.an('array');
+        expect(response.body.length).to.be.greaterThan(0); // we have a seed user, and a new temp user.
+    }
 
-    it('should NOT Allow delete with a regular user', async () => {
-
-        let user: IUser = {
+    @test('should NOT Allow delete with a regular user')
+    public async noDeleteAllowed() {
+let user: IUser = {
             email: "6788765768@test.com",
             password: "test",
             isTokenExpired: false,
@@ -82,23 +91,24 @@ describe('Users', () => {
             isEmailVerified: false,
         };
         //By calling this I'll generate an id
-         let userDoc = new User(user)
+        let userDoc = new User(user)
 
         let createResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
-        
+
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", userAuthToken);
 
         expect(response.status).to.equal(403);
         expect(response.body).to.be.an('object');
-    });
+    }
 
-    it('should create a user', async () => {
-        let user: IUser = {
+    @test('should create a user')
+    public async create() {
+let user: IUser = {
             firstName: "Dave",
             lastName: "Brown",
             email: "test2@test.com",
@@ -119,11 +129,12 @@ describe('Users', () => {
         expect(response.body.model).to.have.property('email');
         expect(response.body.model.email).to.equal(user.email);
         expect(response.body.model.password).should.not.equal(user.password);
-    });
+    }
 
-    it('should create the user in the db and make sure get by id works', async () => {
 
-        let user: IUser = {
+    @test('should create the user in the db and make sure get by id works')
+    public async getByIdWorking() {
+let user: IUser = {
             email: "test2345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -143,10 +154,11 @@ describe('Users', () => {
         expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('email');
         expect(response.body.email).to.equal(user.email);
-    });
+    }
 
-    it('it should update a user', async () => {
-        let user: IUser = {
+    @test('it should update a user')
+    public async updateAUser() {
+let user: IUser = {
             email: "qwerqwer@test.com",
             password: "test",
             isTokenExpired: false,
@@ -173,10 +185,11 @@ describe('Users', () => {
         expect(response.body).to.have.property('model');
         expect(response.body.model).to.have.property('firstName');
         expect(response.body.model.firstName).to.equal(userUpdate.firstName);
-    });
+    }
 
-    it('it should delete a user', async () => {
-        let user: IUser = {
+    @test('it should delete a user')
+    public async deleteAUser() {
+ let user: IUser = {
             email: "24352345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -190,7 +203,7 @@ describe('Users', () => {
             .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
-        
+
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${createResponse.body.model._id}`)
             .set("x-access-token", systemAuthToken);
@@ -200,28 +213,23 @@ describe('Users', () => {
         expect(response.body).to.have.property('ItemRemovedId');
         expect(response.body.ItemRemovedId).to.be.equal(createResponse.body.model._id);
         expect(response.body.ItemRemoved.email).to.be.equal(user.email);
-    });
+    }
 
-    it('should return a 404 on delete when the ID isnt there', async () => {
-
+    @test('should return a 404 on delete when the ID isnt there')
+    public async onDeleteWithoutUserID404() {
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
-    });
+    }
 
-    it('should return a 404 on update when the ID isnt there', async () => {
-
+    @test('should return a 404 on update when the ID isnt there')
+    public async onUpdateWithoutUserID404() {
         let response = await api
             .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
-    });
-
-    after(async () => {
-        await Cleanup.closeConnections();
-    });
-
-});
+    }
+}
