@@ -6,7 +6,7 @@ export class Config{
   public static initialize(){
     // Load environment dependent configuration 
     var env = ConfigurationSchema.convictSchema.get('env');
-    ConfigurationSchema.convictSchema.loadFile('./src/environments/' + env + '.json');
+    ConfigurationSchema.convictSchema.loadFile('./src/server/environments/' + env + '.json');
     
     // Perform validation 
     ConfigurationSchema.convictSchema.validate({allowed: 'strict'});

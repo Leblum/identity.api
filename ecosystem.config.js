@@ -8,7 +8,7 @@ module.exports = {
     // Spawn 2 instances of the Leblum rest api
     {
       name: 'leblum.vendor.api.aplha',
-      script: './dist/server.js',
+      script: './dist/server/server.js',
       instances: 2,
       max_memory_restart: '500M',
       merge_logs: false,

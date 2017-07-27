@@ -8,10 +8,10 @@
     "type": "git"
   },
   "scripts": {
-    "start": "npm build && npm api",
+    "start": "npm run build && npm run api",
     "build": "gulp build",
     "watch": "gulp watch",
-    "api": "nodemon dist/server.js --delay 4",
+    "api": "nodemon dist/server/server.js --delay 4",
     "test": "cross-env NODE_ENV=integration mocha --opts mocha.config",
     "test:auto": "cross-env NODE_ENV=integration mocha --opts mocha.config --watch",
     "postinstall": "gulp build",
