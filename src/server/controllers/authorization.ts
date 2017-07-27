@@ -11,10 +11,10 @@ export class authz {
         return userRoles.some(r => authRoles.indexOf(r) >= 0);
     }
 
-    public static permit(...allowed): (request: any, res: any, next: any) => void {
+    public static permit(...authRoles: string[]): (request: any, res: any, next: any) => void {
         return (request, res, next) => {
             var token = request[CONST.REQUEST_TOKEN_LOCATION] as ITokenPayload;
-            if (token && token.userId && token.roles && this.checkIfRoleExists(token.roles, allowed))
+            if (token && token.userId && token.roles && this.checkIfRoleExists(token.roles, authRoles))
                 next(); // role is allowed, so continue on the next middleware
             else {
                 new AuthenticationController().sendAuthFailure(res, 403, 'You are not in the correct role for this resource');

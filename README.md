@@ -78,3 +78,22 @@ npm install
 *  "DocumentationLocation": [Docs](http://localhost:8080/api-docs)
 *  "APILocation": [Api Base](http://localhost:8080/api)
 *  "AuthenticationEndpoint": [Authenticate](http://localhost:8080/api/authenticate)
+
+# Docker Cheat sheet
+ ```docker build -t leblum/identity.api .```
+
+ ```docker stop leblum-identity-api```
+
+```docker run --name=leblum-identity-api -p 8080:8080 leblum/identity.api```
+
+Removing a named container
+```docker rm /leblum-identity-api```
+
+Run it in the background--->
+```docker run -d --name=leblum-identity-api -p 8080:8080 leblum/identity.api ```
+
+Then you can stream the logs out if you want
+```docker attach leblum-identity-api```
+
+Did you get a segmentation fault on running the image?  Maybe you need to rebuild the docker image from scratch
+```docker build --no-cache -t leblum/identity.api .```
