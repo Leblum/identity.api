@@ -80,6 +80,9 @@ npm install
 *  "AuthenticationEndpoint": [Authenticate](http://localhost:8080/api/authenticate)
 
 # Docker Cheat sheet
+Take a look at the logs for a container.
+```docker logs container-id```
+
  ```docker build -t leblum/identity.api .```
 
  ```docker stop leblum-identity-api```
@@ -97,3 +100,13 @@ Then you can stream the logs out if you want
 
 Did you get a segmentation fault on running the image?  Maybe you need to rebuild the docker image from scratch
 ```docker build --no-cache -t leblum/identity.api .```
+
+``` Deploy a stack from the compose.yml```
+docker stack deploy -c docker-compose.yml lb-identity
+
+ docker stack ps lb-identity
+
+ docker stack rm lb-identity
+
+Show the status of a stack/service
+ docker stack services lb-identity
