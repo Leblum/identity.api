@@ -110,3 +110,6 @@ docker stack deploy -c docker-compose.yml lb-identity
 
 Show the status of a stack/service
  docker stack services lb-identity
+
+
+ docker-machine create --driver digitalocean --digitalocean-access-token=3a6f3017e9b0d2a38b1f4dbdaaa7815da0e419dd226bf266251d5454f0d03c7e testing-machine
