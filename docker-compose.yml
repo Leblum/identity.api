@@ -23,19 +23,5 @@ services:
     #   retries: 5
     networks:
       - webnet
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - target: 8080
-        published: 5000
-        protocol: tcp
-        mode: ingress
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    networks:
-      - webnet
 networks:
   webnet:

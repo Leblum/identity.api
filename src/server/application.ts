@@ -162,6 +162,7 @@ class Application {
     this.express.get('/', (request: express.Request, response: express.Response) => {
       response.json({
         name: CONST.APPLICATION_NAME,
+        description: 'An identity api for the leblum services',
         DocumentationLocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api-docs`,
         APILocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api`,
         AuthenticationEndpoint: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api/authenticate`,
