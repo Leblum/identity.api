@@ -71,7 +71,7 @@
 
 FROM mhart/alpine-node
 
-WORKDIR /src
+WORKDIR /usr/api
 ADD . .
 
 ENV NODE_ENV development
@@ -91,7 +91,7 @@ RUN npm install
 
 RUN gulp build
 
-RUN npm run test
+RUN gulp test
 
 EXPOSE 8080
 CMD ["npm", "start"]

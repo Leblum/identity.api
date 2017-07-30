@@ -32,10 +32,7 @@ class UserTest {
         userAuthToken = await AuthenticationUtil.generateUserAuthToken();
         systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
         guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
-    }
-
-    public static async after(){
-        await Cleanup.closeConnections();
+        return;
     }
 
     @test('allow a user to register')
@@ -51,10 +48,11 @@ class UserTest {
         let response = await api
             .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
             .send(user);
-        expect(response.status).to.equal(354);
+        expect(response.status).to.equal(201);
         expect(response.body).to.be.an('object');
         expect(response.body.email).to.be.equal(user.email);
         expect(response.body.password.length).to.be.equal(0);
+        return;
     }
 
     @test('should list all the users')
@@ -66,6 +64,7 @@ class UserTest {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0); // we have a seed user, and a new temp user.
+         return;
     }
 
     @test('should NOT list all the users for a regular user')
@@ -77,6 +76,7 @@ class UserTest {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0); // we have a seed user, and a new temp user.
+        return;
     }
 
     @test('should NOT Allow delete with a regular user')
@@ -104,6 +104,7 @@ let user: IUser = {
 
         expect(response.status).to.equal(403);
         expect(response.body).to.be.an('object');
+        return;
     }
 
     @test('should create a user')
@@ -129,6 +130,7 @@ let user: IUser = {
         expect(response.body.model).to.have.property('email');
         expect(response.body.model.email).to.equal(user.email);
         expect(response.body.model.password).should.not.equal(user.password);
+        return;
     }
 
 
@@ -154,6 +156,7 @@ let user: IUser = {
         expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('email');
         expect(response.body.email).to.equal(user.email);
+        return;
     }
 
     @test('it should update a user')
@@ -185,6 +188,7 @@ let user: IUser = {
         expect(response.body).to.have.property('model');
         expect(response.body.model).to.have.property('firstName');
         expect(response.body.model.firstName).to.equal(userUpdate.firstName);
+        return;
     }
 
     @test('it should delete a user')
@@ -213,6 +217,7 @@ let user: IUser = {
         expect(response.body).to.have.property('ItemRemovedId');
         expect(response.body.ItemRemovedId).to.be.equal(createResponse.body.model._id);
         expect(response.body.ItemRemoved.email).to.be.equal(user.email);
+        return;
     }
 
     @test('should return a 404 on delete when the ID isnt there')
@@ -222,6 +227,7 @@ let user: IUser = {
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
+        return;
     }
 
     @test('should return a 404 on update when the ID isnt there')
@@ -231,5 +237,11 @@ let user: IUser = {
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
+        return;
+    }
+
+    public static async after(){
+        await Cleanup.closeConnections();
+        return;
     }
 }
