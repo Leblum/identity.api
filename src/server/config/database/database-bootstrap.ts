@@ -17,9 +17,9 @@ export  class DatabaseBootstrap {
     // }
     
     public static async seed() {
-        let count = await Organization.count({});
-        if (count === 0) {
-            log.info('About to bootstrap the database.  This will insert a system org, and system user, along with default roles, and permissions');
+        if (await Organization.count({}) === 0) {
+            if(await Organization.count({}) === 0){
+log.info('About to bootstrap the database.  This will insert a system org, and system user, along with default roles, and permissions');
             // For now all roles have all permissionss.  We're going to do our security on roles for now. 
             // Later we can modify these permissions to be just what we need.
             let permissions = await this.createAllPermissions();
@@ -66,7 +66,7 @@ export  class DatabaseBootstrap {
             await this.createSingleRole('impersonator', 'impersonator', permissions);
             await this.createSingleRole('supplier:owner', 'supplier owner access to sensitive info', permissions);
             await this.createSingleRole('supplier:user', 'supplier employee no access to sensitive info', permissions);
-
+            }
         }
     }
 

@@ -77,7 +77,8 @@ ADD . .
 ENV NODE_ENV development
 
 # If you have native dependencies, you'll need extra tools
-RUN apk add --no-cache make gcc g++ python
+# this used to have --no-cache as a parameter to apk add --no-cache , so if you see problems that might be it.
+#RUN apk add make gcc g++ python
 
 RUN npm i -g pm2
 
@@ -86,11 +87,11 @@ RUN npm i -g gulp
 # If you need npm, don't use a base tag
 RUN npm install
 
-RUN npm rebuild bcrypt --build-from-source
+#RUN npm rebuild bcrypt --build-from-source
 
 RUN gulp build
 
-RUN npm test
+RUN npm run test
 
 EXPOSE 8080
 CMD ["npm", "start"]

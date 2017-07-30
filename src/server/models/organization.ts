@@ -18,7 +18,7 @@ export interface IOrganizationDoc extends IOrganization, IBaseModelDoc {
 }
 
 const OrganizationSchema = new Schema({
-    name: {type: String, required: true},
+    name: {type: String, required: true, unique: true},
     type: { type: Number, enum: [EnumHelper.getValuesFromEnum(OrganizationType)] },
     isSystem: {type: Boolean, required: true},
     users: [{ type : Schema.Types.ObjectId, ref: 'user' }],

@@ -51,7 +51,7 @@ class UserTest {
         let response = await api
             .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
             .send(user);
-        expect(response.status).to.equal(201);
+        expect(response.status).to.equal(354);
         expect(response.body).to.be.an('object');
         expect(response.body.email).to.be.equal(user.email);
         expect(response.body.password.length).to.be.equal(0);
