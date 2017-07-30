@@ -1,5 +1,5 @@
 config:
-  target: 'https://leblum-vendor-api-alpha.herokuapp.com'
+  target: 'http://104.236.210.253'
   phases:
     # -
     #   duration: 60
@@ -7,12 +7,12 @@ config:
     #   name: "Middle Phase"
     -
       duration: 120
-      arrivalRate: 50
-      rampTo: 100
+      arrivalRate: 20
+      rampTo: 20
       name: "High load phase"
   defaults:
     headers:
-      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OGY4YzhjYWVkZjcyOTJiZTgwYTkwZTQiLCJyb2xlcyI6WyI1OGY4YzdhZGVkZjcyOTJiZTgwYTkwZTEiXSwiZXhwaXJhdGlvbiI6IjI0aCIsImlhdCI6MTUwMDU0Nzk5MSwiZXhwIjoxNTAwNjM0MzkxfQ.sq-Sf2a9AYPMYkUfwQBCQMRki_Y3zr1S-uR-nMJCDi8'
+      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OTc4YWU3M2Q4Y2ZiNzA0OTQ4NDk4ODUiLCJvcmdhbml6YXRpb25JZCI6IjU5NzhhZTczZDhjZmI3MDQ5NDg0OTg4MyIsInJvbGVzIjpbImFkbWluIl0sImV4cGlyYXRpb24iOiIyNGgiLCJpYXQiOjE1MDE0MDc2ODMsImV4cCI6MTUwMTQ5NDA4M30.dqfGnrLiaXTej5J-Cuw_dWVIZGMDj2XDp4ZZO7DL8qY'
 scenarios:
   - flow:
     - get:
