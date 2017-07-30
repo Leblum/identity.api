@@ -80,6 +80,7 @@ npm install
 *  "AuthenticationEndpoint": [Authenticate](http://localhost:8080/api/authenticate)
 
 # Docker Cheat sheet
+checking in changes to see automatic deploys working 
 Take a look at the logs for a container.
 ```docker logs container-id```
 
