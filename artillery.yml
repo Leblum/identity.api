@@ -7,8 +7,8 @@ config:
     #   name: "Middle Phase"
     -
       duration: 120
-      arrivalRate: 20
-      rampTo: 20
+      arrivalRate: 30
+      rampTo: 30
       name: "High load phase"
   defaults:
     headers:
