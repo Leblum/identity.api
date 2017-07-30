@@ -88,6 +88,8 @@ RUN npm install
 
 RUN npm rebuild bcrypt --build-from-source
 
+RUN gulp build
+
 RUN npm test
 
 EXPOSE 8080
