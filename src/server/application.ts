@@ -45,7 +45,6 @@ class Application {
     this.connectDatabase();     // Setup database connection
     this.secure();       // Turn on security measures
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
-    this.configureJWT(); // Sets up the way that json web tokens works
     this.middleware();   // Setup the middleware
     this.routes();       // Setup routers for all the controllers
     this.handlers();     // Any additional handlers, home page, etc.
@@ -112,11 +111,6 @@ class Application {
 
   private secure() {
     //app.use(helmet()); //Protecting the app from a lot of vulnerabilities turn on when you want to use TLS.
-  }
-
-  // Sets up authentication, and sets it with our jwt secret token.
-  private configureJWT() {
-    this.express.set('jwtSecretToken', Config.active.get('jwtSecretToken'));
   }
 
   // Configure Express middleware.
