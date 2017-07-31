@@ -1,4 +1,3 @@
-//During the test the env variable is set to test
 import { Database } from '../../config/database/database';
 import { App, server } from '../../server';
 import { User, IUserDoc, Permission, Role, Organization, IUser } from '../../models';
@@ -14,8 +13,6 @@ import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
 const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
-
-
 const api = supertest(`http://localhost:${Config.active.get('port')}`);
 
 let userAuthToken: string;
@@ -32,6 +29,11 @@ class UserTest {
         userAuthToken = await AuthenticationUtil.generateUserAuthToken();
         systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
         guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
+        return;
+    }
+
+    public static async after() {
+        await Cleanup.closeConnections();
         return;
     }
 
@@ -64,7 +66,7 @@ class UserTest {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0); // we have a seed user, and a new temp user.
-         return;
+        return;
     }
 
     @test('should NOT list all the users for a regular user')
@@ -81,7 +83,7 @@ class UserTest {
 
     @test('should NOT Allow delete with a regular user')
     public async noDeleteAllowed() {
-let user: IUser = {
+        let user: IUser = {
             email: "6788765768@test.com",
             password: "test",
             isTokenExpired: false,
@@ -109,7 +111,7 @@ let user: IUser = {
 
     @test('should create a user')
     public async create() {
-let user: IUser = {
+        let user: IUser = {
             firstName: "Dave",
             lastName: "Brown",
             email: "test2@test.com",
@@ -136,7 +138,7 @@ let user: IUser = {
 
     @test('should create the user in the db and make sure get by id works')
     public async getByIdWorking() {
-let user: IUser = {
+        let user: IUser = {
             email: "test2345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -161,7 +163,7 @@ let user: IUser = {
 
     @test('it should update a user')
     public async updateAUser() {
-let user: IUser = {
+        let user: IUser = {
             email: "qwerqwer@test.com",
             password: "test",
             isTokenExpired: false,
@@ -193,7 +195,7 @@ let user: IUser = {
 
     @test('it should delete a user')
     public async deleteAUser() {
- let user: IUser = {
+        let user: IUser = {
             email: "24352345@test.com",
             password: "test",
             isTokenExpired: false,
@@ -237,11 +239,6 @@ let user: IUser = {
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
-        return;
-    }
-
-    public static async after(){
-        await Cleanup.closeConnections();
         return;
     }
 }

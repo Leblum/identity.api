@@ -5,7 +5,7 @@ import { OrganizationType } from "../../enumerations";
 var bcrypt = require('bcrypt');
 import log = require('winston');
 
-export  class DatabaseBootstrap {
+export class DatabaseBootstrap {
 
     // This teardown would be for testing only.  Careful with this guy.
     // public static async teardown(){
@@ -15,57 +15,57 @@ export  class DatabaseBootstrap {
     //     await User.remove({});
     //     await Organization.remove({});
     // }
-    
+
     public static async seed() {
         if (await Organization.count({}) === 0) {
-            if(await Organization.count({}) === 0){
-log.info('About to bootstrap the database.  This will insert a system org, and system user, along with default roles, and permissions');
-            // For now all roles have all permissionss.  We're going to do our security on roles for now. 
-            // Later we can modify these permissions to be just what we need.
-            let permissions = await this.createAllPermissions();
+            if (await Organization.count({}) === 0) {
+                log.info('About to bootstrap the database.  This will insert a system org, and system user, along with default roles, and permissions');
+                // For now all roles have all permissionss.  We're going to do our security on roles for now. 
+                // Later we can modify these permissions to be just what we need.
+                let permissions = await this.createAllPermissions();
 
-            // We create the system organization first.
-            let systemOrg: IOrganization = {
-                name: 'system',
-                isSystem: true,
-                type: OrganizationType.system,
-            };
+                // We create the system organization first.
+                let systemOrg: IOrganization = {
+                    name: 'system',
+                    isSystem: true,
+                    type: OrganizationType.system,
+                };
 
-            let savedSystemOrg: IOrganizationDoc = await new Organization(systemOrg).save();
+                let savedSystemOrg: IOrganizationDoc = await new Organization(systemOrg).save();
 
-            // Then we create a system user.
-            let systemUser: IUser = {
-                firstName: 'system',
-                lastName: 'system',
-                email: 'system@leblum.com',
-                password: await bcrypt.hash(Config.active.get('systemUserPassword'), CONST.SALT_ROUNDS),
-                roles: [await this.createSingleRole('admin', 'amdministrator', permissions)],
-                isTokenExpired: false,
-                organizationId: savedSystemOrg.id,
-                isEmailVerified: true,
-            };
+                // Then we create a system user.
+                let systemUser: IUser = {
+                    firstName: 'system',
+                    lastName: 'system',
+                    email: 'system@leblum.com',
+                    password: await bcrypt.hash(Config.active.get('systemUserPassword'), CONST.SALT_ROUNDS),
+                    roles: [await this.createSingleRole('admin', 'amdministrator', permissions)],
+                    isTokenExpired: false,
+                    organizationId: savedSystemOrg.id,
+                    isEmailVerified: true,
+                };
 
-            let savedSystemUser: IUserDoc = await new User(systemUser).save();
+                let savedSystemUser: IUserDoc = await new User(systemUser).save();
 
-            //Now we need to link the system user back up to the database.
-            savedSystemOrg.users = [savedSystemUser];
-            savedSystemOrg.save();
+                //Now we need to link the system user back up to the database.
+                savedSystemOrg.users = [savedSystemUser];
+                savedSystemOrg.save();
 
-            // Next we need to create a guest organization.  This will act as a holding place
-            // for accounts that haven't been email verified, or in the middle of the signup process before an org has been created.
-            let guestOrg: IOrganization = {
-                name: 'guest',
-                isSystem: false,
-                type: OrganizationType.guest,
-            };
+                // Next we need to create a guest organization.  This will act as a holding place
+                // for accounts that haven't been email verified, or in the middle of the signup process before an org has been created.
+                let guestOrg: IOrganization = {
+                    name: 'guest',
+                    isSystem: false,
+                    type: OrganizationType.guest,
+                };
 
-            let guestOrgDoc = await new Organization(guestOrg).save();
+                let guestOrgDoc = await new Organization(guestOrg).save();
 
-            //now we create all the remaining roles
-            await this.createSingleRole('guest', 'guest', permissions);
-            await this.createSingleRole('impersonator', 'impersonator', permissions);
-            await this.createSingleRole('supplier:owner', 'supplier owner access to sensitive info', permissions);
-            await this.createSingleRole('supplier:user', 'supplier employee no access to sensitive info', permissions);
+                //now we create all the remaining roles
+                await this.createSingleRole('guest', 'guest', permissions);
+                await this.createSingleRole('impersonator', 'impersonator', permissions);
+                await this.createSingleRole('supplier:owner', 'supplier owner access to sensitive info', permissions);
+                await this.createSingleRole('supplier:user', 'supplier employee no access to sensitive info', permissions);
             }
         }
     }

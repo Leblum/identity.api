@@ -21,9 +21,11 @@ export class Cleanup {
     }
 
     public static async clearDatabase() {
-        await Permission.remove({});
-        await Role.remove({});
-        await User.remove({});
-        await Organization.remove({});
+        if (process.env.NODE_ENV === 'integration') {
+            await Permission.remove({});
+            await Role.remove({});
+            await User.remove({});
+            await Organization.remove({});
+        }
     }
 }
