@@ -11,9 +11,9 @@
     "start": "npm run build && pm2 start ecosystem.config.js && pm2 logs all",
     "build": "gulp build",
     "watch": "gulp watch",
-    "api": "nodemon dist/server/server.js --delay 4",
-    "test": "mocha --opts mocha.config",
-    "test:auto": "mocha --opts mocha.config --watch",
+    "api": "nodemon dist/server.js --delay 4",
+    "test": "gulp build && mocha --opts mocha.config",
+    "test:auto": "gulp build && mocha --opts mocha.config --watch",
     "postinstall": "gulp build"
   },
   "engines": {
