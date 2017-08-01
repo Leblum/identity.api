@@ -76,7 +76,7 @@ class Application {
       // When developing locally you can turn on the colorization, but if you leave
       // on, then the logs will be all kinds of messed up. 
       log.add(log.transports.Console, { colorize: false });
-      this.express.use(morgan('dev')); //Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
+      this.express.use(morgan('short')); //Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
     }
     else {
       log.remove(log.transports.Console);

@@ -16,9 +16,7 @@ module.exports = {
       exec_mode : "cluster",
       log_type: "raw",
       merge_logs: true,
-      log_date_format : "YYYY-MM-DD HH:mm Z",
-      out_file: "/dev/null",
-      error_file: "/dev/null",
+      log_date_format : "YYYY-MM-DD HH:mm Z"
     }
   ],
 };

@@ -13,6 +13,8 @@ RUN npm i -g pm2
 
 RUN npm i -g gulp
 
+RUN pm2 install pm2-logrotate
+
 # install node modules  Notice how this is before we move app code over
 # this will make sure that we cache this portion.
 COPY package.json /usr/app/package.json
