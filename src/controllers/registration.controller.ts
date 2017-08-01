@@ -33,9 +33,11 @@ export class RegistrationController extends BaseController {
             // First we have to check if the email address is unique
             if (await this.repository.findUserByEmail(request.body.email)) {
                 ApiErrorHandler.sendError('That user email already exists',400, CONST.ErrorCodes.EMAIL_TAKEN, response);
+                return;
             }
             if(!request.body.password || request.body.password.length < 6){
                 ApiErrorHandler.sendError('Password must be supplied, and be at least 6 chars',400, CONST.ErrorCodes.PASSWORD_FAILED_CHECKS, response);
+                return;
             }
             else {
                 const guestOrg = await this.organizationRepository.getGuestOrganization();

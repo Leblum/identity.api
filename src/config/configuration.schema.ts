@@ -70,5 +70,11 @@ public static convictSchema: convict.Config = convict({
       default: true,
       env: 'CONSOLE_LOGGING',
     },
+    isConsoleColored: {
+      doc: 'Colorization Affects the logging, so be careful on which environments you turn this on.',
+      format: Boolean,
+      default: true,
+      env: 'CONSOLE_COLOR',
+    },
   });
 }

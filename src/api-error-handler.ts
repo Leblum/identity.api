@@ -5,6 +5,7 @@ import { Config } from './config/config';
 export class ApiErrorHandler {
 
     public static sendError(message: string, status: number, errorCode: string, response: Response){
+        log.info(`API Expected Error: ${message}, errorcode:${errorCode}, status: ${status}`)
         response.status(status).json({
             message: message,
             status: status,

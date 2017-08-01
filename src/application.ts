@@ -73,10 +73,22 @@ class Application {
   private logging(): void {
     if (Config.active.get('isConsoleLoggingActive')) {
       log.remove(log.transports.Console);
-      // When developing locally you can turn on the colorization, but if you leave
-      // on, then the logs will be all kinds of messed up. 
-      log.add(log.transports.Console, { colorize: false });
-      this.express.use(morgan('short')); //Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
+      log.add(log.transports.Console, { colorize: Config.active.get('isConsoleColored') });
+
+      // If we can use colors, for instance when running locally, we want to use them.
+      // Out on the server though, for real logs, the colors will add weird tokens, that we don't want showing up in our logs.
+      if (Config.active.get('isConsoleColored')) {
+        this.express.use(morgan('dev')); //Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
+      }
+      // Otherwise, this is most likely logging somewhere where colors would be bad.  For instance off on the actual
+      // Server, in which case we don't want colors, and we need to know the environement.
+      else {
+        morgan.token('environment', () => {
+          return process.env.NODE_ENV;
+        });
+        this.express.use(morgan(':date :environment :method :url :status :response-time ms :res[content-length]'));
+      }
+
     }
     else {
       log.remove(log.transports.Console);
