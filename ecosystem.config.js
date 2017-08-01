@@ -7,7 +7,7 @@ module.exports = {
 
     // Spawn 2 instances of the Leblum rest api
     {
-      name: 'leblum.identity.api',
+      name: 'identity',
       script: './dist/server.js',
       instances: 2,
       max_memory_restart: '500M',
@@ -18,7 +18,7 @@ module.exports = {
       merge_logs: true,
       log_date_format : "YYYY-MM-DD HH:mm Z",
       out_file: "/dev/null",
-      error_file: "/dev/null"
+      error_file: "/dev/null",
     }
   ],
 };
