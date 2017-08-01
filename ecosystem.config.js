@@ -14,7 +14,6 @@ module.exports = {
       max_restarts: 3,
       restart_delay: 3000,
       exec_mode : "cluster",
-      log_type: "json",
       merge_logs: true,
       log_date_format : "YYYY-MM-DD HH:mm Z",
       out_file: "/dev/null",
