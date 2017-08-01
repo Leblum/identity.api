@@ -12,7 +12,7 @@ config:
       name: "High load phase"
   defaults:
     headers:
-      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OTc4YWU3M2Q4Y2ZiNzA0OTQ4NDk4ODUiLCJvcmdhbml6YXRpb25JZCI6IjU5NzhhZTczZDhjZmI3MDQ5NDg0OTg4MyIsInJvbGVzIjpbImFkbWluIl0sImV4cGlyYXRpb24iOiIyNGgiLCJpYXQiOjE1MDE0MDc2ODMsImV4cCI6MTUwMTQ5NDA4M30.dqfGnrLiaXTej5J-Cuw_dWVIZGMDj2XDp4ZZO7DL8qY'
+      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OTdmODRkZmY4NTUwMTJjODRkZDJiODQiLCJvcmdhbml6YXRpb25JZCI6IjU5N2Y4NGRmZjg1NTAxMmM4NGRkMmI4MiIsInJvbGVzIjpbImFkbWluIl0sImV4cGlyYXRpb24iOiIyNGgiLCJpYXQiOjE1MDE1NzI1MDYsImV4cCI6MTUwMTY1ODkwNn0.b7NbJ7mL-py3Li4WEbKJfnukA272FccDA1mckjMjqu4'
 scenarios:
   - flow:
     - get:

@@ -9,7 +9,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Server",
             "program": "${workspaceRoot}/src/server.ts",
             "outFiles": [
                 "${workspaceRoot}/dist/**/*.js"
@@ -27,23 +27,13 @@
             "type": "node",
             "request": "attach",
             "stopOnEntry": false,
-            "name": "Attach to Process",
+            "name": "Attach to Server",
             "processId": "${command:PickProcess}",
             "outFiles": [
                 "${workspaceRoot}/dist/**/*.js"
             ],
-            "protocol": "auto",
             "sourceMaps": true,
             "restart": true
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Gulp build task",
-            "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
-            "args": [
-                "build"
-            ]
         },
         {
             "name": "Run mocha",
@@ -61,10 +51,20 @@
                 "mocha.config",
                 "--watch"
             ],
-            "runtimeExecutable": null,
-            "env": {
-                "NODE_ENV": "integration"
-            }
+            "runtimeExecutable": null
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon",
+            "runtimeExecutable": "nodemon",
+            "program": "${workspaceRoot}/src/server/server.ts",
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*.js"
+            ],
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

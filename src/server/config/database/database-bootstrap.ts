@@ -6,16 +6,7 @@ var bcrypt = require('bcrypt');
 import log = require('winston');
 
 export class DatabaseBootstrap {
-
-    // This teardown would be for testing only.  Careful with this guy.
-    // public static async teardown(){
-    //     let count = await Organization.count({});
-    //     await Permission.remove({});
-    //     await Role.remove({});
-    //     await User.remove({});
-    //     await Organization.remove({});
-    // }
-
+    
     public static async seed() {
         if (await Organization.count({}) === 0) {
             if (await Organization.count({}) === 0) {
