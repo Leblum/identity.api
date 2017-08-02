@@ -9,7 +9,7 @@ module.exports = {
     {
       name: 'lb.ident.api',
       script: './dist/server.js',
-      instances: 2,
+      instances: 4,
       max_memory_restart: '500M',
       max_restarts: 3,
       restart_delay: 3000,

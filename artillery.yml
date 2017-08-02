@@ -7,12 +7,12 @@ config:
     #   name: "Middle Phase"
     -
       duration: 120
-      arrivalRate: 20
-      rampTo: 20
+      arrivalRate: 30
+      rampTo: 30
       name: "High load phase"
   defaults:
     headers:
-      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OTdmODRkZmY4NTUwMTJjODRkZDJiODQiLCJvcmdhbml6YXRpb25JZCI6IjU5N2Y4NGRmZjg1NTAxMmM4NGRkMmI4MiIsInJvbGVzIjpbImFkbWluIl0sImV4cGlyYXRpb24iOiIyNGgiLCJpYXQiOjE1MDE1NzI1MDYsImV4cCI6MTUwMTY1ODkwNn0.b7NbJ7mL-py3Li4WEbKJfnukA272FccDA1mckjMjqu4'
+      x-access-token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1OTgxNzk1NTk2YzM4NDEyNmNhN2NhOTIiLCJvcmdhbml6YXRpb25JZCI6IjU5ODE3OTU0OTZjMzg0MTI2Y2E3Y2E5MCIsInJvbGVzIjpbImFkbWluIl0sImV4cGlyYXRpb24iOiIyNGgiLCJpYXQiOjE1MDE2NjA4MTAsImV4cCI6MTUwMTc0NzIxMH0.5VPLXUAap3y9dSlpdcnJs5SuNpz8vp1WYnV3ZGIpP7I'
 scenarios:
   - flow:
     - get:
