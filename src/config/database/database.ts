@@ -27,8 +27,8 @@ async function requestWithRetry (url) {
 }
 */
 
-export class Database{
-
+export class Database {
+  
     public connect(): Promise<boolean | void> {
         const connectionOptions: any = {
             useMongoClient: true,
@@ -42,7 +42,6 @@ export class Database{
             log.info('error while trying to connect with mongodb', err);
         });
     }
-    
 }
 
 export { mongoose };

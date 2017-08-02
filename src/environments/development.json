@@ -2,7 +2,7 @@
     "publicURL": "http://localhost",
     "name": "leblum.identity.api",
     "database": {
-      "mongoConnectionString": "mongodb://104.236.210.253:27017/leblum-identity-development"
+      "mongoConnectionString": "mongodb://root:hastjGvfpD6CjkFn@ds111103.mlab.com:11103/leblum-identity-development"
     },
     "ampq":{
         "ampqConnectionString": "amqp://wkaxkarj:NAsD1ISNCESHMmVlK9Mch6IcBjapIBYn@puma.rmq.cloudamqp.com/wkaxkarj"
