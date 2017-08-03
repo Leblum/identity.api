@@ -1,4 +1,4 @@
-var appRoot = 'src/';
+var appRoot = 'server/';
 var outputRoot = 'dist/';
 
 module.exports = {
