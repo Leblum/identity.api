@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/Leblum/identity.api.svg?token=piJBjH1x3vNsd4rYXCfv&branch=master)](https://travis-ci.com/Leblum/identity.api)
 
-# Mongoose & Typescript & Express 
+# Leblum Identity API 
  
 Implementation of async - await methods in mongoose and express.
 
@@ -80,6 +80,7 @@ npm install
 *  "AuthenticationEndpoint": [Authenticate](http://localhost:8080/api/authenticate)
 
 # Docker Cheat sheet
+
 checking in changes to see automatic deploys working 
 Take a look at the logs for a container.
 ```docker logs container-id```
@@ -114,3 +115,29 @@ Show the status of a stack/service
 
 
  docker-machine create --driver digitalocean --digitalocean-access-token=3a6f3017e9b0d2a38b1f4dbdaaa7815da0e419dd226bf266251d5454f0d03c7e testing-machine
+
+ # Linux Cheat Sheet 
+
+ To copy out to the server.  You run this directly from a local console.  Don't log into the server. 
+ ```scp -r build root@198.199.74.116:/usr/davesStuff```
+
+Take a rancher backup
+``` docker exec -i practical_swirles mysqldump -A > rancher.dump```
+
+Copy the dump back over locally
+``` scp root@198.199.74.116:/usr/rancher.dump .```
+
+ # Logging into a rancher created instance
+First download the keys from the host.  You go to hosts, and then machine config.
+Place the keys in a folder.
+
+currently I put ssh keys here: C:\Users\David\.ssh\dev-luxor1
+
+ssh -i id_rsa root@45.55.75.119
+
+# Certificates
+certs are stored inside the docker container that's running haproxy.  For instance they are stored:
+/etc/haproxy/certs
+
+You can see them by running a console from the rancher ui, on the load balancer container.
+dev-luxor->lebulm-load-balancer-container-> Where the certs are.

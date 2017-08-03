@@ -171,9 +171,11 @@ class Application {
       response.json({
         name: CONST.APPLICATION_NAME,
         description: 'An identity api for the leblum services',
-        DocumentationLocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api-docs`,
-        APILocation: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api`,
-        AuthenticationEndpoint: `${Config.active.get('publicURL')}:${Config.active.get('port')}/api/authenticate`,
+        APIVersion: CONST.ep.V1,
+        DocumentationLocation: `${request.protocol} + '://' + ${request.get('host')}/api-docs`,
+        APILocation: `${request.protocol} + '://' + ${request.get('host')}/api`,
+        AuthenticationEndpoint: `${request.protocol} + '://' + ${request.get('host')}/api/authenticate`,
+        RegisterEndpoing: `${request.protocol} + '://' + ${request.get('host')}/api/register`,
       })
     });
 
