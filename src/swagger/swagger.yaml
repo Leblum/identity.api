@@ -12,7 +12,7 @@ info:
     name: "MIT Open Source"
     url: "https://opensource.org/licenses/MIT"
 # the domain of the service
-host: localhost:8080
+host: leblum.io
 # array of all schemes that your API supports
 schemes:
   - http

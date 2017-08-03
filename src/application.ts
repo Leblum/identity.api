@@ -172,7 +172,7 @@ class Application {
         name: CONST.APPLICATION_NAME,
         description: 'An identity api for the leblum services',
         APIVersion: CONST.ep.V1,
-        DocumentationLocation: `${request.protocol}://${request.get('host')}/api-docs`,
+        DocumentationLocation: `${request.protocol}://${request.get('host')}${CONST.ep.API_DOCS}`,
         APILocation: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}`,
         AuthenticationEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/authenticate`,
         RegisterEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/register`,
