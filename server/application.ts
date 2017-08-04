@@ -20,6 +20,8 @@ import { ApiErrorHandler } from './api-error-handler';
 import methodOverride = require('method-override');
 import log = require('winston');
 import { authz } from "./controllers/authorization";
+import path = require('path');
+
 
 
 // Creates and configures an ExpressJS web server.
@@ -45,6 +47,7 @@ class Application {
     this.connectDatabase();     // Setup database connection
     this.secure();       // Turn on security measures
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
+    this.client();       // This will serve the client angular application
     this.middleware();   // Setup the middleware
     this.routes();       // Setup routers for all the controllers
     this.handlers();     // Any additional handlers, home page, etc.
@@ -127,6 +130,19 @@ class Application {
     //app.use(helmet()); //Protecting the app from a lot of vulnerabilities turn on when you want to use TLS.
   }
 
+  // This will allow us to serve the static homepage for our swagger definition
+  // along with the swagger ui explorer.
+  private swagger(): void {
+    log.info('Initializing Swagger');
+    this.express.use(CONST.ep.API_DOCS, express.static(__dirname + '/swagger/swagger-ui'));
+    this.express.use(CONST.ep.API_SWAGGER_DEF, express.static(__dirname + '/swagger/'));
+  }
+
+  private client(): void {
+    log.info('Initializing Client');
+    this.express.use('/', express.static(path.join(__dirname, '../client/dist')));
+  }
+
   // Configure Express middleware.
   private middleware(): void {
     log.info('Initializing Middleware');
@@ -149,10 +165,12 @@ class Application {
     log.info('Initializing Routers');
     // The authentication endpoint is 'Open', and should be added to the router pipeline before the other routers
     this.express.use(CONST.ep.AUTHENTICATION, new routers.AuthenticationRouter().getRouter());
+
+    // The registration endpoint is also 'open', and will allow any users to register. They will be placed in the guest org, without any priviliges.
     this.express.use(`${CONST.ep.V1}${CONST.ep.REGISTER}`, new routers.RegistrationRouter().getRouter());
-    // I know this email validation router seems confusing.  I want two endpoints.  One which requires authentication
-    // and one that doesn't so we can have the email be validated without the user signing in. 
-    this.express.use(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`, new routers.ValidateEmailRouter().getRouter());
+
+    // This will get the public only router for email verification
+    this.express.use(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`, new routers.EmailVerificationRouter().getPublicRouter());
     this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
 
     //Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
@@ -171,6 +189,7 @@ class Application {
   // We want to return a json response that will at least be helpful for 
   // the root route of our api.
   private handlers(): void {
+    log.info('Initializing Handlers');
     this.express.get('/', (request: express.Request, response: express.Response) => {
       response.json({
         name: CONST.APPLICATION_NAME,
@@ -189,11 +208,6 @@ class Application {
     });
   }
 
-  // This will allow us to serve the static homepage for our swagger definition
-  // along with the swagger ui explorer.
-  private swagger(): void {
-    this.express.use(CONST.ep.API_DOCS, express.static(__dirname + '/swagger/swagger-ui'));
-    this.express.use(CONST.ep.API_SWAGGER_DEF, express.static(__dirname + '/swagger/'));
-  }
+
 }
 export default new Application();

@@ -49,12 +49,10 @@ export class EmailVerificationController extends BaseController {
 
             response.status(200).json({
                 message: "Email Verified Completed",
-            })
+            });
         }
         catch (err) {
             next(err)
         }
-
     }
-
 }

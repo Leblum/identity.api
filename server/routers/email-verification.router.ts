@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { EmailVerificationController } from '../controllers/';
 import { BaseRouter } from './base/base.router';
 import { CONST } from '../constants';
+import { Request, Response, RequestHandler, } from 'express';
+import { RequestHandlerParams, NextFunction } from 'express-serve-static-core';
 
 export class EmailVerificationRouter extends BaseRouter {
     public router: Router = Router();
@@ -11,5 +13,12 @@ export class EmailVerificationRouter extends BaseRouter {
     public constructor(){
         super();
         this.resource = CONST.ep.EMAILVERIFICATION;
+    }
+
+    public getPublicRouter(): Router {
+        return this.router
+            .post(``, async (request: Request, response: Response, next: NextFunction) => {
+                await this.controller.validateEmail(request, response, next);
+            });
     }
 }

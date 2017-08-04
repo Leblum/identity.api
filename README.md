@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/Leblum/identity.api.svg?token=piJBjH1x3vNsd4rYXCfv&branch=master)](https://travis-ci.com/Leblum/identity.api)
-
 # Leblum Identity API 
  
 Implementation of async - await methods in mongoose and express.
@@ -75,11 +73,12 @@ npm install
 
 ## URL
 
-*  "DocumentationLocation": [Docs](http://localhost:8080/api-docs)
-*  "APILocation": [Api Base](http://localhost:8080/api)
-*  "AuthenticationEndpoint": [Authenticate](http://localhost:8080/api/authenticate)
+If you hit the root, you'll see how you can work with the api.  the docs location etc.
 
 # Docker Cheat sheet
+
+if you're constantly building the image.... you'll want to clean up the lingering images
+```docker image prune```
 
 checking in changes to see automatic deploys working 
 Take a look at the logs for a container.
