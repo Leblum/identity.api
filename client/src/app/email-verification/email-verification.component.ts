@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-// *|USER:VERIFICATION_LINK|*
-
 @Component({
   selector: 'app-email-verification',
   templateUrl: './email-verification.component.html',
-  styleUrls: ['./email-verification.component.css']
+  styleUrls: ['./email-verification.component.scss']
 })
 export class EmailVerificationComponent implements OnInit {
 
