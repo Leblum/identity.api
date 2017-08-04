@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+// *|USER:VERIFICATION_LINK|*
+
 @Component({
   selector: 'app-email-verification',
   templateUrl: './email-verification.component.html',

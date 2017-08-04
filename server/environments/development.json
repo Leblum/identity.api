@@ -1,5 +1,4 @@
 {
-    "publicURL": "http://localhost",
     "name": "leblum.identity.api",
     "database": {
       "mongoConnectionString": "mongodb://root:hastjGvfpD6CjkFn@ds111103.mlab.com:11103/leblum-identity-development"
@@ -10,5 +9,6 @@
     "systemUserPassword": "ads987sadgydfg76e9uhnsj8nhe9f87",
     "jwtSecretToken": "asdf97a9s8d7baodfbhoda8f7g9adf8asj",
     "returnCallStackOnError": true,
-    "isConsoleLoggingActive": true
+    "isConsoleLoggingActive": true,
+    "mandrillApiKey": "Zh8DlnQXZIW5urHG7f1Llw" // this is the test key for right now... switch to real
 }

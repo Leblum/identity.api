@@ -1,5 +1,4 @@
 {
-    "publicURL": "http://localhost",
     "name": "leblum.identity.api",
     "database": {
       "mongoConnectionString": "mongodb://root:leblum1234@ds111123.mlab.com:11123/leblum-vendor-api-stage"

@@ -12,6 +12,7 @@ import { IEmailVerification, EmailVerification } from "../models/email-verificat
 import { ApiErrorHandler } from "../api-error-handler";
 import { AuthenticationUtil } from "./index";
 import * as moment from 'moment';
+import { EmailVerificationNotification } from "../notifications/email-verification.notification";
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -66,15 +67,26 @@ export class RegistrationController extends BaseController {
                     expiresOn: moment().add(moment.duration(1, 'week')).format(CONST.MOMENT_DATE_FORMAT),
                 }
 
-                await new EmailVerification(emailVerification).save();
+                let emailVerificationDoc = await new EmailVerification(emailVerification).save();
 
-                // TODO: Send the email verification
+                // if there was a problem sending the email verification email.
+                // we're going to delete the newly created user, and return an error  this will make sure people can still try and register with the same email.
+                try{
+                    // Now we shoot off a notification to mandrill
+                    await EmailVerificationNotification.sendVerificationEmail(user.email,emailVerificationDoc.id);
+                }
+                catch(err){
+                   await user.remove();
+                   await emailVerificationDoc.remove();
+                   throw err;
+                }
+
 
                 //Clean up the user before we return it to the register call;
                 user.password = '';
                 response.status(201).json(user);
             }
         }
-        catch (err) { AuthenticationUtil.sendAuthFailure(response, 401, err); }
+        catch (err) { ApiErrorHandler.sendError('There was an error with registratrion',400,response, null,err); }
     }
 }

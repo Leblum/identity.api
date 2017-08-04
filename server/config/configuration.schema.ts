@@ -20,12 +20,6 @@ public static convictSchema: convict.Config = convict({
       default: 'leblum unamed app',
       env: 'APP_NAME'
     },
-    publicURL: {
-      doc: 'This url is used to dynamically generate a location for documentation in the startup app',
-      format: '*',
-      default: 'http://localhost/',
-      env: 'PUBLIC_URL'
-    },
     database: {
       mongoConnectionString: {
         doc: 'Mongo Connection string',
@@ -75,6 +69,13 @@ public static convictSchema: convict.Config = convict({
       format: Boolean,
       default: true,
       env: 'CONSOLE_COLOR',
+    },
+    mandrillApiKey:{
+      doc:'DEFAULT HERE IS TEST KEY! This is the api key that we want to use with mandrill.  Keep in mind there is a different test for the integration environment',
+      format: String,
+      default: 'Zh8DlnQXZIW5urHG7f1Llw',
+      env: 'MANDRILL_API_KEY',
+      sensitive: true
     },
   });
 }
