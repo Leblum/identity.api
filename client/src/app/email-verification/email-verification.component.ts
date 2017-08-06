@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmailVerificationComponent implements OnInit {
 
+  public open: boolean = false;
+
   constructor() { }
 
   ngOnInit() {

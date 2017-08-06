@@ -45,12 +45,13 @@ class Application {
     this.healthcheck();  // Router for the healthcheck
     this.loggingClientEndpoint();
     this.connectDatabase();     // Setup database connection
+    this.middleware();   // Setup the middleware
     this.secure();       // Turn on security measures
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
-    this.client();       // This will serve the client angular application
     this.middleware();   // Setup the middleware
     this.routes();       // Setup routers for all the controllers
     this.handlers();     // Any additional handlers, home page, etc.
+    this.client();       // This will serve the client angular application
 
     this.server = this.express.listen(Config.active.get('port'));
 
@@ -140,7 +141,9 @@ class Application {
 
   private client(): void {
     log.info('Initializing Client');
-    this.express.use('/', express.static(path.join(__dirname, '../client/dist')));
+    
+    this.express.use(express.static(path.join(__dirname, '../client/dist/')));
+    this.express.use('*',express.static(path.join(__dirname, '../client/dist/index.html')));
   }
 
   // Configure Express middleware.
@@ -168,7 +171,7 @@ class Application {
 
     // The registration endpoint is also 'open', and will allow any users to register. They will be placed in the guest org, without any priviliges.
     this.express.use(`${CONST.ep.V1}${CONST.ep.REGISTER}`, new routers.RegistrationRouter().getRouter());
-
+    
     // This will get the public only router for email verification
     this.express.use(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`, new routers.EmailVerificationRouter().getPublicRouter());
     this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
@@ -203,11 +206,9 @@ class Application {
       })
     });
 
-    this.express.get('*', function (req, res, next) {
-      next({ message: `No router was found for your request, page not found.  Requested Page: ${req.originalUrl}`, status: 404 });
-    });
+    // this.express.get('*', function (req, res, next) {
+    //   next({ message: `No router was found for your request, page not found.  Requested Page: ${req.originalUrl}`, status: 404 });
+    // });
   }
-
-
 }
 export default new Application();
