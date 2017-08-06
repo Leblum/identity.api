@@ -45,7 +45,7 @@ class Application {
     this.healthcheck();  // Router for the healthcheck
     this.loggingClientEndpoint();
     this.connectDatabase();     // Setup database connection
-    this.middleware();   // Setup the middleware
+    this.middleware();   // Setup the middleware - compression, etc...
     this.secure();       // Turn on security measures
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
     this.middleware();   // Setup the middleware
@@ -193,18 +193,18 @@ class Application {
   // the root route of our api.
   private handlers(): void {
     log.info('Initializing Handlers');
-    this.express.get('/', (request: express.Request, response: express.Response) => {
-      response.json({
-        name: CONST.APPLICATION_NAME,
-        description: 'An identity api for the leblum services',
-        APIVersion: CONST.ep.V1,
-        DocumentationLocation: `${request.protocol}://${request.get('host')}${CONST.ep.API_DOCS}`,
-        APILocation: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}`,
-        AuthenticationEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/authenticate`,
-        RegisterEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/register`,
-        Healthcheck:`${request.protocol}://${request.get('host')}/healthcheck`
-      })
-    });
+    // this.express.get('/', (request: express.Request, response: express.Response) => {
+    //   response.json({
+    //     name: CONST.APPLICATION_NAME,
+    //     description: 'An identity api for the leblum services',
+    //     APIVersion: CONST.ep.V1,
+    //     DocumentationLocation: `${request.protocol}://${request.get('host')}${CONST.ep.API_DOCS}`,
+    //     APILocation: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}`,
+    //     AuthenticationEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/authenticate`,
+    //     RegisterEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/register`,
+    //     Healthcheck:`${request.protocol}://${request.get('host')}/healthcheck`
+    //   })
+    // });
 
     // this.express.get('*', function (req, res, next) {
     //   next({ message: `No router was found for your request, page not found.  Requested Page: ${req.originalUrl}`, status: 404 });
