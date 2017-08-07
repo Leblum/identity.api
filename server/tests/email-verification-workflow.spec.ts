@@ -44,7 +44,7 @@ class EmailVerificationTest {
         }
 
         let userResponse = await api
-            .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
             .send(user);
         expect(userResponse.status).to.equal(201);
         expect(userResponse.body).to.be.an('object');
@@ -64,13 +64,13 @@ class EmailVerificationTest {
         }
 
         let response = await api
-            .post(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`).send(validateRequest);
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`).send(validateRequest);
         
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('object');
 
         let updatedUser = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userResponse.body._id}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userResponse.body._id}`)
             .set("x-access-token", systemAuthToken)
 
         expect(updatedUser.status).to.equal(200);
@@ -90,7 +90,7 @@ class EmailVerificationTest {
         }
 
         let userResponse = await api
-            .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
             .send(user);
         expect(userResponse.status).to.equal(201);
         expect(userResponse.body).to.be.an('object');
@@ -117,13 +117,13 @@ class EmailVerificationTest {
         }
 
         let response = await api
-            .post(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`).send(validateRequest);
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`).send(validateRequest);
 
         expect(response.status).to.equal(400);
         expect(response.body).to.be.an('object');
 
         let updatedUser = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userResponse.body._id}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userResponse.body._id}`)
             .set("x-access-token", systemAuthToken)
 
         expect(updatedUser.status).to.equal(200);

@@ -21,6 +21,7 @@ import methodOverride = require('method-override');
 import log = require('winston');
 import { authz } from "./controllers/authorization";
 import path = require('path');
+import cors = require('cors')
 
 
 
@@ -162,21 +163,25 @@ class Application {
     }));
     // compress all requests
     this.express.use(compression());
+    this.express.use(cors());
   }
 
   private routes(): void {
     log.info('Initializing Routers');
+    // OPEN Endpoints only
     // The authentication endpoint is 'Open', and should be added to the router pipeline before the other routers
-    this.express.use(CONST.ep.AUTHENTICATION, new routers.AuthenticationRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1 + CONST.ep.AUTHENTICATION, new routers.AuthenticationRouter().getRouter());
 
     // The registration endpoint is also 'open', and will allow any users to register. They will be placed in the guest org, without any priviliges.
-    this.express.use(`${CONST.ep.V1}${CONST.ep.REGISTER}`, new routers.RegistrationRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1 + CONST.ep.REGISTER, new routers.RegistrationRouter().getRouter());
     
     // This will get the public only router for email verification
-    this.express.use(`${CONST.ep.V1}${CONST.ep.VALIDATE_EMAIL}`, new routers.EmailVerificationRouter().getPublicRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1 + CONST.ep.VALIDATE_EMAIL, new routers.EmailVerificationRouter().getPublicRouter());
+    
+    // Now we lock up the rest.
     this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
 
-    //Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
+    // Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.EmailVerificationRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.OrganizationRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.UserRouter().getRouter());

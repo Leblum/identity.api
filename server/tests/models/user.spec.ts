@@ -48,7 +48,7 @@ class UserTest {
         }
 
         let response = await api
-            .post(`${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
             .send(user);
         expect(response.status).to.equal(201);
         expect(response.body).to.be.an('object');
@@ -182,7 +182,7 @@ class UserTest {
         };
 
         let response = await api
-            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", systemAuthToken)
             .send(userUpdate);
 
@@ -206,12 +206,12 @@ class UserTest {
         };
 
         let createResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
 
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${createResponse.body.model._id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${createResponse.body.model._id}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
@@ -225,7 +225,7 @@ class UserTest {
     @test('should return a 404 on delete when the ID isnt there')
     public async onDeleteWithoutUserID404() {
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);
@@ -235,7 +235,7 @@ class UserTest {
     @test('should return a 404 on update when the ID isnt there')
     public async onUpdateWithoutUserID404() {
         let response = await api
-            .put(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(404);

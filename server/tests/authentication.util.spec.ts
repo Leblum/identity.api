@@ -36,7 +36,7 @@ export class AuthenticationUtil {
         }
 
         let res = await chai.request(App.express)
-            .post(`/authenticate`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
             .send({
                 "email": "integrationTestLeblum@leblum.com",
                 "password": "test1234"
@@ -55,7 +55,7 @@ export class AuthenticationUtil {
         let user = await User.findOne({ email: "system@leblum.com" });
 
         let res = await chai.request(App.express)
-            .post(`/authenticate`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
             .send({
                 "email": "system@leblum.com",
                 "password": Config.active.get('systemUserPassword')

@@ -1,17 +1,16 @@
-<!--
-  ~ Copyright (c) 2016 VMware, Inc. All Rights Reserved.
-  ~ This software is released under MIT license.
-  ~ The full license information can be found in LICENSE in the root directory of this project.
-  -->
-<p>This is a page to help demonstrate routing.</p>
-<button class="btn btn-primary" (click)="open = true">Show modal</button>
-<clr-modal [(clrModalOpen)]="open">
-  <h3 class="modal-title">I have a nice title</h3>
-  <div class="modal-body">
-    <p>But not much to say...</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline" (click)="open = false">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="open = false">Ok</button>
-  </div>
-</clr-modal>
+<alert type="warning" *ngIf="showWorking" class="alert-box">We're verifying your email now.</alert>
+<alert type="success" *ngIf="showSuccess" class="alert-box">Awesome!  Your email has been verified. You'll be redirected to the home page in <span class="seconds-left">{{secondsLeft}}</span></alert>
+<alert type="danger" *ngIf="showError" class="alert-box">We're sorry, but something seems to have gone wrong with the email verification process.
+    <accordion>
+        <accordion-group #group>
+            <div accordion-heading>
+            Error Details
+            <i class="pull-right float-xs-right glyphicon"
+                [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+            </div>
+            <code class="error-code">
+               {{errorText}}
+            </code>
+        </accordion-group>
+    </accordion>
+</alert>

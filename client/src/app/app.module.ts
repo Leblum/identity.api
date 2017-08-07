@@ -5,29 +5,36 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { EmailVerificationComponent } from './email-verification/email-verification.component';
-import { MainMenuComponent } from './main-menu/main-menu.component';
 import { FooterComponent } from './footer/footer.component';
-import { ClarityModule } from 'clarity-angular';
 import { HomeComponent } from './home/home.component';
 import { ApplicationRouting } from "./app.routing";
+import { AlertModule } from 'ngx-bootstrap';
+import { HeaderComponent } from './header/header.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { EmailVerificationService } from '../services/';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   imports: [
-    ClarityModule.forRoot(),
     ApplicationRouting,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpModule,
+    AlertModule.forRoot(),
+    AccordionModule.forRoot(),
   ],
   declarations: [
     AppComponent,
     EmailVerificationComponent,
-    MainMenuComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    HeaderComponent,
+    NavigationComponent
   ],
-  providers: [],
+  providers: [
+    EmailVerificationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

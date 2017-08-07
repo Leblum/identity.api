@@ -11,9 +11,12 @@ import { HomeComponent } from './home/home.component';
 
 
 export const ApplicationRoutes: Routes = [
-    {path: '', redirectTo: 'home', pathMatch: 'full'},
+    {path: '', redirectTo: 'email-verification', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
-    {path: 'email-verification', component: EmailVerificationComponent}
+    {path: 'magazine', component: HomeComponent},
+    {path: 'support', component: HomeComponent},
+    {path: 'my-account', component: HomeComponent},
+    {path: 'verify-email', component: EmailVerificationComponent}
 ];
 
 export const ApplicationRouting: ModuleWithProviders = RouterModule.forRoot(ApplicationRoutes);
