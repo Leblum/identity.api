@@ -42,7 +42,7 @@ RUN cd /usr/app/client && npm install
 COPY . .
 
 # now we need to build the client
-RUN cd /usr/app/client && ng build --aot
+RUN cd /usr/app/client && ng build --aot --extract-css=true --output-hashing=all --sourcemaps=true
 
 # build the server
 RUN gulp build 
