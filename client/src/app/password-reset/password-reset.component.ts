@@ -45,7 +45,6 @@ export class PasswordResetComponent implements OnInit {
         else{
           this.showError = true;
           this.errorText = JSON.stringify({message: "There was no id on the link supplied. Submit a new password reset request."});
-          throw (error);
         }
       });
     }
