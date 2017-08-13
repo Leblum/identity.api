@@ -13,6 +13,7 @@ import { HeaderComponent } from './header/header.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { EmailVerificationService } from '../services/';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     FooterComponent,
     HomeComponent,
     HeaderComponent,
-    NavigationComponent
+    NavigationComponent,
+    PasswordResetComponent
   ],
   providers: [
     EmailVerificationService
