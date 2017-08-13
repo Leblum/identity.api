@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PasswordResetService } from "../../services/";
+import { Params, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-password-reset',
@@ -13,30 +15,63 @@ export class PasswordResetComponent implements OnInit {
   public password1: string = '';
   public password2: string = '';
   public warningMessage: string;
+  public errorText: string;
 
-  constructor() { }
+  constructor(public activatedRoute: ActivatedRoute, public passwordResetService: PasswordResetService) { }
 
   ngOnInit() {
   }
 
+  //https://leblum.io/reset-password?id=${id}
   saveNewPassword(){
+    if(this.isPasswordValid()){
+      this.activatedRoute.queryParamMap.subscribe((params: Params) => {
+        let passwordResetTokenId = params.get('id');
+        if(passwordResetTokenId){
+          this.passwordResetService.resetPassword(passwordResetTokenId, this.password1).subscribe(
+            (response) => {
+              console.log(`response:${response}`);
+              if (response.status === 200) {
+                // Here we know it was successful.  So we're going to update the UI accordingly.
+                this.showSuccess = true;
+              }
+            },
+            (error) => {
+              this.showError = true;
+              this.errorText = JSON.stringify(error);
+              throw (error);
+            });
+        }
+        else{
+          this.showError = true;
+          this.errorText = JSON.stringify({message: "There was no id on the link supplied. Submit a new password reset request."});
+          throw (error);
+        }
+      });
+    }
+  }
+
+  public isPasswordValid(): boolean{
     if(this.password1.length === 0 || this.password2.length === 0){
       this.showWarning = true;
       this.warningMessage = "You must enter a new password in both fields."
-      return;
+      return false;
     }
+
     // Now first we need to compare the 2 passwords.
     if(this.password1 !== this.password2){
       this.showWarning = true;
       this.warningMessage = "The two passwords don't match."
-      return;
+      return false;
     }
 
     // Now first we need to compare the 2 passwords.
     if(this.password1.length < 6){
       this.showWarning = true;
       this.warningMessage = "Password must be 6 characters."
-      return;
+      return false;
     }
+    this.showWarning = false;
+    return true;
   }
 }

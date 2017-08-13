@@ -11,7 +11,7 @@ import { ApplicationRouting } from "./app.routing";
 import { AlertModule } from 'ngx-bootstrap';
 import { HeaderComponent } from './header/header.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { EmailVerificationService } from '../services/';
+import { EmailVerificationService, PasswordResetService } from '../services/';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 
@@ -35,7 +35,8 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
     PasswordResetComponent
   ],
   providers: [
-    EmailVerificationService
+    EmailVerificationService,
+    PasswordResetService
   ],
   bootstrap: [AppComponent]
 })
