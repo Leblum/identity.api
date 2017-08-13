@@ -1,7 +1,7 @@
 //During the test the env variable is set to test
 import { Database } from '../config/database/database';
 import { App, server } from '../server';
-import { User, IUserDoc, Permission, Role, Organization, EmailVerification } from '../models';
+import { User, IUserDoc, Permission, Role, Organization, EmailVerification, PasswordResetToken } from '../models';
 import { Config } from '../config/config';
 
 let mongoose = require("mongoose");
@@ -27,6 +27,7 @@ export class Cleanup {
             await User.remove({});
             await Organization.remove({});
             await EmailVerification.remove({});
+            await PasswordResetToken.remove({});
         }
     }
 }

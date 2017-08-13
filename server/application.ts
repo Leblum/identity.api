@@ -182,6 +182,9 @@ class Application {
     
     // This will get the public only router for email verification
     this.express.use(CONST.ep.API + CONST.ep.V1 + CONST.ep.VALIDATE_EMAIL, new routers.EmailVerificationRouter().getPublicRouter());
+
+    // This will get the public only router for email verification
+    this.express.use(CONST.ep.API + CONST.ep.V1, new routers.PasswordResetTokenRouter().getPublicRouter());
     
     // Now we lock up the rest.
     this.express.use('/api/*', new routers.AuthenticationRouter().authMiddleware);
@@ -192,6 +195,7 @@ class Application {
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.UserRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.RoleRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PasswordResetTokenRouter().getRouter());
   }
 
   // We want to return a json response that will at least be helpful for 

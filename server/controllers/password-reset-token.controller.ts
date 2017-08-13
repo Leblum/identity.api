@@ -23,7 +23,7 @@ export class PasswordResetTokenController extends BaseController {
         super();
     }
 
-    public async requestPasswordReset(request: Request, response: Response, next: NextFunction): Promise<any>{
+    public async requestPasswordReset(request: Request, response: Response, next: NextFunction): Promise<any> {
         try {
             if (!request.body || !request.body.email) {
                 ApiErrorHandler.sendError("Item Not Found", 404, response)
@@ -35,24 +35,25 @@ export class PasswordResetTokenController extends BaseController {
 
             // First we find a user based on that email.
             const user = await this.userRepo.findUserByEmail(request.body.email);
+            if (user) {
+                // Now we insert a password reset token for that user.
+                const passwordResetToken: IPasswordResetToken = {
+                    userId: user.id,
+                    expiresOn: moment().add(moment.duration(24, 'hours')).format(CONST.MOMENT_DATE_FORMAT),
+                }
 
-            // Now we insert a password reset token for that user.
-            const passwordResetToken: IPasswordResetToken = {
-                userId: user.id,
-                expiresOn: moment().add(moment.duration(24, 'hours')).format(CONST.MOMENT_DATE_FORMAT),
-            } 
+                let passwordResetTokenDoc = await new PasswordResetToken(passwordResetToken).save();
 
-            let passwordResetTokenDoc = await new PasswordResetToken(passwordResetToken).save();
-
-            // Now we send that user an email with a link to reset their password.
-            // Cleanup if there was a problem sending the password reset email. 
-            try{
-                // Now we shoot off a notification to mandrill
-                await PasswordResetNotification.sendPasswordResetEmail(user.email,passwordResetTokenDoc.id);
-            }
-            catch(err){
-                await passwordResetTokenDoc.remove();
-                throw err;
+                // Now we send that user an email with a link to reset their password.
+                // Cleanup if there was a problem sending the password reset email. 
+                try {
+                    // Now we shoot off a notification to mandrill
+                    await PasswordResetNotification.sendPasswordResetEmail(user.email, passwordResetTokenDoc.id);
+                }
+                catch (err) {
+                    await passwordResetTokenDoc.remove();
+                    throw err;
+                }
             }
 
             response.status(200).json({
@@ -69,7 +70,7 @@ export class PasswordResetTokenController extends BaseController {
             // This is how the request should be shaped.
             // { passwordResetTokenId: id, password: password }
             // Keep in mind that this token will only reset the password for one user, the userId on the token.
-            if (!request.body || !request.body.passwordResetTokenId ||  !request.body.password ) {
+            if (!request.body || !request.body.passwordResetTokenId || !request.body.password) {
                 ApiErrorHandler.sendError("Password Token Not Supplied, or password not supplied", 400, response)
                 return;
             }
@@ -81,14 +82,14 @@ export class PasswordResetTokenController extends BaseController {
             }
 
             // Check the expiration for the token.
-            if(!moment().isBefore(moment(passwordResetToken.expiresOn,CONST.MOMENT_DATE_FORMAT))){
+            if (!moment().isBefore(moment(passwordResetToken.expiresOn, CONST.MOMENT_DATE_FORMAT))) {
                 // Here that record has already expired
                 ApiErrorHandler.sendError("That password reset token has expired, please request a new one", 400, response, CONST.ErrorCodes.PASSWORD_RESET_TOKEN_EXPIRED);
                 return;
             }
 
             // Now we know the timer checks out. let's update the user record, and get them on their way.
-            let user = await  new UserRepository().single(passwordResetToken.userId);
+            let user = await new UserRepository().single(passwordResetToken.userId);
             user.password = await bcrypt.hash(request.body.password, CONST.SALT_ROUNDS);
             user.isTokenExpired = true;
             await user.save();
