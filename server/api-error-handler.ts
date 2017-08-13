@@ -15,7 +15,8 @@ export class ApiErrorHandler {
     }
 
     public static HandleApiError(error: Error & { status: number }, request: Request, response: Response, next: NextFunction) {
-        log.error(error.stack);
+        log.error(JSON.stringify(error));
+        log.error('Call Stack: ' + error.stack);
 
         // Set the response status code on the response in the case of error.
         response.statusCode = error.status || 500;

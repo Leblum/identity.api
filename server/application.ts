@@ -27,7 +27,6 @@ import cors = require('cors')
 
 // Creates and configures an ExpressJS web server.
 class Application {
-
   // ref to Express instance
   public express: express.Application;
   public currentDatabase: Database;
@@ -44,8 +43,8 @@ class Application {
     this.express = express();
     this.logging();      // Initialize logging 
     this.healthcheck();  // Router for the healthcheck
-    this.loggingClientEndpoint();
     this.connectDatabase();     // Setup database connection
+    this.loggingClientEndpoint();
     this.middleware();   // Setup the middleware - compression, etc...
     this.secure();       // Turn on security measures
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
@@ -53,6 +52,7 @@ class Application {
     this.routes();       // Setup routers for all the controllers
     this.handlers();     // Any additional handlers, home page, etc.
     this.client();       // This will serve the client angular application
+    this.initErrorHandler(); //This global error handler, will handle 404s for us, and any other errors.  It has to be LAST in the stack.
 
     this.server = this.express.listen(Config.active.get('port'));
 
@@ -100,6 +100,13 @@ class Application {
     }
   }
 
+  initErrorHandler(): any {
+    log.info('Instantiating Default Error Handler Route');
+    this.express.use((error: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
+      ApiErrorHandler.HandleApiError(error, request, response, next);
+    });
+  }
+
   private healthcheck() {
     this.express.get('/healthcheck', (request: express.Request, response: express.Response) => {
       response.statusCode = this.setupComplete ? 200 : 500;
@@ -120,8 +127,6 @@ class Application {
   private async connectDatabase() {
     this.currentDatabase = new Database();
     let connected = await this.currentDatabase.connect();
-    // Be very careful with this line.
-    ///asd9f9as78df98sadjawait DatabaseBootstrap.teardown();
     await DatabaseBootstrap.seed();
 
     this.setupComplete = connected as boolean;
@@ -129,7 +134,7 @@ class Application {
   }
 
   private secure() {
-    //app.use(helmet()); //Protecting the app from a lot of vulnerabilities turn on when you want to use TLS.
+    //this.express.use(helmet()); //Protecting the app from a lot of vulnerabilities turn on when you want to use TLS.
   }
 
   // This will allow us to serve the static homepage for our swagger definition
@@ -179,7 +184,7 @@ class Application {
     this.express.use(CONST.ep.API + CONST.ep.V1 + CONST.ep.VALIDATE_EMAIL, new routers.EmailVerificationRouter().getPublicRouter());
     
     // Now we lock up the rest.
-    this.express.use('/api*', new routers.AuthenticationRouter().authMiddleware);
+    this.express.use('/api/*', new routers.AuthenticationRouter().authMiddleware);
 
     // Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.EmailVerificationRouter().getRouter());
@@ -187,33 +192,28 @@ class Application {
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.UserRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.RoleRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
-
-    log.info('Instantiating Default Error Handler Route');
-    this.express.use((error: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
-      ApiErrorHandler.HandleApiError(error, request, response, next);
-    });
   }
 
   // We want to return a json response that will at least be helpful for 
   // the root route of our api.
   private handlers(): void {
     log.info('Initializing Handlers');
-    // this.express.get('/', (request: express.Request, response: express.Response) => {
-    //   response.json({
-    //     name: CONST.APPLICATION_NAME,
-    //     description: 'An identity api for the leblum services',
-    //     APIVersion: CONST.ep.V1,
-    //     DocumentationLocation: `${request.protocol}://${request.get('host')}${CONST.ep.API_DOCS}`,
-    //     APILocation: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}`,
-    //     AuthenticationEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/authenticate`,
-    //     RegisterEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/register`,
-    //     Healthcheck:`${request.protocol}://${request.get('host')}/healthcheck`
-    //   })
-    // });
+    this.express.get('/api', (request: express.Request, response: express.Response) => {
+      response.json({
+        name: CONST.APPLICATION_NAME,
+        description: 'An identity api for the leblum services',
+        APIVersion: CONST.ep.V1,
+        DocumentationLocation: `${request.protocol}://${request.get('host')}${CONST.ep.API_DOCS}`,
+        APILocation: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}`,
+        AuthenticationEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/authenticate`,
+        RegisterEndpoint: `${request.protocol}://${request.get('host')}${CONST.ep.API}${CONST.ep.V1}/register`,
+        Healthcheck:`${request.protocol}://${request.get('host')}/healthcheck`
+      })
+    });
 
-    // this.express.get('*', function (req, res, next) {
-    //   next({ message: `No router was found for your request, page not found.  Requested Page: ${req.originalUrl}`, status: 404 });
-    // });
+    this.express.get('*', function (req, res, next) {
+      throw({ message: `No router was found for your request, page not found.  Requested Page: ${req.originalUrl}`, status: 404 });
+    });
   }
 }
 export default new Application();

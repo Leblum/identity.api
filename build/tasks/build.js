@@ -40,8 +40,8 @@ gulp.task('copy-css', function () {
 });
 
 gulp.task('copy-swagger', function () {
-    gulp.src('src/swagger/swagger-ui/**/*')
-      .pipe(gulp.dest('dist/swagger/swagger-ui/'));
+    gulp.src(paths.swagger)
+      .pipe(gulp.dest(paths.output + '/swagger/'));
 });
 
 // this task calls the clean task (located

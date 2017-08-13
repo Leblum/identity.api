@@ -10,7 +10,7 @@ module.exports = {
   html: appRoot + '**/*.html',
   css: appRoot + '**/*.css',
   content: appRoot + '**/*.png',
-  swagger: appRoot + 'swagger/swagger-ui/' + '**/*',
+  swagger: appRoot + 'swagger/' + '**/*',
   output: outputRoot,
   doc: './doc',
   e2eSpecsSrc: 'test/e2e/src/*.js',

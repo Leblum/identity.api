@@ -24,7 +24,7 @@ tags:
 produces:
   - application/json
 paths:
-  /authenticate:
+  /api/v1/authenticate:
     post:
       description: 'The way that you authenticate to the api'
       summary: Authentication for users
@@ -49,7 +49,7 @@ paths:
         401:
           description: 'Authentication failure'          
       security: []
-  /v1/register:
+  /api/v1/register:
     post:
       description: 'Registering a new user'
       summary: Open registration

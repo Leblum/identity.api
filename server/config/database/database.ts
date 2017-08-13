@@ -4,7 +4,7 @@ import { Config } from '../config';
 import log = require('winston');
 
 export class Database {
-    public connect(): Promise<boolean | void> {
+    public connect(): Promise<boolean> {
         const connectionOptions: any = {
             useMongoClient: true,
         }
@@ -15,6 +15,7 @@ export class Database {
             return true;
         }).catch(function (err) {
             log.info('error while trying to connect with mongodb', err);
+            return false;
         });
     }
 }

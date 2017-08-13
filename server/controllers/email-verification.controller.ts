@@ -46,8 +46,7 @@ export class EmailVerificationController extends BaseController {
             await user.save();
 
             // Commented for testing    
-            // TODO REMOVE THIS COMMENT
-            //await emailVerifcationRecord.remove();
+            await emailVerifcationRecord.remove();
 
             response.status(200).json({
                 message: "Email Verified Completed",
