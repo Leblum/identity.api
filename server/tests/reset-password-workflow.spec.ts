@@ -22,7 +22,7 @@ let userAuthToken: string;
 let systemAuthToken: string;
 let guestOrgId: string;
 
-@suite.only('Reset Password Workflow')
+@suite('Reset Password Workflow')
 class EmailVerificationTest {
 
     public static async before() {
