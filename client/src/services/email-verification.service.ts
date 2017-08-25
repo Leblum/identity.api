@@ -16,6 +16,7 @@ export class EmailVerificationService extends BaseService {
     }
 
     // GET /datamodel/entities/{name}/templates
+    // Makes a request to the api to verify the email id.
     public verifyEmail(id: string): Observable<Response> {
         const url = `${environment.IdentityAPIBase}${environment.IdentityAPIVersion}/validate-email`;
         return this.http.post(url, { id: id }, this.requestOptions)

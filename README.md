@@ -126,13 +126,20 @@ Take a rancher backup
 Copy the dump back over locally
 ``` scp root@198.199.74.116:/usr/rancher.dump .```
 
+# Rancher
+
+
  # Logging into a rancher created instance
 First download the keys from the host.  You go to hosts, and then machine config.
 Place the keys in a folder.
+My keys are stored in f:\leblum\servers\SERVER_NAME
+cd into the server name you want to connect to.
 
-currently I put ssh keys here: C:\Users\David\.ssh\dev-luxor1
+# Rancher dev-luxor-1
+ssh -i id_rsa root@165.227.67.136 
 
-ssh -i id_rsa root@45.55.75.119
+# Rancher dev-luxor-2
+ssh -i id_rsa root@165.227.96.232
 
 # Certificates
 certs are stored inside the docker container that's running haproxy.  For instance they are stored:

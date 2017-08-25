@@ -50,8 +50,8 @@ class Application {
     this.swagger();      // Serve up swagger, this is before authentication, as swagger is open
     this.middleware();   // Setup the middleware
     this.routes();       // Setup routers for all the controllers
+    this.client();       // This will serve the client angular application, will serve all static files.
     this.handlers();     // Any additional handlers, home page, etc.
-    this.client();       // This will serve the client angular application
     this.initErrorHandler(); //This global error handler, will handle 404s for us, and any other errors.  It has to be LAST in the stack.
 
     this.server = this.express.listen(Config.active.get('port'));
