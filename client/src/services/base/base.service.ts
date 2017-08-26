@@ -6,15 +6,24 @@ import 'rxjs/add/observable/throw';
 
 import { ServiceError } from '../../classes/app-error.class'
 import { BaseModel } from '../../models';
+import { environment } from "../../environments/environment";
 
 export class BaseService {
 
     protected requestOptions: RequestOptions;
+    protected identityApiBaseV1: string = `${environment.IdentityAPIBase}${environment.IdentityAPIVersion}`;
 
-    public constructor(){
+    public constructor(protected http: Http){
         this.requestOptions = new RequestOptions({
             headers: new Headers({ 'Content-Type': MimeType.JSON })
         });
+    }
+
+    protected postObject(endpoint: string, object: any): Observable<Response>{
+        return this.http.post(`${this.identityApiBaseV1}${endpoint}`, object, this.requestOptions)
+            .map((res: Response) => {
+                return res;
+            }).catch(this.handleError);
     }
 
     protected handleError(errorResponse: Response | any) {

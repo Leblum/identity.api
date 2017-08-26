@@ -20,7 +20,7 @@ export class PasswordResetTokenRouter extends BaseRouter {
             .post(`${CONST.ep.PASSWORD_RESET}`, async (request: Request, response: Response, next: NextFunction) => {
                 await this.controller.resetPassword(request, response, next);
             })
-            .post(`${CONST.ep.REQUEST_PASSWORD_RESET}`, async (request: Request, response: Response, next: NextFunction) => {
+            .post(`${CONST.ep.PASSWORD_RESET_REQUEST}`, async (request: Request, response: Response, next: NextFunction) => {
                 await this.controller.requestPasswordReset(request, response, next);
             });
     }

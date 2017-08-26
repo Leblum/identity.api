@@ -3,8 +3,6 @@ export const CONST = {
         API: '/api',
         V1: '/v1',
         AUTHENTICATION: '/authenticate',
-        API_DOCS: '/api-docs',
-        API_SWAGGER_DEF: '/swagger-definition',
         PERMISSIONS: '/permissions',
         ROLES: '/roles',
         USERS: '/users',
@@ -17,10 +15,6 @@ export const CONST = {
         PASSWORD_RESET_REQUEST: '/password-reset-request'
     },
     MOMENT_DATE_FORMAT: 'YYYY-MM-DD h:mm:ss a Z',
-    LEBLUM_API_Q_BACKPLANE: 'leblum-api-q-backplane',
-    APPLICATION_NAME: "leblum.identity.api",
-    REQUEST_TOKEN_LOCATION: 'api-decoded-token',
-    SALT_ROUNDS: 10,
     ErrorCodes: {
         EMAIL_TAKEN: 'EmailAlreadyTaken',
         PASSWORD_FAILED_CHECKS: 'PasswordFailedChecks',

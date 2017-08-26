@@ -63,7 +63,7 @@ class EmailVerificationTest {
         }
 
         let passwordResetTokenResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REQUEST_PASSWORD_RESET}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.PASSWORD_RESET_REQUEST}`)
             .send(passwordResetRequest);
         expect(passwordResetTokenResponse.status).to.equal(200);
         expect(passwordResetTokenResponse.body).to.be.an('object');
@@ -137,7 +137,7 @@ class EmailVerificationTest {
         }
 
         let passwordResetTokenResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REQUEST_PASSWORD_RESET}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.PASSWORD_RESET_REQUEST}`)
             .send(passwordResetRequest);
         expect(passwordResetTokenResponse.status).to.equal(200);
         expect(passwordResetTokenResponse.body).to.be.an('object');
@@ -175,7 +175,7 @@ class EmailVerificationTest {
         }
 
         let passwordResetTokenResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REQUEST_PASSWORD_RESET}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.PASSWORD_RESET_REQUEST}`)
             .send(passwordResetRequest);
         expect(passwordResetTokenResponse.status).to.equal(200);
         expect(passwordResetTokenResponse.body).to.be.an('object');

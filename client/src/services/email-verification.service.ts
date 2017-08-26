@@ -7,21 +7,17 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import { ServiceError } from "../classes/app-error.class";
 import { environment } from '../environments/environment';
+import { CONST } from '../constants';
 
 @Injectable()
 export class EmailVerificationService extends BaseService {
 
     constructor(protected http: Http) {
-        super();
+        super(http);
     }
 
-    // GET /datamodel/entities/{name}/templates
     // Makes a request to the api to verify the email id.
     public verifyEmail(id: string): Observable<Response> {
-        const url = `${environment.IdentityAPIBase}${environment.IdentityAPIVersion}/validate-email`;
-        return this.http.post(url, { id: id }, this.requestOptions)
-            .map((res: Response) => {
-                return res;
-            }).catch( this.handleError );
+        return super.postObject(CONST.ep.VALIDATE_EMAIL, { id: id });
     }
 }

@@ -7,23 +7,25 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import { ServiceError } from "../classes/app-error.class";
 import { environment } from '../environments/environment';
+import { CONST } from '../constants';
 
 @Injectable()
 export class PasswordResetService extends BaseService {
 
     constructor(protected http: Http) {
-        super();
+        super(http);
+    }
+
+    public requestPasswordReset(email: string): Observable<Response> {
+        return super.postObject(CONST.ep.PASSWORD_RESET_REQUEST, {
+            email: email
+        });
     }
 
     public resetPassword(passwordResetTokenId: string, password: string): Observable<Response> {
-
-        const url = `${environment.IdentityAPIBase}${environment.IdentityAPIVersion}/password-reset`;
-        return this.http.post(url, { 
-                passwordResetTokenId: passwordResetTokenId, 
-                password: password 
-            }, this.requestOptions)
-            .map((res: Response) => {
-                return res;
-            }).catch( this.handleError );
+        return super.postObject(CONST.ep.PASSWORD_RESET, {
+            passwordResetTokenId: passwordResetTokenId,
+            password: password
+        });
     }
 }
