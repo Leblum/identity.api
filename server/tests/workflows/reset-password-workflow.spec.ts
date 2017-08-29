@@ -1,21 +1,22 @@
-import { Database } from '../config/database/database';
-import { App, server } from '../server-entry';
-import { User, IUserDoc, Permission, Role, Organization, IUser, PasswordResetToken } from '../models';
-import { Config } from '../config/config';
-import { CONST } from "../constants";
-import { AuthenticationUtil } from "./authentication.util.spec";
-import { Cleanup } from "./cleanup.util.spec";
+import { Database } from '../../config/database/database';
+import { App, server } from '../../server-entry';
+import { User, IUserDoc, Permission, Role, Organization, IUser, EmailVerification, PasswordResetToken } from '../../models';
+import { Config } from '../../config/config';
+import { CONST } from "../../constants";
+import { AuthenticationUtil } from "../authentication.util.spec";
+import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
-import * as moment from 'moment';
+import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
 
+import * as moment from 'moment';
 import * as supertest from 'supertest';
 import * as chai from 'chai';
-import { DatabaseBootstrap } from "../config/database/database-bootstrap";
-import { UserRepository } from "../repositories/index";
+import { UserRepository } from "../../repositories/index";
+
+const api = supertest.agent(App.server);
 const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
-const api = supertest(`http://localhost:${Config.active.get('port')}`);
 const bcrypt = require('bcrypt');
 
 let userAuthToken: string;
@@ -23,16 +24,20 @@ let systemAuthToken: string;
 let guestOrgId: string;
 
 @suite('Reset Password Workflow')
-class EmailVerificationTest {
+class ResetPasswordWorkflowTest {
 
     public static async before() {
+        console.log('Testing Password Workflow');
         await Cleanup.clearDatabase();
         await DatabaseBootstrap.seed();
 
         userAuthToken = await AuthenticationUtil.generateUserAuthToken();
         systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
         guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
-        return;
+    }
+
+    public static async after(){
+        await Cleanup.clearDatabase();
     }
 
     @test('register -> request password reset -> reset password')
@@ -181,11 +186,6 @@ class EmailVerificationTest {
         expect(passwordResetTokenResponse.body).to.be.an('object');
         expect(passwordResetTokenResponse.body.message.length).to.be.greaterThan(0);
 
-        return;
-    }
-
-    public static async after() {
-        await Cleanup.closeConnections();
         return;
     }
 }

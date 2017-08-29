@@ -13,18 +13,11 @@ chai.use(require('chai-http'));
 import { suite, test, context, } from "mocha-typescript";
 
 export class Cleanup {
-    public static async closeConnections() {
-        // mongoose.models = {};
-        // mongoose.modelSchemas = {};
-        // await mongoose.connection.close();
-        // await App.server.close();
-    }
-
+    
     public static async clearDatabase() {
-        const db = new Database();
-        await db.connect();
+        await Database.connect();
         if (process.env.NODE_ENV === 'integration'
-            && db.databaseName.includes('integration')
+            && Database.databaseName.includes('integration')
         ) {
             await Permission.remove({});
             await Role.remove({});

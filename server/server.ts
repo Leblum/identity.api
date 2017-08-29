@@ -40,7 +40,7 @@ class Application {
     this.express = express();
     this.logging();      // Initialize logging 
     this.healthcheck();  // Router for the healthcheck
-    this.connectDatabase();     // Setup database connection
+    this.connectDatabase() // Setup database connection
     this.loggingClientEndpoint();
     this.middleware();   // Setup the middleware - compression, etc...
     this.secure();       // Turn on security measures
@@ -51,9 +51,9 @@ class Application {
     this.handlers();     // Any additional handlers, home page, etc.
     this.initErrorHandler(); // This global error handler, will handle 404s for us, and any other errors.  It has to be LAST in the stack.
 
-    this.server = this.express.listen(Config.active.get('port'));
-
-    log.info(`Listening on port: ${Config.active.get('port')}`);
+    this.server = this.express.listen(Config.active.get('port'), () => {
+      log.info(`Listening on port: ${Config.active.get('port')}`);
+    });
   }
 
   // Here we're going to make sure that the environment is setup.  
@@ -126,11 +126,11 @@ class Application {
   }
 
   private async connectDatabase() {
-    this.currentDatabase = new Database();
-    let connected = await this.currentDatabase.connect();
+    await Database.connect();
     await DatabaseBootstrap.seed();
     HealthStatus.isDatabaseSeeded = true;
     log.info('Completed Setup, boostrapped database, database now online');
+    this.server.emit("dbConnected");
   }
 
   private secure() {

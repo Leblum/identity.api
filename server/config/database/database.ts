@@ -7,21 +7,22 @@ mongoose.Promise = require('bluebird');
 
 export class Database {
 
-    public databaseName: string = '';
-    public async connect(): Promise<void> {
+    public static databaseName: string = '';
+    public static async connect(): Promise<void> {
         const connectionOptions: any = {
             useMongoClient: true,
         }
-        
-        try{
-            await mongoose.connect(Config.active.get('database.mongoConnectionString'), connectionOptions);
-            this.databaseName = mongoose.connection.db.databaseName;
-            log.info(`Connected To Mongo Database: ${mongoose.connection.db.databaseName}`);
-            HealthStatus.isDatabaseConnected = true;
-        }
-        catch(err){
-            log.info('error while trying to connect with mongodb', err);
-            HealthStatus.isDatabaseConnected = false;
+        if(!HealthStatus.isDatabaseConnected){
+            try{
+                await mongoose.connect(Config.active.get('database.mongoConnectionString'), connectionOptions);
+                this.databaseName = mongoose.connection.db.databaseName;
+                log.info(`Connected To Mongo Database: ${mongoose.connection.db.databaseName}`);
+                HealthStatus.isDatabaseConnected = true;
+            }
+            catch(err){
+                log.info('error while trying to connect with mongodb', err);
+                HealthStatus.isDatabaseConnected = false;
+            }
         }
     }
 }

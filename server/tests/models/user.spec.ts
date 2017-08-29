@@ -6,14 +6,15 @@ import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
+import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
 
 import * as supertest from 'supertest';
 import * as chai from 'chai';
-import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
+
+const api = supertest.agent(App.server);  
 const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
-const api = supertest(`http://localhost:${Config.active.get('port')}`);
 
 let userAuthToken: string;
 let systemAuthToken: string;
@@ -22,19 +23,21 @@ let guestOrgId: string;
 @suite('User Test')
 class UserTest {
 
-    public static async before() {
-        await Cleanup.clearDatabase();
-        await DatabaseBootstrap.seed();
-
-        userAuthToken = await AuthenticationUtil.generateUserAuthToken();
-        systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
-        guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
-        return;
+    public static before(done) {
+        console.log('Testing user test');
+        App.server.on('dbConnected',async ()=>{
+            await Cleanup.clearDatabase();
+            await DatabaseBootstrap.seed();
+    
+            userAuthToken = await AuthenticationUtil.generateUserAuthToken();
+            systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
+            guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
+            done();
+        });
     }
 
-    public static async after() {
-        await Cleanup.closeConnections();
-        return;
+    public static async after(){
+        await Cleanup.clearDatabase();
     }
 
     @test('allow a user to register')
