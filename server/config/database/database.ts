@@ -1,22 +1,28 @@
 import mongoose = require('mongoose');
 import { ConnectionOptions } from 'mongoose';
 import { Config } from '../config';
+import { HealthStatus } from '../../health-status';
 import log = require('winston');
+mongoose.Promise = require('bluebird');
 
 export class Database {
-    public connect(): Promise<boolean> {
+
+    public databaseName: string = '';
+    public async connect(): Promise<void> {
         const connectionOptions: any = {
             useMongoClient: true,
         }
-        mongoose.Promise = require('bluebird');
-
-        return mongoose.connect(Config.active.get('database.mongoConnectionString'), connectionOptions).then(() => {
+        
+        try{
+            await mongoose.connect(Config.active.get('database.mongoConnectionString'), connectionOptions);
+            this.databaseName = mongoose.connection.db.databaseName;
             log.info(`Connected To Mongo Database: ${mongoose.connection.db.databaseName}`);
-            return true;
-        }).catch(function (err) {
+            HealthStatus.isDatabaseConnected = true;
+        }
+        catch(err){
             log.info('error while trying to connect with mongodb', err);
-            return false;
-        });
+            HealthStatus.isDatabaseConnected = false;
+        }
     }
 }
 

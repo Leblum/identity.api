@@ -1,5 +1,5 @@
 import { Database } from '../../config/database/database';
-import { App, server } from '../../server';
+import { App, server } from '../../server-entry';
 import { User, IUserDoc, Permission, Role, Organization, IUser } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";

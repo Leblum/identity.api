@@ -1,6 +1,6 @@
 //During the test the env variable is set to test
 import { Database } from '../config/database/database';
-import { App, server } from '../server';
+import { App, server } from '../server-entry';
 import { User, IUserDoc, Organization, IOrganization, IOrganizationDoc } from '../models';
 import { Config } from '../config/config';
 
