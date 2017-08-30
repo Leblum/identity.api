@@ -48,7 +48,7 @@ export class PasswordResetTokenController extends BaseController {
                 // Cleanup if there was a problem sending the password reset email. 
                 try {
                     // Now we shoot off a notification to mandrill
-                    await PasswordResetNotification.sendPasswordResetEmail(user.email, passwordResetTokenDoc.id);
+                    await PasswordResetNotification.sendPasswordResetEmail(user.email, passwordResetTokenDoc.id, request);
                 }
                 catch (err) {
                     await passwordResetTokenDoc.remove();
