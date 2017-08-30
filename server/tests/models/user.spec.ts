@@ -23,6 +23,9 @@ let guestOrgId: string;
 @suite('User Test')
 class UserTest {
 
+    // There's a hack here.  The user test is the first one that's run,
+    // so that's the test that waits for the 'dbConnected' event to be fired.  None of the other tests do this, but 
+    // I couldn't seem to figure out another way around the race conditions that are created by the server starting up.
     public static before(done) {
         console.log('Testing user test');
         App.server.on('dbConnected',async ()=>{

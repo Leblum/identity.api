@@ -130,7 +130,7 @@ class Application {
     await DatabaseBootstrap.seed();
     HealthStatus.isDatabaseSeeded = true;
     log.info('Completed Setup, boostrapped database, database now online');
-    this.server.emit("dbConnected");
+    this.server.emit("dbConnected");  // Used by the unit tests to prevent them from starting until the database is connected. 
   }
 
   private secure() {

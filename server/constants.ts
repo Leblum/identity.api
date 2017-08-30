@@ -14,7 +14,11 @@ export const CONST = {
         PASSWORD_RESET: '/password-reset',
         PASSWORD_RESET_TOKENS: '/password-reset-tokens',
         VALIDATE_EMAIL: '/validate-email',
-        PASSWORD_RESET_REQUEST: '/password-reset-request'
+        PASSWORD_RESET_REQUEST: '/password-reset-request',
+        client: {
+            VERIFY_EMAIL: '/verify-email',
+            RESET_PASSWORD: '/reset-password'
+        }
     },
     MOMENT_DATE_FORMAT: 'YYYY-MM-DD h:mm:ss a Z',
     LEBLUM_API_Q_BACKPLANE: 'leblum-api-q-backplane',

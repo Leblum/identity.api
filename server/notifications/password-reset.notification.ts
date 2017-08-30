@@ -1,12 +1,14 @@
-import * as request from "superagent";
+import * as api from "superagent";
 import { Config } from "../config/config";
 import log = require('winston');
+import { Request } from 'express';
+import { CONST } from '../constants';
 
 export class PasswordResetNotification {
-    public static async sendPasswordResetEmail(emailAddress: string, id: string): Promise<void> {
+    public static async sendPasswordResetEmail(emailAddress: string, id: string, request: Request): Promise<void> {
         try{
 
-        let mandrillResponse = await request
+        let mandrillResponse = await api
             .post('https://mandrillapp.com/api/1.0/messages/send-template.json')
             .send({
                 "key": `${Config.active.get('mandrillApiKey')}`,
@@ -25,7 +27,7 @@ export class PasswordResetNotification {
                     "global_merge_vars": [
                         {
                             "name": "PASSWORD_RESET_LINK",
-                            "content": `https://leblum.io/reset-password?id=${id}`
+                            "content": `${request.protocol}://${request.get('host')}${CONST.ep.client.RESET_PASSWORD}?id=${id}`
                         }
                     ],
                     "merge_vars": []

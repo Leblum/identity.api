@@ -1,12 +1,13 @@
-import * as request from "superagent";
+import * as api from "superagent";
 import { Config } from "../config/config";
 import log = require('winston');
+import { Request } from 'express';
+import { CONST } from '../constants';
 
 export class EmailVerificationNotification {
-    public static async sendVerificationEmail(emailAddress: string, id: string): Promise<void> {
+    public static async sendVerificationEmail(emailAddress: string, id: string, request: Request): Promise<void> {
         try{
-
-        let mandrillResponse = await request
+        let mandrillResponse = await api
             .post('https://mandrillapp.com/api/1.0/messages/send-template.json')
             .send({
                 "key": `${Config.active.get('mandrillApiKey')}`,
@@ -25,7 +26,7 @@ export class EmailVerificationNotification {
                     "global_merge_vars": [
                         {
                             "name": "USER_VERIFICATION_LINK",
-                            "content": `https://leblum.io/verify-email?id=${id}`
+                            "content":  `${request.protocol}://${request.get('host')}${CONST.ep.client.VERIFY_EMAIL}?id=${id}`
                         }
                     ],
                     "merge_vars": []
