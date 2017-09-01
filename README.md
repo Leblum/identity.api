@@ -147,3 +147,16 @@ certs are stored inside the docker container that's running haproxy.  For instan
 
 You can see them by running a console from the rancher ui, on the load balancer container.
 dev-luxor->lebulm-load-balancer-container-> Where the certs are.
+
+# Hyper Visor Emulator With Docker 
+
+Turning it off
+```
+bcdedit /set hypervisorlaunchtype off
+```
+
+Turning it on
+
+```
+bcdedit /set hypervisorlaunchtype on
+```
