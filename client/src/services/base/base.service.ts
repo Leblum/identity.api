@@ -27,20 +27,24 @@ export class BaseService {
             }).catch(this.handleError);
     }
 
+    // The server will be sending this back:
+    // response.json({
+    //     message: error.message || 'Server Error',
+    //     status: error.status || 500,
+    //     URL: request.url,
+    //     method: request.method,
+    //     stack: Config.active.get('returnCallStackOnError') ? error.stack : '',
+    //     requestBody: request.body
+    // });
     protected handleError(errorResponse: Response | any) {
         // TODO: Implement Real Logging infrastructure.
         // Might want to log to remote server (Fire and forget style)
         const appError = new ServiceError();
         if (errorResponse instanceof Response) {
             const body = errorResponse.json() || '';
-            if (typeof body.error !== 'undefined' && typeof body.error.message !== 'undefined' && body.error.detail !== undefined) {
-                appError.message = body.error.message;
-                appError.description = body.error.detail;
-            } else if (errorResponse.status === 0) {
-                appError.message = `API call failed`;
-            } else {
-                appError.message = `${errorResponse.status} - ${errorResponse.statusText || ''}`;
-            }
+            appError.message = body.message ? body.message : 'no message provided';
+            appError.description = body.description ? body.description : 'no description provided';
+            appError.stack = body.stack ? body.stack : 'no stack provided';
             appError.statusCode = errorResponse.status;
             appError.statusText = errorResponse.statusText;
             return Observable.throw(appError);

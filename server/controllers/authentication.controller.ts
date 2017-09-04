@@ -42,7 +42,6 @@ export class AuthenticationController extends BaseController {
                 organizationId: user.organizationId,
                 // We're just going to put the name of the role on the token.  
                 roles: user.roles.map(role => { return role.name }),
-                // TODO: We really need to get an organizationId on the token.  I think we're going to need it later.
                 expiration: this.tokenExpiration
             };
 

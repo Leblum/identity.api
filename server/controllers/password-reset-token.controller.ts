@@ -75,6 +75,11 @@ export class PasswordResetTokenController extends BaseController {
                 return;
             }
 
+            if( !mongoose.Types.ObjectId.isValid(request.body.passwordResetTokenId) ){
+                ApiErrorHandler.sendError("The password reset token supplied was not a valid bson token.", 400, response)
+                return;
+              }
+
             const passwordResetToken = await this.repository.single(request.body.passwordResetTokenId);
             if (!passwordResetToken) {
                 ApiErrorHandler.sendError("Item Not Found", 404, response)
@@ -94,9 +99,7 @@ export class PasswordResetTokenController extends BaseController {
             user.isTokenExpired = true;
             await user.save();
 
-            // // Commented for testing    
-            // // TODO REMOVE THIS COMMENT 
-            // //await passwordResetToken.remove();
+            await passwordResetToken.remove();
 
             response.status(200).json({
                 message: "Password has been reset",
