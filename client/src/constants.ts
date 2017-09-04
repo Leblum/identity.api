@@ -1,7 +1,5 @@
 export const CONST = {
     ep: {
-        API: '/api',
-        V1: '/v1',
         AUTHENTICATION: '/authenticate',
         PERMISSIONS: '/permissions',
         ROLES: '/roles',

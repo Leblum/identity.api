@@ -67,8 +67,8 @@ class Application {
     }
     else {
       log.info(`Current Environment set via environment variables (NODE_ENV):${process.env.NODE_ENV}`);
-      HealthStatus.isEnvironmentVariableSet = true;
     }
+    HealthStatus.isEnvironmentVariableSet = true;
   }
 
   // We want to configure logging so that if we're outputting it to the console
@@ -149,8 +149,8 @@ class Application {
   private client(): void {
     log.info('Initializing Client');
 
-    this.express.use(express.static(path.join(__dirname, '../client/dist/')));
-    this.express.use('*', express.static(path.join(__dirname, '../client/dist/index.html')));
+    this.express.use(express.static(path.join(__dirname, '../client/dist/'+ Config.active.get('clientDistFolder') + '/')));
+    this.express.use('*', express.static(path.join(__dirname, '../client/dist/' + Config.active.get('clientDistFolder') +  '/index.html')));
   }
 
   // Configure Express middleware.

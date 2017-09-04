@@ -77,5 +77,12 @@ public static convictSchema: convict.Config = convict({
       env: 'MANDRILL_API_KEY',
       sensitive: true
     },
+    clientDistFolder:{
+      doc:'The client dist folder needs to be set, we build the docker image with all the client folders built.',
+      format: String,
+      default: 'dist',
+      env: 'CLIENT_DIST_FOLDER',
+      sensitive: false,
+    }
   });
 }

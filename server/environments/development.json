@@ -10,5 +10,6 @@
     "jwtSecretToken": "asdf97a9s8d7baodfbhoda8f7g9adf8asj",
     "returnCallStackOnError": true,
     "isConsoleLoggingActive": true,
-    "mandrillApiKey": "EEQCHdKzdFHYo4VNLdb3nw" // this is the test key for right now... switch to real
+    "mandrillApiKey": "EEQCHdKzdFHYo4VNLdb3nw", // this is the test key for right now... switch to real
+    "clientDistFolder": "dev"
 }

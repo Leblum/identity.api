@@ -8,7 +8,12 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prodbuild": "ng build --aot --extract-css=true --output-hashing=all --sourcemaps=true --output-path=dist/prod --env=prod",
+    "devbuild": "ng build --aot --extract-css=true --output-hashing=all --sourcemaps=true --output-path=dist/dev --env=dev",
+    "testbuild": "ng build --aot --extract-css=true --output-hashing=all --sourcemaps=true --output-path=dist/test --env=test",
+    "stagebuild": "ng build --aot --extract-css=true --output-hashing=all --sourcemaps=true --output-path=dist/stage --env=stage",
+    "localbuild": "ng build --output-path=dist --env=local"
   },
   "private": true,
   "dependencies": {

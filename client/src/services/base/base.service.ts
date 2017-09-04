@@ -8,6 +8,7 @@ import { ServiceError } from '../../classes/app-error.class'
 import { BaseModel } from '../../models';
 import { environment } from "../../environments/environment";
 
+
 export class BaseService {
 
     protected requestOptions: RequestOptions;

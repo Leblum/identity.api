@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 // I'm concerned about load time, so I'm adding observables very carefully.
 import 'rxjs/add/operator/catch';
 import { ServiceError } from "../classes/app-error.class";
-import { environment } from '../environments/environment';
 import { CONST } from '../constants';
 
 @Injectable()
