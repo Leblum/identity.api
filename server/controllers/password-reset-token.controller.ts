@@ -84,7 +84,7 @@ export class PasswordResetTokenController extends BaseController {
             // Check the expiration for the token.
             if (!moment().isBefore(moment(passwordResetToken.expiresOn, CONST.MOMENT_DATE_FORMAT))) {
                 // Here that record has already expired
-                ApiErrorHandler.sendError("That password reset token has expired, please request a new one", 400, response, CONST.ErrorCodes.PASSWORD_RESET_TOKEN_EXPIRED);
+                ApiErrorHandler.sendError("That password reset token has expired, please request a new one", 400, response, CONST.errorCodes.PASSWORD_RESET_TOKEN_EXPIRED);
                 return;
             }
 

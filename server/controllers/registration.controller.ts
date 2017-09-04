@@ -35,11 +35,11 @@ export class RegistrationController extends BaseController {
         try {
             // First we have to check if the email address is unique
             if (await this.repository.findUserByEmail(request.body.email)) {
-                ApiErrorHandler.sendError('That user email already exists',400, response, CONST.ErrorCodes.EMAIL_TAKEN);
+                ApiErrorHandler.sendError('That user email already exists',400, response, CONST.errorCodes.EMAIL_TAKEN);
                 return;
             }
             if(!request.body.password || request.body.password.length < 6){
-                ApiErrorHandler.sendError('Password must be supplied, and be at least 6 chars',400, response, CONST.ErrorCodes.PASSWORD_FAILED_CHECKS);
+                ApiErrorHandler.sendError('Password must be supplied, and be at least 6 chars',400, response, CONST.errorCodes.PASSWORD_FAILED_CHECKS);
                 return;
             }
             else {

@@ -36,7 +36,7 @@ export class EmailVerificationController extends BaseController {
             // We're going to check the expiration against the time it was created.
             if(!moment().isBefore(moment(emailVerifcationRecord.expiresOn,CONST.MOMENT_DATE_FORMAT))){
                 // Here that record has already expired
-                ApiErrorHandler.sendError("That email verification record has expired, please request a new one", 400, response, CONST.ErrorCodes.EMAIL_VERIFICATION_EXPIRED)
+                ApiErrorHandler.sendError("That email verification record has expired, please request a new one", 400, response, CONST.errorCodes.EMAIL_VERIFICATION_EXPIRED)
                 return;
             }
 

@@ -25,7 +25,7 @@ export const CONST = {
     APPLICATION_NAME: "leblum.identity.api",
     REQUEST_TOKEN_LOCATION: 'api-decoded-token',
     SALT_ROUNDS: 10,
-    ErrorCodes: {
+    errorCodes: {
         EMAIL_TAKEN: 'EmailAlreadyTaken',
         PASSWORD_FAILED_CHECKS: 'PasswordFailedChecks',
         EMAIL_VERIFICATION_EXPIRED: 'EmailVerificationHasExpired',
