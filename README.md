@@ -163,3 +163,25 @@ Turning it on
 ```
 bcdedit /set hypervisorlaunchtype on
 ```
+
+# Environment files notes
+
+So the environment files can be a bit confusing.  Especially when you take a look through the docker file, and the client code base.
+
+Here's the deal.  The dockerfile builds all environments, and then we serve a folder based on runtime environment config.  That means that
+at build time the client is built with it's related environment file, and then at run time we serve a specific client out through the express server.
+
+For instance for development.  The client is built using the --env=dev and output-dir=/dist/dev this will put a fully functional, properly configured client in the docker container, with it's related environment built into the codebase.  The express server at runtime decides which client folder to serve out.  This is deteremined at runtime by the related convict config for the server. 
+
+This allows me to have the best of both worlds.  We can use angular environment files like they were designed, and we can still have a single docker file.  So one dockerfile will build me all the client environments that we might need. 
+
+If you want to have the client live reload, and served out of the server, then run in the client
+```
+npm start
+```
+
+and in the server ->
+```
+gulp watch
+npm run nm
+```
