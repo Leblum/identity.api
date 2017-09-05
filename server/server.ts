@@ -81,7 +81,9 @@ class Application {
       // If we can use colors, for instance when running locally, we want to use them.
       // Out on the server though, for real logs, the colors will add weird tokens, that we don't want showing up in our logs.
       if (Config.active.get('isConsoleColored')) {
-        this.express.use(morgan('dev')); // Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
+        this.express.use(morgan('dev', {
+          skip: this.skipHealthCheck
+        })); // Using morgan middleware for logging all requests.  the 'dev' here is just a particular format.
       }
       // Otherwise, this is most likely logging somewhere where colors would be bad.  For instance off on the actual
       // Server, in which case we don't want colors, and we need to know the environement.
@@ -89,14 +91,21 @@ class Application {
         morgan.token('environment', () => {
           return process.env.NODE_ENV;
         });
-        this.express.use(morgan(':date :environment :method :url :status :response-time ms :res[content-length]'));
+        this.express.use(morgan(':date :environment :method :url :status :response-time ms :res[content-length]', {
+          skip: this.skipHealthCheck
+        }));
       }
-
     }
     else {
       log.remove(log.transports.Console);
     }
     HealthStatus.isLoggingInitialized = true;
+  }
+
+  // Because we really don't need to fill the logs with a ton of health check 200's we're going to skip
+  // logging the 200 health checks.  if they are 500's and something went wrong that's a different story and we'll log them.
+  private skipHealthCheck(request: express.Request, response: express.Response){
+    return request.originalUrl.includes('healthcheck') && response.statusCode === 200;
   }
 
   initErrorHandler(): any {
