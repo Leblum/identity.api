@@ -97,6 +97,7 @@ class UserTest {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
+            isActive: true,
         };
         //By calling this I'll generate an id
         let userDoc = new User(user)
@@ -125,6 +126,7 @@ class UserTest {
             isTokenExpired: false,
             organizationId: guestOrgId,
             isEmailVerified: false,
+            isActive: true,
         };
 
         let response = await api
@@ -134,10 +136,9 @@ class UserTest {
 
         expect(response.status).to.equal(201);
         expect(response.body).to.be.an('object');
-        expect(response.body).to.have.property('model');
-        expect(response.body.model).to.have.property('email');
-        expect(response.body.model.email).to.equal(user.email);
-        expect(response.body.model.password).should.not.equal(user.password);
+        expect(response.body).to.have.property('email');
+        expect(response.body.email).to.equal(user.email);
+        expect(response.body.password).should.not.equal(user.password);
         return;
     }
 
@@ -152,6 +153,7 @@ class UserTest {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
+            isActive: true,
         };
 
         let userDoc = await new User(user).save();
@@ -177,6 +179,7 @@ class UserTest {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
+            isActive: true,
         };
 
         let userDoc = await new User(user).save();
@@ -193,9 +196,8 @@ class UserTest {
             .send(userUpdate);
 
         expect(response.status).to.equal(202);
-        expect(response.body).to.have.property('model');
-        expect(response.body.model).to.have.property('firstName');
-        expect(response.body.model.firstName).to.equal(userUpdate.firstName);
+        expect(response.body).to.have.property('firstName');
+        expect(response.body.firstName).to.equal(userUpdate.firstName);
         return;
     }
 
@@ -209,6 +211,7 @@ class UserTest {
             lastName: "Brown",
             organizationId: guestOrgId,
             isEmailVerified: false,
+            isActive: true,
         };
 
         let createResponse = await api
@@ -217,13 +220,13 @@ class UserTest {
             .send(user);
 
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${createResponse.body.model._id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${createResponse.body._id}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property('ItemRemoved');
         expect(response.body).to.have.property('ItemRemovedId');
-        expect(response.body.ItemRemovedId).to.be.equal(createResponse.body.model._id);
+        expect(response.body.ItemRemovedId).to.be.equal(createResponse.body._id);
         expect(response.body.ItemRemoved.email).to.be.equal(user.email);
         return;
     }

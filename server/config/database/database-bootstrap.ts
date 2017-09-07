@@ -11,9 +11,6 @@ export class DatabaseBootstrap {
     public static entered: boolean = false;
 
     public static async seed() {
-        let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-        const setTimeoutPromise = util.promisify(setTimeout);
-
         if (await Organization.count({}) === 0) {
             // when unit testing, multiple threads seem to want to run this.  this prevents that race condition from happening.
             // it's not exactly my proudest moment, but I can't seem to find another way. 
@@ -45,6 +42,7 @@ export class DatabaseBootstrap {
                             isTokenExpired: false,
                             organizationId: savedSystemOrg.id,
                             isEmailVerified: true,
+                            isActive: true,
                         };
     
                         let savedSystemUser: IUserDoc = await new User(systemUser).save();
@@ -77,10 +75,6 @@ export class DatabaseBootstrap {
                 }
                 
             }
-            // await wait(Math.floor((Math.random() * 3000) + 1));
-            // if (await Organization.count({}) === 0) {
-                
-            // }
         }
     }
 

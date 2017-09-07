@@ -16,6 +16,7 @@ export interface IUser extends IBaseModel {
     // This is used by the authentication controller to revoke the renewal of a token.  
     isTokenExpired: boolean; 
     isEmailVerified: boolean;
+    isActive: boolean;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
 }
@@ -33,7 +34,8 @@ const UserSchema = new Schema({
     isEmailVerified: {type : Boolean, required: true, default: false},
     href: {type:String},
     organizationId: { type : Schema.Types.ObjectId, ref: 'organization' },
-    roles: [{ type : Schema.Types.ObjectId, ref: 'role' }]
+    roles: [{ type : Schema.Types.ObjectId, ref: 'role' }],
+    isActive: {type: Boolean, required: true, default: true}
 },{timestamps:true});
 
 //If you do any pre save methods, and you use fat arrow syntax 'this' doesn't refer to the document.
