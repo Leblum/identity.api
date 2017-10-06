@@ -9,6 +9,7 @@ import { UserRepository, IOrganizationRepository, OrganizationRepository, RoleRe
 import { IUserRepository } from "../repositories/interfaces/user.repository.interface";
 import { CONST } from "../constants";
 import { IEmailVerification, EmailVerification } from "../models/email-verification";
+import * as moment from 'moment';
 import { AuthenticationUtil } from "./index";
 
 const bcrypt = require('bcrypt');
@@ -42,17 +43,17 @@ export class AuthenticationController extends BaseController {
                 organizationId: user.organizationId,
                 // We're just going to put the name of the role on the token.  
                 roles: user.roles.map(role => { return role.name }),
-                expiration: this.tokenExpiration
+                expiresAt: moment().add(moment.duration(1, 'day')).format(CONST.MOMENT_DATE_FORMAT)
             };
 
             const token = jwt.sign(tokenPayload, Config.active.get('jwtSecretToken'), {
-                expiresIn: tokenPayload.expiration
+                expiresIn: '25h'
             });
 
             response.json({
                 authenticated: true,
                 message: 'Successfully created jwt authentication token.',
-                expiresIn: tokenPayload.expiration,
+                expiresAt: tokenPayload.expiresAt,
                 token: token,
             });
         } catch (err) { AuthenticationUtil.sendAuthFailure(response, 401, err); }
@@ -85,17 +86,17 @@ export class AuthenticationController extends BaseController {
                                 organizationId: user.organizationId,
                                 userId: user.id,
                                 roles: user.roles.map(role => { return role.name }),
-                                expiration: this.tokenExpiration
+                                expiresAt: moment().add(moment.duration(1, 'day')).format(CONST.MOMENT_DATE_FORMAT)
                             };
 
                             const newToken = jwt.sign(tokenPayload, Config.active.get('jwtSecretToken'), {
-                                expiresIn: tokenPayload.expiration
+                                expiresIn: '25h'
                             });
 
                             response.json({
                                 authenticated: true,
                                 message: 'Successfully refreshed jwt authentication token.',
-                                expiresIn: tokenPayload.expiration,
+                                expiresAt: moment().add(moment.duration(1, 'day')).format(CONST.MOMENT_DATE_FORMAT),
                                 token: newToken,
                             });
                         }
