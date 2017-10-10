@@ -9,6 +9,7 @@ export interface IUser extends IBaseModel {
     lastName?: string,
     password: string;
     email: string;
+    phone?:string;
     roles?: Array<IRole>;
     organizationId: string;
     href?: string;
@@ -29,6 +30,7 @@ const UserSchema = new Schema({
     firstName: {type: String, required: false},
     lastName: {type: String, required: false},
     email: {type:String, unique:true},
+    phone: {type:String, unique:true},
     password: {type: String, required: true, select: false},
     isTokenExpired: {type : Boolean, required: true, default: false},
     isEmailVerified: {type : Boolean, required: true, default: false},
