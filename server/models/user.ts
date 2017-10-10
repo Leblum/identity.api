@@ -30,7 +30,7 @@ const UserSchema = new Schema({
     firstName: {type: String, required: false},
     lastName: {type: String, required: false},
     email: {type:String, unique:true},
-    phone: {type:String, unique:true},
+    phone: {type:String},
     password: {type: String, required: true, select: false},
     isTokenExpired: {type : Boolean, required: true, default: false},
     isEmailVerified: {type : Boolean, required: true, default: false},
