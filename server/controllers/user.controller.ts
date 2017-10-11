@@ -64,7 +64,7 @@ export class UserController extends BaseController {
             users: [upgradeRequest.userId],
         };
 
-        let orgDoc = await this.organizationRepository.createFromBody(org);
+        let orgDoc = await this.organizationRepository.create(this.organizationRepository.createFromBody(org));
 
         user.roles.push(role);
         user.organizationId = orgDoc._id;

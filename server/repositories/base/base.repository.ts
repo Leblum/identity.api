@@ -7,6 +7,10 @@ export abstract class BaseRepository<IModelDoc extends IBaseModelDoc> implements
 
     protected abstract mongooseModelInstance: Model<IModelDoc>;
 
+    public async save(document: IModelDoc): Promise<IModelDoc>{
+        return await document.save();
+    }
+
     public createFromInterface(model: IBaseModel): IModelDoc{
         return new this.mongooseModelInstance(model);
     }
