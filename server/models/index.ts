@@ -1,4 +1,5 @@
 export * from './user';
+export * from './user-upgrade';
 export * from './role';
 export * from './permission';
 export * from './email-verification';

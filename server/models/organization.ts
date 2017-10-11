@@ -8,7 +8,7 @@ export interface IOrganization extends IBaseModel {
     name: string,
     type: OrganizationType,
     isSystem: boolean;
-    users?: Array<IUserDoc>;
+    users?: Array<string>;
     href?: string,
 }
 

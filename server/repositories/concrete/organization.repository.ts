@@ -12,13 +12,16 @@ export class OrganizationRepository extends BaseRepository<IOrganizationDoc> imp
         super();
     }
 
+    public async getOrgByName(name: string): Promise<IOrganizationDoc>{
+        let org = await Organization.findOne({ name: name });
+        return org;
+    }
+
     public async getGuestOrganization(): Promise<IOrganizationDoc> {
-        let guestOrg = await Organization.findOne({ name: 'guest' });
-        return guestOrg;
+        return await this.getOrgByName('guest');
     }
     
     public async getSystemOrganization(): Promise<IOrganizationDoc> {
-        let systemOrg = await Organization.findOne({ name: 'system' });
-        return systemOrg;
+        return await this.getOrgByName('system');
     }
 }

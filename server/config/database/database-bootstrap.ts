@@ -48,7 +48,7 @@ export class DatabaseBootstrap {
                         let savedSystemUser: IUserDoc = await new User(systemUser).save();
     
                         //Now we need to link the system user back up to the database.
-                        savedSystemOrg.users = [savedSystemUser];
+                        savedSystemOrg.users = [savedSystemUser._id];
                         await savedSystemOrg.save();
     
                         // Next we need to create a guest organization.  This will act as a holding place

@@ -8,6 +8,7 @@ export const CONST = {
         PERMISSIONS: '/permissions',
         ROLES: '/roles',
         USERS: '/users',
+        UPGRADE: '/upgrade',
         ORGANIZATIONS: '/organizations',
         REGISTER: '/register',
         EMAIL_VERIFICATIONS: '/email-verifications',
@@ -20,6 +21,12 @@ export const CONST = {
             RESET_PASSWORD: '/reset-password'
         }
     },
+    ADMIN_ROLE: 'admin',
+    GUEST_ROLE: 'guest',
+    PRODUCT_ADMIN_ROLE: 'product:admin',
+    PRODUCT_EDITOR_ROLE: 'product:editor',
+    SUPPLIER_EDITOR_ROLE: 'supplier:editor',
+    SUPPLIER_ADMIN_ROLE: 'supplier:admin',
     MOMENT_DATE_FORMAT: 'YYYY-MM-DD h:mm:ss a Z',
     LEBLUM_API_Q_BACKPLANE: 'leblum-api-q-backplane',
     APPLICATION_NAME: "leblum.identity.api",
@@ -27,6 +34,7 @@ export const CONST = {
     SALT_ROUNDS: 10,
     errorCodes: {
         EMAIL_TAKEN: 'EmailAlreadyTaken',
+        ORG_NAME_TAKEN: 'OrganizationNameTaken',
         PASSWORD_FAILED_CHECKS: 'PasswordFailedChecks',
         EMAIL_VERIFICATION_EXPIRED: 'EmailVerificationHasExpired',
         PASSWORD_RESET_TOKEN_EXPIRED: 'PasswordResetTokenExpired'

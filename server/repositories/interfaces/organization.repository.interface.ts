@@ -7,4 +7,5 @@ import { IOrganizationDoc } from "../../models/organization";
 export interface IOrganizationRepository extends IBaseRepository<IOrganizationDoc>{
     getGuestOrganization(): Promise<IOrganizationDoc>;
     getSystemOrganization(): Promise<IOrganizationDoc>;
+    getOrgByName(name: string): Promise<IOrganizationDoc>;
 }

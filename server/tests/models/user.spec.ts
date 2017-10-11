@@ -1,6 +1,6 @@
 import { Database } from '../../config/database/database';
 import { App, server } from '../../server-entry';
-import { User, IUserDoc, Permission, Role, Organization, IUser } from '../../models';
+import { User, IUserDoc, Permission, Role, Organization, IUser, IUserUpgradeRequest, IRole } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
@@ -113,6 +113,55 @@ class UserTest {
 
         expect(response.status).to.equal(403);
         expect(response.body).to.be.an('object');
+        return;
+    }
+
+    @test('should upgrade a user')
+    public async upgdrade() {
+        let user: IUser = {
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "test22345@test.com",
+            password: "test1234",
+            isTokenExpired: false,
+            organizationId: guestOrgId,
+            isEmailVerified: false,
+            isActive: true,
+        };
+
+        let role: IRole = {
+            name: CONST.SUPPLIER_EDITOR_ROLE,
+            description: 'Testing supplier editor upgrade',
+            permissions: [],
+            href: ''
+        }
+
+        // Create the supplier editor role
+        let roleResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.ROLES}`)
+        .set("x-access-token", systemAuthToken)
+        .send(role);
+
+        // First we're going to create a user
+        let userResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .set("x-access-token", systemAuthToken)
+            .send(user);
+
+        let upgradeRequest: IUserUpgradeRequest = {
+            organizationName:'DavesFlowers',
+            roleName: CONST.SUPPLIER_EDITOR_ROLE,
+            userId: userResponse.body._id
+        };
+
+        let upgradeResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.UPGRADE}`)
+        .set("x-access-token", systemAuthToken)
+        .send(upgradeRequest);
+
+        expect(upgradeResponse.status).to.equal(202);
+        expect(upgradeResponse.body).to.be.an('object');
+        expect(upgradeResponse.body).to.have.property('organizationId');
         return;
     }
 
