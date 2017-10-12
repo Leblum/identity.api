@@ -11,5 +11,7 @@
     "returnCallStackOnError": true,
     "isConsoleLoggingActive": true,
     "mandrillApiKey": "EEQCHdKzdFHYo4VNLdb3nw", // this is the test key for right now... switch to real
-    "clientDistFolder": "dev"
+    "clientDistFolder": "dev",
+    "sendEmailToTestAccount": "true",
+    "emailToUseForTesting": "leblum.test@gmail.com"
 }

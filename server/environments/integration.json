@@ -10,6 +10,8 @@
     "jwtSecretToken": "leblum1234",
     "returnCallStackOnError": true,
     "isConsoleLoggingActive": true,
-    "mandrillApiKey": "Zh8DlnQXZIW5urHG7f1Llw", // Integration always uses the test mandrill key, that way we don't have to worry about our test users.
-    "clientDistFolder": "dev"
+    "mandrillApiKey": "EEQCHdKzdFHYo4VNLdb3nw", // Integration always uses the test mandrill key, that way we don't have to worry about our test users.
+    "clientDistFolder": "dev",
+    "sendEmailToTestAccount": "true",
+    "emailToUseForTesting": "leblum.test@gmail.com"
 }

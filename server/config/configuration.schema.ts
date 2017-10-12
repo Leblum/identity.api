@@ -83,6 +83,20 @@ public static convictSchema: convict.Config = convict({
       default: 'dist',
       env: 'CLIENT_DIST_FOLDER',
       sensitive: false,
+    },
+    sendEmailToTestAccount:{
+      doc:'For testing purposes do we want to send email verification emails to the account that was signed up, or to our test email address',
+      format: Boolean,
+      default: true,
+      env: 'SEND_EMAIL_TO_TEST',
+      sensitive: false,
+    },
+    emailToUseForTesting:{
+      doc:'What email do we want to send verification emails to?  Only used if the sendEmailToTestAccount flag is true',
+      format: String,
+      default: 'dave@leblum.com',
+      env: 'TEST_EMAIL_ACCOUNT',
+      sensitive: false,
     }
   });
 }

@@ -9,5 +9,7 @@
     "jwtSecretToken": "asdf97a9s8d7baodfbhoda8f7g9adf8asj",
     "returnCallStackOnError": true,
     "isConsoleLoggingActive": true,
-    "clientDistFolder": "test"
+    "clientDistFolder": "test",
+    "sendEmailToTestAccount": "true",
+    "emailToUseForTesting": "leblum.test@gmail.com"
 }

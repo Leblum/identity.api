@@ -29,9 +29,9 @@ export class UserController extends BaseController {
         let upgradeRequest: IUserUpgradeRequest = request.body as IUserUpgradeRequest;
 
         // There are only specific roles we're going to allow for upgrade.  For instance, we don't want to allow 
-        // the system upgrade someone to a admin or system role. 
+        // the system to upgrade someone to a admin or system role. 
         if(upgradeRequest.roleName != CONST.SUPPLIER_EDITOR_ROLE){
-          ApiErrorHandler.sendError('You can only upgrade to specific roles.  This isnt one of them', 400, response);
+          ApiErrorHandler.sendError('You can only upgrade to specific roles.  This is not one of them', 400, response);
           return;
         }
 

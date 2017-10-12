@@ -72,8 +72,15 @@ export class RegistrationController extends BaseController {
             // if there was a problem sending the email verification email.
             // we're going to delete the newly created user, and return an error  this will make sure people can still try and register with the same email.
             try {
-                // Now we shoot off a notification to mandrill
-                await EmailVerificationNotification.sendVerificationEmail(user.email, emailVerificationDoc.id, request);
+                // If we're in the test environment, shoot the emails off to our test email address.
+                if (Config.active.get('sendEmailToTestAccount')) {
+                    // Now we shoot off a notification to mandrill
+                    await EmailVerificationNotification.sendVerificationEmail(Config.active.get('emailToUseForTesting'), emailVerificationDoc.id, request);
+                }
+                else {
+                    // Now we shoot off a notification to mandrill
+                    await EmailVerificationNotification.sendVerificationEmail(user.email, emailVerificationDoc.id, request);
+                }
             }
             catch (err) {
                 await user.remove();
