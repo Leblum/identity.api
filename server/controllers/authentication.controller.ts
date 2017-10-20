@@ -38,10 +38,12 @@ export class AuthenticationController extends BaseController {
                 return;
             }
 
+            // There's basically a soft expiration time on this token, which is set with moment,
+            // and a hard expiration time set on this token with jwt sign.  
             const tokenPayload: ITokenPayload = {
                 userId: user.id,
                 organizationId: user.organizationId,
-                // We're just going to put the name of the role on the token.  
+                // We're just going to put the name of the role on the token.
                 roles: user.roles.map(role => { return role.name }),
                 expiresAt: moment().add(moment.duration(1, 'day')).format(CONST.MOMENT_DATE_FORMAT)
             };
@@ -50,11 +52,14 @@ export class AuthenticationController extends BaseController {
                 expiresIn: '25h'
             });
 
+            // We're adding the decoded details because the jsonwebtoken library doesn't work on mobile. 
+            // that's a problem, because we want to get the user id off the token, for update requests.
             response.json({
                 authenticated: true,
                 message: 'Successfully created jwt authentication token.',
                 expiresAt: tokenPayload.expiresAt,
                 token: token,
+                decoded: tokenPayload
             });
         } catch (err) { AuthenticationUtil.sendAuthFailure(response, 401, err); }
     }
@@ -98,6 +103,7 @@ export class AuthenticationController extends BaseController {
                                 message: 'Successfully refreshed jwt authentication token.',
                                 expiresAt: moment().add(moment.duration(1, 'day')).format(CONST.MOMENT_DATE_FORMAT),
                                 token: newToken,
+                                decoded: tokenPayload
                             });
                         }
                     }).catch((error) => { next(error) });
