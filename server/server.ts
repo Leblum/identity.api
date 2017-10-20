@@ -20,7 +20,7 @@ import { HealthStatus } from './health-status';
 
 import methodOverride = require('method-override');
 import log = require('winston');
-import { authz } from "./controllers/authorization";
+import { Authz } from "./controllers/authorization";
 import path = require('path');
 import cors = require('cors')
 
@@ -202,17 +202,20 @@ class Application {
     // Now we lock up the rest.
     this.express.use('/api/*', new routers.AuthenticationRouter().authMiddleware);
 
+    // Get the restricted user router.  User has to be authenticated, but can only update their own information.
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin',CONST.GUEST_ROLE, CONST.SUPPLIER_EDITOR_ROLE, CONST.PRODUCT_EDITOR_ROLE), new routers.UserRouter().getRestrictedRouter());
+
     // Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.EmailVerificationRouter().getRouter());
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.OrganizationRouter().getRouter());
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.UserRouter().getRouter());
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.RoleRouter().getRouter());
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PermissionRouter().getRouter());
-    this.express.use(CONST.ep.API + CONST.ep.V1, authz.permit('admin'), new routers.PasswordResetTokenRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.EmailVerificationRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.OrganizationRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.UserRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.RoleRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.PermissionRouter().getRouter());
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.PasswordResetTokenRouter().getRouter());
   }
 
   // We want to return a json response that will at least be helpful for 
-  // the root route of our api.
+  // the root route of our api.Í
   private handlers(): void {
     log.info('Initializing Handlers');
     this.express.get('/api', (request: express.Request, response: express.Response) => {

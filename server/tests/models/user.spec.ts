@@ -1,6 +1,6 @@
 import { Database } from '../../config/database/database';
 import { App, server } from '../../server-entry';
-import { User, IUserDoc, Permission, Role, Organization, IUser, IUserUpgradeRequest, IRole } from '../../models';
+import { User, IUserDoc, Permission, Role, Organization, IUser, IUserUpgradeRequest, IRole, ITokenPayload } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
 import { AuthenticationUtil } from "../authentication.util.spec";
@@ -66,7 +66,7 @@ class UserTest {
     @test('should list all the users')
     public async userList() {
         let response = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
@@ -78,7 +78,7 @@ class UserTest {
     @test('should NOT list all the users for a regular user')
     public async failUserListForAuthentication() {
         let response = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken);
 
         expect(response.status).to.equal(200);
@@ -103,12 +103,12 @@ class UserTest {
         let userDoc = new User(user)
 
         let createResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
 
         let response = await api
-            .delete(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
+            .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", userAuthToken);
 
         expect(response.status).to.equal(403);
@@ -138,13 +138,13 @@ class UserTest {
 
         // Create the supplier editor role
         let roleResponse = await api
-        .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.ROLES}`)
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.ROLES}`)
         .set("x-access-token", systemAuthToken)
         .send(role);
 
         // First we're going to create a user
         let userResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
 
@@ -179,7 +179,7 @@ class UserTest {
         };
 
         let response = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}`)
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
             .set("x-access-token", systemAuthToken)
             .send(user);
 
@@ -208,7 +208,7 @@ class UserTest {
         let userDoc = await new User(user).save();
 
         let response = await api
-            .get(`${CONST.ep.API}${CONST.ep.V1}/${CONST.ep.USERS}/${userDoc.id}`)
+            .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
             .set("x-access-token", systemAuthToken)
 
         expect(response.status).to.equal(200);
@@ -237,6 +237,7 @@ class UserTest {
             _id: `${userDoc.id}`,
             firstName: "Don",
             lastName: "Jaun",
+            email: 'ThisisaNewemail@leblum.com'
         };
 
         let response = await api
@@ -247,6 +248,295 @@ class UserTest {
         expect(response.status).to.equal(202);
         expect(response.body).to.have.property('firstName');
         expect(response.body.firstName).to.equal(userUpdate.firstName);
+        return;
+    }
+
+    @test('A user should be able to update their own details.')
+    public async updateAUserBySelf() {
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "12345@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let registerResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+
+        let authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "12345@leblum.com",
+            "password": "test12345"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        let decodedToken: ITokenPayload = authResponse.body.decoded;
+
+        let userUpdate = {
+            _id: `${decodedToken.userId}`,
+            firstName: "Don",
+            lastName: "Jaun",
+        };
+
+        let response = await api
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
+            .set("x-access-token", authResponse.body.token)
+            .send(userUpdate);
+
+        expect(response.status).to.equal(202);
+        expect(response.body).to.have.property('firstName');
+        expect(response.body.firstName).to.equal(userUpdate.firstName);
+        return;
+    }
+
+    @test('A user not be able to change their email to one thats already in use')
+    public async updateToTakenEmail() {
+
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "asdf987asdf7@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let user2 = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "TAKENEMAIL@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let registerResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+        let register2Response = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+        .send(user2);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+        let authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "asdf987asdf7@leblum.com",
+            "password": "test12345"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        let decodedToken: ITokenPayload = authResponse.body.decoded;
+
+        let userUpdate = {
+            email: 'TAKENEMAIL@leblum.com'
+        };
+
+        let response = await api
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
+            .set("x-access-token", authResponse.body.token)
+            .send(userUpdate);
+        console.log('Update Response: ', response.body);
+
+        expect(response.status).to.equal(400);
+        return;
+    }
+
+    @test('A user should NOT be able to update someone elses information')
+    public async updateUserBySomeoneelse() {
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "1234546574567@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let user2 = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "secondUserForUpdate@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let registerResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+        let register2Response = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+        .send(user2);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+        let authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "secondUserForUpdate@leblum.com",
+            "password": "test12345"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        let decodedToken: ITokenPayload = authResponse.body.decoded;
+
+        let userUpdate = {
+            firstName: "Don",
+            lastName: "Jaun",
+        };
+
+        let response = await api
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
+            .set("x-access-token", authResponse.body.token)
+            .send(userUpdate);
+        console.log('Update Response: ', response.body);
+
+        expect(response.status).to.equal(403);
+        return;
+    }
+
+    @test('A user should be able to update their password.')
+    public async updateUserPassword() {
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "12345239785239875@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let registerResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+
+        let authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "12345239785239875@leblum.com",
+            "password": "test12345"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        let decodedToken: ITokenPayload = authResponse.body.decoded;
+
+        let userUpdate = {
+            _id: `${decodedToken.userId}`,
+            password: 'thisIsANewTestPassword'
+        };
+
+        let response = await api
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/${registerResponse.body._id}`)
+            .set("x-access-token", authResponse.body.token)
+            .send(userUpdate);
+
+        expect(response.status).to.equal(202);
+
+        // Now we try and re auth with that password.
+
+        authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "12345239785239875@leblum.com",
+            "password": "thisIsANewTestPassword"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        return;
+    }
+
+    @test('A user cant update another users password.')
+    public async updateSomeElsesPassword() {
+        let user = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "adsd9fg79sdfg@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let User1registerResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user);
+        expect(User1registerResponse.status).to.equal(201);
+
+        let user2 = {
+            "firstName": "Dave",
+            "lastName": "Brown",
+            "email": "attacker12344@leblum.com",
+            "password": "test12345",
+            "isTokenExpired": false
+        }
+
+        let AttackerregisterResponse = await api
+            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+            .send(user2);
+        expect(AttackerregisterResponse.status).to.equal(201);
+
+        let authResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
+        .send({
+            "email": "attacker12344@leblum.com",
+            "password": "test12345"
+        });
+
+        authResponse.should.have.status(200);
+        authResponse.body.should.be.a('object');
+        authResponse.body.should.have.property('decoded');
+
+        let decodedToken: ITokenPayload = authResponse.body.decoded;
+
+        let userUpdate = {
+            _id: `${User1registerResponse.body._id}`,
+            password: 'thisIsANewTestPassword'
+        };
+
+        let response = await api
+            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/${User1registerResponse.body._id}`)
+            .set("x-access-token", authResponse.body.token)
+            .send(userUpdate);
+
+        expect(response.status).to.equal(403);
+
         return;
     }
 

@@ -4,13 +4,12 @@ import { Request, Response, RequestHandler, } from 'express';
 import { RequestHandlerParams, NextFunction } from 'express-serve-static-core';
 import { BaseRouter } from './base/base.router';
 
-export class AuthenticationRouter extends BaseRouter {
+export class AuthenticationRouter  {
     public router: Router = Router();
     public controller = new AuthenticationController();
     public resource: string = '';
 
     public constructor() {
-        super();
     }
 
     public getRouter(): Router {

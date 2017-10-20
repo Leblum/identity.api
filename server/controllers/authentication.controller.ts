@@ -4,37 +4,35 @@ import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
 import { BaseController } from './base/base.controller';
 import { Config } from '../config/config';
-import { ITokenPayload } from '../models/';
+import { ITokenPayload, IBaseModelDoc } from '../models/';
 import { UserRepository, IOrganizationRepository, OrganizationRepository, RoleRepository, IRoleRepository } from "../repositories";
 import { IUserRepository } from "../repositories/interfaces/user.repository.interface";
 import { CONST } from "../constants";
 import { IEmailVerification, EmailVerification } from "../models/email-verification";
 import * as moment from 'moment';
-import { AuthenticationUtil } from "./index";
+import { ApiErrorHandler } from '../api-error-handler';
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-export class AuthenticationController extends BaseController {
+export class AuthenticationController {
 
     private saltRounds: Number = 5;
     private tokenExpiration: string = '24h';
-    public defaultPopulationArgument = null;
 
-    protected repository: IUserRepository = new UserRepository();
+    protected userRepository: IUserRepository = new UserRepository();
     protected organizationRepository: IOrganizationRepository = new OrganizationRepository();
     protected roleRepository: IRoleRepository = new RoleRepository();
 
     constructor() {
-        super();
     }
 
     public async authenticate(request: Request, response: Response, next: NextFunction): Promise<any> {
         try {
-            const user = await this.repository.getUserForPasswordCheck(request.body.email);
+            const user = await this.userRepository.getUserForPasswordCheck(request.body.email);
             const passwordResult = await bcrypt.compare(request.body.password, user.password);
             if (passwordResult === false) {
-                AuthenticationUtil.sendAuthFailure(response, 401, 'Password does not match');
+                ApiErrorHandler.sendAuthFailure(response, 401, 'Password does not match');
                 return;
             }
 
@@ -61,7 +59,7 @@ export class AuthenticationController extends BaseController {
                 token: token,
                 decoded: tokenPayload
             });
-        } catch (err) { AuthenticationUtil.sendAuthFailure(response, 401, err); }
+        } catch (err) { ApiErrorHandler.sendAuthFailure(response, 401, err); }
     }
 
     /*
@@ -78,12 +76,12 @@ export class AuthenticationController extends BaseController {
             // verifies secret and checks exp
             jwt.verify(token, Config.active.get('jwtSecretToken'), (err, decodedToken: ITokenPayload) => {
                 if (err) {
-                    AuthenticationUtil.sendAuthFailure(response, 401, 'Failed to authenticate token. The timer *may* have expired on this token.');
+                    ApiErrorHandler.sendAuthFailure(response, 401, 'Failed to authenticate token. The timer *may* have expired on this token.');
                 } else {
                     //get the user from the database, and verify that they don't need to re login
-                    this.repository.single(decodedToken.userId).then((user) => {
+                    this.userRepository.single(decodedToken.userId).then((user) => {
                         if (user.isTokenExpired) {
-                            AuthenticationUtil.sendAuthFailure(response, 401, 'The user must login again to refresh their credentials');
+                            ApiErrorHandler.sendAuthFailure(response, 401, 'The user must login again to refresh their credentials');
                         }
                         else {
 
@@ -112,7 +110,7 @@ export class AuthenticationController extends BaseController {
         }
         else {
             // If we don't have a token, return a failure
-            AuthenticationUtil.sendAuthFailure(response, 403, 'No Authentication Token Provided');
+            ApiErrorHandler.sendAuthFailure(response, 403, 'No Authentication Token Provided');
         }
     }
 
@@ -123,7 +121,7 @@ export class AuthenticationController extends BaseController {
                 // verifies secret and checks exp
                 //Rewrite to use async or something 
                 jwt.verify(token, Config.active.get('jwtSecretToken'), (err, decoded) => {
-                    if (err) { AuthenticationUtil.sendAuthFailure(response, 401, `Failed to authenticate token. The timer *may* have expired on this token. err: ${err}`); }
+                    if (err) { ApiErrorHandler.sendAuthFailure(response, 401, `Failed to authenticate token. The timer *may* have expired on this token. err: ${err}`); }
                     else {
                         var token: ITokenPayload = decoded;
                         request[CONST.REQUEST_TOKEN_LOCATION] = token;
@@ -132,10 +130,10 @@ export class AuthenticationController extends BaseController {
                 });
             } else {
                 //No token, send auth failure
-                return AuthenticationUtil.sendAuthFailure(response, 403, 'No Authentication Token Provided');
+                return ApiErrorHandler.sendAuthFailure(response, 403, 'No Authentication Token Provided');
             }
         } catch (err) {
-            AuthenticationUtil.sendAuthFailure(response, 401, "Authentication Failed");
+            ApiErrorHandler.sendAuthFailure(response, 401, "Authentication Failed");
         }
     }
 }

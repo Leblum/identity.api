@@ -4,6 +4,13 @@ export enum OrganizationType{
     supplier = 3
 }
 
+export enum OwnershipType{
+    supplier=1,
+    organization=2,
+    user=3
+}
+
+
 export class EnumHelper {
     public static getValuesFromEnum<E>(e: E): Array<Number> {
         let keys = Object.keys(e);

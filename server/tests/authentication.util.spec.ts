@@ -41,7 +41,6 @@ export class AuthenticationUtil {
                 "email": "integrationTestLeblum@leblum.com",
                 "password": "test1234"
             });
-
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('token');

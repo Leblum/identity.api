@@ -15,6 +15,16 @@ export class UserRouter extends BaseRouter {
         this.resource = CONST.ep.USERS;
     }
 
+    public getRestrictedRouter(): Router {
+        return this.router // Updates a single resource
+        .put(`${this.resource}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/:id`, async (request: Request, response: Response, next: NextFunction) => {
+                await this.controller.updatePassword(request, response, next);
+        })
+        .put(`${this.resource}${CONST.ep.RESTRICTED}/:id`, async (request: Request, response: Response, next: NextFunction) => {
+                await this.controller.updateFull(request, response, next);
+        })
+    }
+
     public getRouter(): Router {
         return super.getRouter()
             .post(`${this.resource}${CONST.ep.UPGRADE}`, async (request: Request, response: Response, next: NextFunction) => {

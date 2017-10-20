@@ -2,9 +2,14 @@ import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
 import { IRole } from './role';
 import { IBaseModel, IBaseModelDoc } from "./index";
+import * as enums from '../enumerations';
 
 
 export interface IUser extends IBaseModel {
+    ownerships?: {
+        ownerId: string,
+        ownershipType: enums.OwnershipType
+    }[],
     firstName?: string,
     lastName?: string,
     password: string;
@@ -27,6 +32,11 @@ export interface IUserDoc extends IUser, IBaseModelDoc {
 }
 
 const UserSchema = new Schema({
+    ownerships: [{
+        _id: { auto: false },
+        ownerId:  { type: Schema.Types.ObjectId },
+        ownershipType: { type: Number, enum: [enums.EnumHelper.getValuesFromEnum(enums.OwnershipType)] },
+    }],
     firstName: {type: String, required: false},
     lastName: {type: String, required: false},
     email: {type:String, unique:true},

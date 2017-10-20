@@ -6,11 +6,20 @@ import { CONST } from '../constants';
 import { PasswordResetTokenRepository, IPasswordResetTokenRepository, UserRepository, IUserRepository } from '../repositories';
 import * as moment from 'moment';
 import { ApiErrorHandler } from "../api-error-handler";
-import { IPasswordResetToken, PasswordResetToken } from "../models/index";
+import { IPasswordResetToken, PasswordResetToken, IPasswordResetTokenDoc } from "../models/index";
 import { PasswordResetNotification } from "../notifications/index";
 const bcrypt = require('bcrypt');
 
 export class PasswordResetTokenController extends BaseController {
+    public isOwnershipRequired: boolean = false;
+    public rolesRequiringOwnership: string[] = [];
+    public addOwnerships(request: Request, response: Response, next: NextFunction, modelDoc: IPasswordResetTokenDoc): void {
+    }
+
+    public isOwner(request: Request, response: Response, next: NextFunction, modelDoc: IPasswordResetTokenDoc): boolean {
+         throw new Error("Password Reset Tokens shouldnt require an ownership check.");
+    }
+
     public defaultPopulationArgument =
     {
         path: 'user'

@@ -4,31 +4,28 @@ import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
 import { BaseController } from './base/base.controller';
 import { Config } from '../config/config';
-import { ITokenPayload } from '../models/';
+import { ITokenPayload, IBaseModelDoc } from '../models/';
 import { UserRepository, IOrganizationRepository, OrganizationRepository, RoleRepository, IRoleRepository } from "../repositories";
 import { IUserRepository } from "../repositories/interfaces/user.repository.interface";
 import { CONST } from "../constants";
 import { IEmailVerification, EmailVerification } from "../models/email-verification";
 import { ApiErrorHandler } from "../api-error-handler";
-import { AuthenticationUtil } from "./index";
 import * as moment from 'moment';
 import { EmailVerificationNotification } from "../notifications/email-verification.notification";
+import { OwnershipType } from '../enumerations';
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-export class RegistrationController extends BaseController {
-
+export class RegistrationController {
     private saltRounds: Number = 5;
     private tokenExpiration: string = '24h';
-    public defaultPopulationArgument = null;
 
     protected repository: IUserRepository = new UserRepository();
     protected organizationRepository: IOrganizationRepository = new OrganizationRepository();
     protected roleRepository: IRoleRepository = new RoleRepository();
 
     constructor() {
-        super();
     }
 
     public async register(request: Request, response: Response, next: NextFunction): Promise<any> {
@@ -59,6 +56,14 @@ export class RegistrationController extends BaseController {
             user.roles.push(guestRole);
             user.isEmailVerified = false;
 
+            user = await user.save();
+
+            //Now that we have an id, we're going to update the user again, with their ownership of themselves.
+            user.ownerships = [{
+                ownerId: user._id,
+                ownershipType: OwnershipType.user
+              }];
+            
             user = await user.save();
 
             //Now we create an email verification record

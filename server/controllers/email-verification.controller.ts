@@ -1,4 +1,4 @@
-import { EmailVerification, IEmailVerification, IEmailVerificationDoc } from '../models';
+import { EmailVerification, IEmailVerification, IEmailVerificationDoc, IBaseModelDoc } from '../models';
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler, Application } from 'express';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
@@ -9,6 +9,16 @@ import * as moment from 'moment';
 import { ApiErrorHandler } from "../api-error-handler";
 
 export class EmailVerificationController extends BaseController {
+    public isOwnershipRequired: boolean = false;
+    public rolesRequiringOwnership: string[];
+
+    public addOwnerships(request: Request, response: Response, next: NextFunction, modelDoc: IBaseModelDoc): void {
+    }
+
+    public isOwner(request: Request, response: Response, next: NextFunction, document: IBaseModelDoc): boolean {
+        throw new Error("Email Verification shouldnt require an ownership check.");
+    }
+    
     public defaultPopulationArgument =
     {
         path: 'user'

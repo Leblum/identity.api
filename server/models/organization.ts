@@ -2,11 +2,15 @@ import { mongoose } from '../config/database/database';
 import { Schema, Model, Document, model } from 'mongoose';
 import { IUserDoc } from './user';
 import { IBaseModel, IBaseModelDoc } from "./index";
-import { EnumHelper, OrganizationType } from "../enumerations";
+import * as enums from "../enumerations";
 
 export interface IOrganization extends IBaseModel {
+    ownerships?: {
+        ownerId: string,
+        ownershipType: enums.OwnershipType
+    }[],
     name: string,
-    type: OrganizationType,
+    type: enums.OrganizationType,
     isSystem: boolean;
     users?: Array<string>;
     href?: string,
@@ -18,8 +22,13 @@ export interface IOrganizationDoc extends IOrganization, IBaseModelDoc {
 }
 
 const OrganizationSchema = new Schema({
+    ownerships: [{
+        _id: { auto: false },
+        ownerId:  { type: Schema.Types.ObjectId },
+        ownershipType: { type: Number, enum: [enums.EnumHelper.getValuesFromEnum(enums.OwnershipType)] },
+    }],
     name: {type: String, required: true, unique: true},
-    type: { type: Number, enum: [EnumHelper.getValuesFromEnum(OrganizationType)] },
+    type: { type: Number, enum: [enums.EnumHelper.getValuesFromEnum(enums.OrganizationType)] },
     isSystem: {type: Boolean, required: true},
     users: [{ type : Schema.Types.ObjectId, ref: 'user' }],
     href: {type:String},
