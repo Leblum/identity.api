@@ -136,7 +136,7 @@ export class UserController extends BaseController {
       // If they are trying to change email.
       if (user && user.email) {
         if (await this.repository.findUserByEmail(user.email)) {
-          ApiErrorHandler.sendError('That email is already in use, you cant update to that email address ', 400, response);
+          ApiErrorHandler.sendError('That email is already in use, you cant update to that email address ', 400, response, CONST.errorCodes.EMAIL_TAKEN);
           return null; // This is basically a message to the base controller to stop processing the update. 
         }
       }
