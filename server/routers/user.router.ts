@@ -25,8 +25,8 @@ export class UserRouter extends BaseRouter {
             .put(`${this.resource}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/:id`, async (request: Request, response: Response, next: NextFunction) => {
                 await this.controller.updatePassword(request, response, next);
             })
-            .put(`${this.resource}${CONST.ep.RESTRICTED}/:id`, async (request: Request, response: Response, next: NextFunction) => {
-                await this.controller.updateFull(request, response, next);
+            .patch(`${this.resource}${CONST.ep.RESTRICTED}/:id`, async (request: Request, response: Response, next: NextFunction) => {
+                await this.controller.updatePartial(request, response, next);
             })
     }
 

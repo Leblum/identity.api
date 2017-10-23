@@ -281,7 +281,7 @@ class UserTest {
         };
 
         let response = await api
-            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
+            .patch(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
             .set("x-access-token", authResponse.body.token)
             .send(userUpdate);
 
@@ -344,7 +344,7 @@ class UserTest {
         };
 
         let response = await api
-            .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
+            .patch(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
             .set("x-access-token", authResponse.body.token)
             .send(userUpdate);
         console.log('Update Response: ', response.body);
