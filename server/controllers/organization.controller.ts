@@ -31,7 +31,10 @@ export class OrganizationController extends BaseController{
         // The password change request should be shaped like a user
         let organizationNameChangeRequest: IOrganization = request.body as IOrganization;
 
-        if (await this.repository.getOrgByName(organizationNameChangeRequest.name)) {
+        // Of course we can update the name if it's the same organization. 
+        let orgSearch = await this.repository.getOrgByName(organizationNameChangeRequest.name);
+
+        if (orgSearch && orgSearch._id != request.body._id) {
           ApiErrorHandler.sendError('You cannot update the organization to a name that already exists.', 400, response, CONST.errorCodes.ORG_NAME_TAKEN);
           return;
         }
