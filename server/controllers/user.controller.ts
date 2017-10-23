@@ -7,6 +7,7 @@ import { CONST } from '../constants';
 import { IUserRepository, UserRepository, OrganizationRepository, IOrganizationRepository, RoleRepository } from "../repositories";
 import { ApiErrorHandler } from '../api-error-handler';
 import { OrganizationType, OwnershipType } from '../enumerations';
+import { OrganizationController } from './index';
 var bcrypt = require('bcrypt');
 
 export class UserController extends BaseController {
@@ -108,6 +109,10 @@ export class UserController extends BaseController {
       // Now that we've checked the request, we're going to create a new organization, put the user in that organziation, and upgrade the users role.
       // First create the org.
       let org: IOrganization = {
+        ownerships: [{
+          ownershipType: OwnershipType.user,
+          ownerId: user.id
+        }],
         name: upgradeRequest.organizationName,
         isSystem: false,
         type: OrganizationType.supplier,

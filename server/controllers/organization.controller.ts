@@ -6,6 +6,7 @@ import { CONST } from '../constants';
 import { OrganizationRepository, IOrganizationRepository } from '../repositories'
 import { Request, Response, NextFunction } from 'express';
 import { OwnershipType } from '../enumerations';
+import { ApiErrorHandler } from '../api-error-handler';
 
 export class OrganizationController extends BaseController{
   public isOwnershipRequired: boolean = true;
@@ -20,6 +21,32 @@ export class OrganizationController extends BaseController{
       ownerId: currentToken.userId,
       ownershipType: OwnershipType.user
     }];
+  }
+
+  // This is a restricted method, that will only really be called by people trying to change the owner name on 
+  // details of supplier.
+  public async updateName(request: Request, response: Response, next: NextFunction) {
+    try {
+      if (await this.isModificationAllowed(request, response, next)) {
+        // The password change request should be shaped like a user
+        let organizationNameChangeRequest: IOrganization = request.body as IOrganization;
+
+        if (await this.repository.getOrgByName(organizationNameChangeRequest.name)) {
+          ApiErrorHandler.sendError('You cannot update the organization to a name that already exists.', 400, response, CONST.errorCodes.ORG_NAME_TAKEN);
+          return;
+        }
+
+        // get the user from the repo
+        let org = await this.repository.single(this.getId(request));
+
+        // first up hash the password
+        org.name = organizationNameChangeRequest.name;
+
+        await this.repository.save(org);
+
+        response.status(202).json(org);
+      }
+    } catch (error) { next(error) }
   }
 
   // For organization documents, we're going to 

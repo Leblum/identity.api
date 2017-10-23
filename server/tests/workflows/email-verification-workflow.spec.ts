@@ -3,7 +3,7 @@ import { App, server } from '../../server-entry';
 import { User, IUserDoc, Permission, Role, Organization, IUser, EmailVerification } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
-import { AuthenticationUtil } from "../authentication.util.spec";
+import { AuthUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
 import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
@@ -17,10 +17,6 @@ const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
 
-let userAuthToken: string;
-let systemAuthToken: string;
-let guestOrgId: string;
-
 @suite('Email Verification Test')
 class EmailVerificationTest {
 
@@ -28,10 +24,7 @@ class EmailVerificationTest {
         console.log('Testing Email Verification');
         await Cleanup.clearDatabase();
         await DatabaseBootstrap.seed();
-
-        userAuthToken = await AuthenticationUtil.generateUserAuthToken();
-        systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
-        guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
+        await AuthUtil.seed();
     }
 
     @test('register then verify workflow')
@@ -72,7 +65,7 @@ class EmailVerificationTest {
 
         let updatedUser = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userResponse.body._id}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
 
         expect(updatedUser.status).to.equal(200);
         expect(updatedUser.body).to.be.an('object');
@@ -125,7 +118,7 @@ class EmailVerificationTest {
 
         let updatedUser = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userResponse.body._id}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
 
         expect(updatedUser.status).to.equal(200);
         expect(updatedUser.body).to.be.an('object');

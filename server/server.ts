@@ -205,6 +205,9 @@ class Application {
     // Get the restricted user router.  User has to be authenticated, but can only update their own information.
     this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin',CONST.GUEST_ROLE, CONST.SUPPLIER_EDITOR_ROLE, CONST.PRODUCT_EDITOR_ROLE), new routers.UserRouter().getRestrictedRouter());
 
+    // Notice here that the guest role isn't included here.  That's because guests shouldn't be able to change the organization name.
+    this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin', CONST.SUPPLIER_EDITOR_ROLE, CONST.PRODUCT_EDITOR_ROLE), new routers.OrganizationRouter().getRestrictedRouter());
+
     // Basically the users can authenticate, and register, but much past that, and you're going to need an admin user to access our identity api.
     this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.EmailVerificationRouter().getRouter());
     this.express.use(CONST.ep.API + CONST.ep.V1, Authz.permit('admin'), new routers.OrganizationRouter().getRouter());

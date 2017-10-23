@@ -13,14 +13,18 @@ let should = chai.should();
 chai.use(require('chai-http'));
 var bcrypt = require('bcrypt');
 
-export class AuthenticationUtil {
+export class AuthUtil {
 
-    public static async generateUserAuthToken() {
+    static systemAuthToken: string;
+    static userAuthToken: string;
+    static guestOrgId: string;
+
+    public static async generateUserAuthToken(): Promise<string> {
 
         // This will make sure we can call this method as much as we want, and 
         // we'll only create a new user if we need to. 
         let user = await User.findOne({ email: "integrationTestLeblum@leblum.com" });
-        let guestOrg = await AuthenticationUtil.findGuestOrganization();
+        let guestOrg = await AuthUtil.findGuestOrganization();
         if (!user) {
             let newUser = new User({
                 firstName: "Dave",
@@ -44,10 +48,11 @@ export class AuthenticationUtil {
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('token');
-        return res.body.token;
+        this.userAuthToken = res.body.token;
+        return this.userAuthToken;
     }
 
-    public static async generateSystemAuthToken() {
+    public static async generateSystemAuthToken(): Promise<string> {
 
         // This will make sure we can call this method as much as we want, and 
         // we'll only create a new user if we need to. 
@@ -63,7 +68,20 @@ export class AuthenticationUtil {
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('token');
-        return res.body.token;
+        this.systemAuthToken = res.body.token;
+        return this.systemAuthToken;
+    }
+
+    // This can be used to seed all the tokens, and ids that will be useful later in testing.
+    public static async seed(){
+        await this.generateSystemAuthToken();
+        await this.generateUserAuthToken();
+        await this.getGuestOrganizationId();
+    }
+
+    public static async getGuestOrganizationId(): Promise<string>{
+       this.guestOrgId = (await this.findGuestOrganization())._id;
+       return this.guestOrgId;
     }
 
     public static async findGuestOrganization(): Promise<IOrganizationDoc> {

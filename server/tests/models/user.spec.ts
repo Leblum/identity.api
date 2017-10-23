@@ -3,7 +3,7 @@ import { App, server } from '../../server-entry';
 import { User, IUserDoc, Permission, Role, Organization, IUser, IUserUpgradeRequest, IRole, ITokenPayload } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
-import { AuthenticationUtil } from "../authentication.util.spec";
+import { AuthUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
 import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
@@ -16,31 +16,22 @@ const mongoose = require("mongoose");
 const expect = chai.expect;
 const should = chai.should();
 
-let userAuthToken: string;
-let systemAuthToken: string;
-let guestOrgId: string;
-
 @suite('User Test')
 class UserTest {
 
     // There's a hack here.  The user test is the first one that's run,
     // so that's the test that waits for the 'dbConnected' event to be fired.  None of the other tests do this, but 
     // I couldn't seem to figure out another way around the race conditions that are created by the server starting up.
-    public static before(done) {
+    public static async before() {
         console.log('Testing user test');
-        App.server.on('dbConnected',async ()=>{
-            await Cleanup.clearDatabase();
-            await DatabaseBootstrap.seed();
-    
-            userAuthToken = await AuthenticationUtil.generateUserAuthToken();
-            systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
-            guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
-            done();
-        });
+        await Cleanup.clearDatabase();
+        await DatabaseBootstrap.seed();
+
+        await AuthUtil.seed();
     }
 
     public static async after(){
-        await Cleanup.clearDatabase();
+        //await Cleanup.clearDatabase();
     }
 
     @test('allow a user to register')
@@ -67,7 +58,7 @@ class UserTest {
     public async userList() {
         let response = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken);
+            .set("x-access-token", AuthUtil.systemAuthToken);
 
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
@@ -79,7 +70,7 @@ class UserTest {
     public async failUserListForAuthentication() {
         let response = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken);
+            .set("x-access-token", AuthUtil.systemAuthToken);
 
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');
@@ -95,7 +86,7 @@ class UserTest {
             isTokenExpired: false,
             firstName: "Dave",
             lastName: "Brown",
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
@@ -104,12 +95,12 @@ class UserTest {
 
         let createResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
             .send(user);
 
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
-            .set("x-access-token", userAuthToken);
+            .set("x-access-token", AuthUtil.userAuthToken);
 
         expect(response.status).to.equal(403);
         expect(response.body).to.be.an('object');
@@ -124,7 +115,7 @@ class UserTest {
             email: "test22345@test.com",
             password: "test1234",
             isTokenExpired: false,
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
@@ -139,13 +130,13 @@ class UserTest {
         // Create the supplier editor role
         let roleResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.ROLES}`)
-        .set("x-access-token", systemAuthToken)
+        .set("x-access-token", AuthUtil.systemAuthToken)
         .send(role);
 
         // First we're going to create a user
         let userResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
             .send(user);
 
         let upgradeRequest: IUserUpgradeRequest = {
@@ -156,7 +147,7 @@ class UserTest {
 
         let upgradeResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.UPGRADE}`)
-        .set("x-access-token", systemAuthToken)
+        .set("x-access-token", AuthUtil.systemAuthToken)
         .send(upgradeRequest);
 
         expect(upgradeResponse.status).to.equal(202);
@@ -173,14 +164,14 @@ class UserTest {
             email: "test2@test.com",
             password: "test1234",
             isTokenExpired: false,
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
 
         let response = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
             .send(user);
 
         expect(response.status).to.equal(201);
@@ -200,7 +191,7 @@ class UserTest {
             isTokenExpired: false,
             firstName: "Dave",
             lastName: "Brown",
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
@@ -209,7 +200,7 @@ class UserTest {
 
         let response = await api
             .get(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
 
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('object');
@@ -226,7 +217,7 @@ class UserTest {
             isTokenExpired: false,
             firstName: "Dave",
             lastName: "Brown",
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
@@ -242,7 +233,7 @@ class UserTest {
 
         let response = await api
             .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${userDoc.id}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
             .send(userUpdate);
 
         expect(response.status).to.equal(202);
@@ -548,19 +539,19 @@ class UserTest {
             isTokenExpired: false,
             firstName: "Dave",
             lastName: "Brown",
-            organizationId: guestOrgId,
+            organizationId: AuthUtil.guestOrgId,
             isEmailVerified: false,
             isActive: true,
         };
 
         let createResponse = await api
             .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}`)
-            .set("x-access-token", systemAuthToken)
+            .set("x-access-token", AuthUtil.systemAuthToken)
             .send(user);
 
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/${createResponse.body._id}`)
-            .set("x-access-token", systemAuthToken);
+            .set("x-access-token", AuthUtil.systemAuthToken);
 
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property('ItemRemoved');
@@ -574,7 +565,7 @@ class UserTest {
     public async onDeleteWithoutUserID404() {
         let response = await api
             .delete(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
-            .set("x-access-token", systemAuthToken);
+            .set("x-access-token", AuthUtil.systemAuthToken);
 
         expect(response.status).to.equal(404);
         return;
@@ -584,7 +575,7 @@ class UserTest {
     public async onUpdateWithoutUserID404() {
         let response = await api
             .put(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}/58f8c8caedf7292be80a90e4`)
-            .set("x-access-token", systemAuthToken);
+            .set("x-access-token", AuthUtil.systemAuthToken);
 
         expect(response.status).to.equal(404);
         return;

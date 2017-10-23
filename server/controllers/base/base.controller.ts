@@ -236,15 +236,17 @@ export abstract class BaseController {
 
     public async single(request: Request, response: Response, next: NextFunction): Promise<IBaseModelDoc> {
         try {
-            let model: IBaseModelDoc = await this.repository.single(this.getId(request), this.defaultPopulationArgument);
-            if (!model)
-                throw ({ message: 'Item Not Found', status: 404 });
-
-            response.json(model);
-
-            log.info(`Executed Single Operation: ${this.repository.getCollectionName()}, item._id: ${model._id}`);
-
-            return model;
+            if (await this.isModificationAllowed(request, response, next)){
+                let model: IBaseModelDoc = await this.repository.single(this.getId(request), this.defaultPopulationArgument);
+                if (!model)
+                    throw ({ message: 'Item Not Found', status: 404 });
+    
+                response.json(model);
+    
+                log.info(`Executed Single Operation: ${this.repository.getCollectionName()}, item._id: ${model._id}`);
+    
+                return model;
+            }
         } catch (err) { next(err) }
     }
 }

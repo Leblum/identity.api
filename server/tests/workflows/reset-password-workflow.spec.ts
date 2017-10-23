@@ -3,7 +3,7 @@ import { App, server } from '../../server-entry';
 import { User, IUserDoc, Permission, Role, Organization, IUser, EmailVerification, PasswordResetToken } from '../../models';
 import { Config } from '../../config/config';
 import { CONST } from "../../constants";
-import { AuthenticationUtil } from "../authentication.util.spec";
+import { AuthUtil } from "../authentication.util.spec";
 import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
 import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
@@ -19,10 +19,6 @@ const expect = chai.expect;
 const should = chai.should();
 const bcrypt = require('bcrypt');
 
-let userAuthToken: string;
-let systemAuthToken: string;
-let guestOrgId: string;
-
 @suite('Reset Password Workflow')
 class ResetPasswordWorkflowTest {
 
@@ -30,10 +26,7 @@ class ResetPasswordWorkflowTest {
         console.log('Testing Password Workflow');
         await Cleanup.clearDatabase();
         await DatabaseBootstrap.seed();
-
-        userAuthToken = await AuthenticationUtil.generateUserAuthToken();
-        systemAuthToken = await AuthenticationUtil.generateSystemAuthToken();
-        guestOrgId = (await AuthenticationUtil.findGuestOrganization()).id;
+        await AuthUtil.seed();
     }
 
     public static async after(){
@@ -154,7 +147,7 @@ class ResetPasswordWorkflowTest {
         expect(passwordResetTokenDoc).to.not.be.null;
 
         //now we change the password reset expire time to be in the past.
-        passwordResetTokenDoc.expiresOn =  moment().subtract(moment.duration(25, 'hours')).format(CONST.MOMENT_DATE_FORMAT);
+        passwordResetTokenDoc.expiresOn =  moment().subtract(moment.duration(26, 'hours')).format(CONST.MOMENT_DATE_FORMAT);
         passwordResetTokenDoc.save();
 
         // Now we craft up a request that the client would send after setting a new password.
