@@ -137,11 +137,13 @@ export class UserController extends BaseController {
 
   public async preUpdateHook(user: IUserDoc, request: Request, response: Response, next: NextFunction): Promise<IUserDoc> {
     try {
-
       // If they are trying to change email.
       if (user && user.email) {
         const userByEmail = await this.repository.findUserByEmail(user.email)
-        if ( userByEmail && user._id != userByEmail._id ) {
+
+        // Notice here how I didn't use _id when you have a document, you want to use .id because the _id has a generation time on it, and it's 
+        // not an exact match.
+        if ( userByEmail && (user.id != user.id) ) {
           ApiErrorHandler.sendError('That email is already in use, you cant update to that email address ', 400, response, CONST.errorCodes.EMAIL_TAKEN);
           return null; // This is basically a message to the base controller to stop processing the update. 
         }
