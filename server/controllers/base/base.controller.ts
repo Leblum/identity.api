@@ -83,7 +83,7 @@ export abstract class BaseController {
     public respondWithValidationErrors(request: Request, response: Response, next: NextFunction, validationErrors: IValidationError[]): void {
         response.status(412).json({
             validationError: 'Your Item did not pass validation',
-            validationErorrs: validationErrors
+            validationErrors: validationErrors
         });
     }
 

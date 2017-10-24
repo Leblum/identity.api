@@ -347,9 +347,12 @@ class UserTest {
             .patch(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
             .set("x-access-token", authResponse.body.token)
             .send(userUpdate);
-        console.log('Update Response: ', response.body);
+        //console.log('Update Response: ', response.body);
 
-        expect(response.status).to.equal(400);
+        // email should fail validation
+        expect(response.status).to.equal(412);
+        expect(response.body).to.be.an('object');
+        expect(response.body.validationErrors.length).to.be.equal(1);
         return;
     }
 

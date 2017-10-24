@@ -1,4 +1,4 @@
-import { IUserDoc, User, IUserUpgradeRequest, IOrganization, IUserUpgradeResponse, ITokenPayload, IUser } from '../models';
+import { IUserDoc, User, IUserUpgradeRequest, IOrganization, IUserUpgradeResponse, ITokenPayload, IUser, IValidationError } from '../models';
 import { Router, Request, Response, RequestParamHandler, NextFunction, RequestHandler } from 'express';
 import mongoose = require('mongoose');
 import { Schema, Model, Document } from 'mongoose';
@@ -135,24 +135,32 @@ export class UserController extends BaseController {
     catch (err) { ApiErrorHandler.sendError('There was an error with the upgrade user request', 400, response, null, err); }
   }
 
-  public async preUpdateHook(user: IUserDoc, request: Request, response: Response, next: NextFunction): Promise<IUserDoc> {
-    try {
-      // If they are trying to change email.
-      if (user && user.email) {
-        const userByEmail = await this.repository.findUserByEmail(user.email)
-
-        // Notice here how I didn't use _id when you have a document, you want to use .id because the _id has a generation time on it, and it's 
-        // not an exact match.
-        if ( userByEmail && (userByEmail.id !== user.id) ) {
-          ApiErrorHandler.sendError('That email is already in use, you cant update to that email address ', 400, response, CONST.errorCodes.EMAIL_TAKEN);
-          return null; // This is basically a message to the base controller to stop processing the update. 
-        }
-      }
-    } catch (err) { 
-      next(err); 
+  public async isValid(user: IUserDoc): Promise<IValidationError[]> {
+    let validationErrors = new Array<IValidationError>();
+    if (!await this.checkEmail(user)) {
+      console.log('Name Validation failed');
+      validationErrors.push({
+        field: 'email',
+        message: 'That email is already taken, you cant update/create to a email thats already taken',
+        path: 'email',
+        value: user.email
+      });
     }
+    return validationErrors;
+  }
 
-    return user;
+  private async checkEmail(user:IUserDoc): Promise<boolean> {
+    // If they are trying to change email.
+    if (user && user.email) {
+      const userByEmail = await this.repository.findUserByEmail(user.email);
+
+      // Notice here how I didn't use _id when you have a document, you want to use .id because the _id has a generation time on it, and it's 
+      // not an exact match.
+      if (userByEmail && (userByEmail.id !== user.id)) {
+        return false; 
+      }
+    }
+    return true;
   }
 
   public async preCreateHook(user: IUserDoc): Promise<IUserDoc> {

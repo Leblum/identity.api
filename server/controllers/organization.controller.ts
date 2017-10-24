@@ -42,7 +42,7 @@ export class OrganizationController extends BaseController{
         // get the user from the repo
         let org = await this.repository.single(this.getId(request));
 
-        // first up hash the password
+        // change the name
         org.name = organizationNameChangeRequest.name;
 
         await this.repository.save(org);
