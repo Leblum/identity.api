@@ -25,6 +25,7 @@ export interface IUser extends IBaseModel {
     isActive: boolean;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
+    pushTokens?: Array<string>;
 }
 
 export interface IUserDoc extends IUser, IBaseModelDoc {
@@ -47,7 +48,8 @@ const UserSchema = new Schema({
     href: {type:String},
     organizationId: { type : Schema.Types.ObjectId, ref: 'organization' },
     roles: [{ type : Schema.Types.ObjectId, ref: 'role' }],
-    isActive: {type: Boolean, required: true, default: true}
+    isActive: {type: Boolean, required: true, default: true},
+    pushTokens: [{type: String}]
 },{timestamps:true});
 
 //If you do any pre save methods, and you use fat arrow syntax 'this' doesn't refer to the document.
