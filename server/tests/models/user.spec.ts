@@ -8,6 +8,7 @@ import { Cleanup } from "../cleanup.util.spec";
 import { suite, test } from "mocha-typescript";
 import { DatabaseBootstrap } from "../../config/database/database-bootstrap";
 
+
 import * as supertest from 'supertest';
 import * as chai from 'chai';
 
@@ -36,21 +37,18 @@ class UserTest {
 
     @test('allow a user to register')
     public async register() {
-        let user = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "registeredUser@leblum.com",
-            "password": "test354435",
-            "isTokenExpired": false
+        let user:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "asdfg97scxvb9@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let response = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-            .send(user);
-        expect(response.status).to.equal(201);
-        expect(response.body).to.be.an('object');
-        expect(response.body.email).to.be.equal(user.email);
-        expect(response.body.password.length).to.be.equal(0);
+        let registerResponse = await this.registerUser(user);
         return;
     }
 
@@ -294,37 +292,31 @@ class UserTest {
     @test('A user not be able to change their email to one thats already in use')
     public async updateToTakenEmail() {
 
-        let user = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "asdf987asdf7@leblum.com",
-            "password": "test12345",
-            "isTokenExpired": false
+        let user:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "asdf987asdf7@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let user2 = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "TAKENEMAIL@leblum.com",
-            "password": "test12345",
-            "isTokenExpired": false
+        let user2:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "TAKENEMAIL@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let registerResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-            .send(user);
-        expect(registerResponse.status).to.equal(201);
-        expect(registerResponse.body).to.be.an('object');
-        expect(registerResponse.body.email).to.be.equal(user.email);
-        expect(registerResponse.body.password.length).to.be.equal(0);
+        let registerResponse = await this.registerUser(user);
 
-        let register2Response = await api
-        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-        .send(user2);
-        expect(registerResponse.status).to.equal(201);
-        expect(registerResponse.body).to.be.an('object');
-        expect(registerResponse.body.email).to.be.equal(user.email);
-        expect(registerResponse.body.password.length).to.be.equal(0);
+        let register2Response = await this.registerUser(user2);
 
         let authResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
@@ -347,7 +339,6 @@ class UserTest {
             .patch(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.USERS}${CONST.ep.RESTRICTED}/${registerResponse.body._id}`)
             .set("x-access-token", authResponse.body.token)
             .send(userUpdate);
-        //console.log('Update Response: ', response.body);
 
         // email should fail validation
         expect(response.status).to.equal(412);
@@ -356,39 +347,47 @@ class UserTest {
         return;
     }
 
+    private async registerUser(user:IUser): Promise<supertest.Response> {
+        let registerResponse = await api
+        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
+        .send(user);
+
+        expect(registerResponse.status).to.equal(201);
+        expect(registerResponse.body).to.be.an('object');
+        expect(registerResponse.body.email).to.be.equal(user.email);
+        expect(registerResponse.body.password.length).to.be.equal(0);
+
+        return registerResponse;
+    }
+
     @test('A user should NOT be able to update someone elses information')
     public async updateUserBySomeoneelse() {
-        let user = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "1234546574567@leblum.com",
-            "password": "test12345",
-            "isTokenExpired": false
+
+        let user:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "987987sdaklfh@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let user2 = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "secondUserForUpdate@leblum.com",
-            "password": "test12345",
-            "isTokenExpired": false
+        let user2:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "secondUserForUpdate@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let registerResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-            .send(user);
-        expect(registerResponse.status).to.equal(201);
-        expect(registerResponse.body).to.be.an('object');
-        expect(registerResponse.body.email).to.be.equal(user.email);
-        expect(registerResponse.body.password.length).to.be.equal(0);
-
-        let register2Response = await api
-        .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-        .send(user2);
-        expect(registerResponse.status).to.equal(201);
-        expect(registerResponse.body).to.be.an('object');
-        expect(registerResponse.body.email).to.be.equal(user.email);
-        expect(registerResponse.body.password.length).to.be.equal(0);
+        let registerResponse = await this.registerUser(user);
+        
+        let register2Response = await this.registerUser(user2);
 
         let authResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
@@ -420,27 +419,23 @@ class UserTest {
 
     @test('A user should be able to update their password.')
     public async updateUserPassword() {
-        let user = {
-            "firstName": "Dave",
-            "lastName": "Brown",
-            "email": "12345239785239875@leblum.com",
-            "password": "test12345",
-            "isTokenExpired": false
+        let user:IUser = {
+            organizationId: 'test',
+            isEmailVerified: true,
+            isActive: true,
+            firstName: "Dave",
+            lastName: "Brown",
+            email: "4356dwfgdsfga34e@leblum.com",
+            password: "test12345",
+            isTokenExpired: false
         }
 
-        let registerResponse = await api
-            .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.REGISTER}`)
-            .send(user);
-        expect(registerResponse.status).to.equal(201);
-        expect(registerResponse.body).to.be.an('object');
-        expect(registerResponse.body.email).to.be.equal(user.email);
-        expect(registerResponse.body.password.length).to.be.equal(0);
-
+        let registerResponse = await this.registerUser(user);
 
         let authResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
         .send({
-            "email": "12345239785239875@leblum.com",
+            "email": "4356dwfgdsfga34e@leblum.com",
             "password": "test12345"
         });
 
@@ -463,11 +458,10 @@ class UserTest {
         expect(response.status).to.equal(202);
 
         // Now we try and re auth with that password.
-
         authResponse = await api
         .post(`${CONST.ep.API}${CONST.ep.V1}${CONST.ep.AUTHENTICATION}`)
         .send({
-            "email": "12345239785239875@leblum.com",
+            "email": "4356dwfgdsfga34e@leblum.com",
             "password": "thisIsANewTestPassword"
         });
 

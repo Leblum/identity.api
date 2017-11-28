@@ -147,8 +147,8 @@ class ResetPasswordWorkflowTest {
         expect(passwordResetTokenDoc).to.not.be.null;
 
         //now we change the password reset expire time to be in the past.
-        passwordResetTokenDoc.expiresOn =  moment().subtract(moment.duration(26, 'hours')).format(CONST.MOMENT_DATE_FORMAT);
-        passwordResetTokenDoc.save();
+        passwordResetTokenDoc.expiresOn =  moment().subtract(moment.duration(27, 'hours')).format(CONST.MOMENT_DATE_FORMAT);
+        await passwordResetTokenDoc.save();
 
         // Now we craft up a request that the client would send after setting a new password.
         let newPasswordRequest = { 

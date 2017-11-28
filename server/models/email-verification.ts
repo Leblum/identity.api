@@ -3,6 +3,9 @@ import { Schema, Model, Document, model } from 'mongoose';
 import { IUserDoc } from './user';
 import { IBaseModel, IBaseModelDoc } from "./index";
 
+
+// Really the email verification is just a map between the 
+// user and when this record will expire.  In theory we need to clean these records up later.
 export interface IEmailVerification extends IBaseModel {
     userId: string;
     expiresOn: string;
